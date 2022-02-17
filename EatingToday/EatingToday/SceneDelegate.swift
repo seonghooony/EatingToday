@@ -14,12 +14,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         
-        guard let windowScene = (scene as? UIWindowScene) else { return }
+        guard let scene = (scene as? UIWindowScene) else { return }
         
-        window = UIWindow(windowScene: windowScene)
-        window?.backgroundColor = .systemBackground
-        window?.rootViewController = LoginViewController()
+        window = UIWindow(frame: scene.coordinateSpace.bounds)
+        window?.windowScene = scene
+        
+        let firstViewController = LoginViewController()
+        let navigationController = UINavigationController(rootViewController: firstViewController)
+        
+        window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
+
+                
         
     }
 
