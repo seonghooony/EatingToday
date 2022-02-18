@@ -16,6 +16,7 @@
 		DB6F1AFA27BBFA0800247B89 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1AF927BBFA0800247B89 /* LoginViewController.swift */; };
 		DB6F1AFC27BCEA9600247B89 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DB6F1AFB27BCEA9600247B89 /* GoogleService-Info.plist */; };
 		DB6F1B0227BE4A6000247B89 /* ResisterUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1B0127BE4A6000247B89 /* ResisterUserViewController.swift */; };
+		DB6F1B0427BF829100247B89 /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1B0327BF829100247B89 /* UserInfo.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		DB6F1AF927BBFA0800247B89 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		DB6F1AFB27BCEA9600247B89 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		DB6F1B0127BE4A6000247B89 /* ResisterUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResisterUserViewController.swift; sourceTree = "<group>"; };
+		DB6F1B0327BF829100247B89 /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +95,7 @@
 				DB6F1AF727BBF98A00247B89 /* MainViewController.swift */,
 				DB6F1AF927BBFA0800247B89 /* LoginViewController.swift */,
 				DB6F1B0127BE4A6000247B89 /* ResisterUserViewController.swift */,
+				DB6F1B0327BF829100247B89 /* UserInfo.swift */,
 			);
 			path = EatingToday;
 			sourceTree = "<group>";
@@ -216,6 +219,7 @@
 				DB6F1AE427BBF93100247B89 /* AppDelegate.swift in Sources */,
 				DB6F1AF827BBF98A00247B89 /* MainViewController.swift in Sources */,
 				DB6F1B0227BE4A6000247B89 /* ResisterUserViewController.swift in Sources */,
+				DB6F1B0427BF829100247B89 /* UserInfo.swift in Sources */,
 				DB6F1AE627BBF93100247B89 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

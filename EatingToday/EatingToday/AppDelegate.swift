@@ -7,6 +7,7 @@
 
 import UIKit
 import Firebase
+import GoogleSignIn
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -15,15 +16,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-//        window = UIWindow(frame: UIScreen.main.bounds)
-//        let loginViewController = LoginViewController()
-//        let navigationController = UINavigationController(rootViewController: loginViewController)
-//        window?.rootViewController = navigationController
-        
         //Firebase초기화
         FirebaseApp.configure()
         
         return true
+    }
+    //구글 인증프로세스가 끝날때 앱이 수신하는 url을 처리하는 역할
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        return GIDSignIn.sharedInstance.handle(url)
     }
 
     // MARK: UISceneSession Lifecycle

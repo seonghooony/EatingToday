@@ -6,12 +6,16 @@
 //
 
 import UIKit
+import Firebase
 import FirebaseAuth
-import FirebaseDatabase
+//import FirebaseDatabase
+import FirebaseFirestoreSwift
 
 class ResisterUserViewController: UIViewController {
     
-    var ref = Database.database().reference()
+    //var ref = Database.database().reference()
+    //firestore 용
+    let db = Firestore.firestore()
     
     let titleLabel = UILabel()
 
@@ -28,7 +32,7 @@ class ResisterUserViewController: UIViewController {
     }
     
     @objc func resisterClicked() {
-        print(" 클릭")
+        
         //firebase 이메일/비밀번호 인증
         let email = emailField.text ?? ""
         let password = passwordField.text ?? ""
@@ -50,7 +54,8 @@ class ResisterUserViewController: UIViewController {
                     self.showErrorAlert(errorMsg: error!.localizedDescription)
                     return
                 }
-                self.ref.child("users").child(user.uid).setValue(["nickname": nickname])
+                
+                self.pushUserInfo(email: user.email, uid: user.uid, nickname: nickname)
                 
                 let mainVC = MainViewController()
                 mainVC.modalPresentationStyle = .fullScreen
@@ -58,6 +63,23 @@ class ResisterUserViewController: UIViewController {
             }
         }
     }
+    
+    private func pushUserInfo(email: String?, uid: String, nickname: String) {
+        
+        db.collection("users").getDocuments{ snapshot, _ in
+            let batch = self.db.batch()
+            let userInfo = self.db.collection("users").document(uid)
+            let userData = UserInfo(email: email, nickname: nickname, profileImageURL: "")
+            do {
+                try batch.setData(from: userData, forDocument: userInfo)
+            }catch let error {
+                print("ERROR writing userInfo to Firestore \(error.localizedDescription)")
+            }
+            batch.commit()
+            
+        }
+    }
+    
     func showErrorAlert(errorMsg: String) {
         let alert = UIAlertController(
             title: "오류",
