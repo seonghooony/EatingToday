@@ -49,7 +49,7 @@ class LoginViewController: UIViewController {
             }
         }
     }
-    
+     
     @objc func emailResisterClicked() {
         let resisterUserVC = ResisterUserViewController()
         navigationController?.pushViewController(resisterUserVC, animated: true)
