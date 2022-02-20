@@ -34,6 +34,7 @@
 		DB6F1AFB27BCEA9600247B89 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		DB6F1B0127BE4A6000247B89 /* ResisterUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResisterUserViewController.swift; sourceTree = "<group>"; };
 		DB6F1B0327BF829100247B89 /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
+		DB6F1B0527C2135400247B89 /* EatingToday.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EatingToday.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +87,7 @@
 		DB6F1AE227BBF93100247B89 /* EatingToday */ = {
 			isa = PBXGroup;
 			children = (
+				DB6F1B0527C2135400247B89 /* EatingToday.entitlements */,
 				DB6F1AE327BBF93100247B89 /* AppDelegate.swift */,
 				DB6F1AE527BBF93100247B89 /* SceneDelegate.swift */,
 				DB6F1AEC27BBF93200247B89 /* Assets.xcassets */,
@@ -360,6 +362,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = EatingToday/EatingToday.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = H95MAPX5SG;
@@ -389,6 +392,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = EatingToday/EatingToday.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = H95MAPX5SG;
