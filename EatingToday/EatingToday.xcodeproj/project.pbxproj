@@ -17,6 +17,9 @@
 		DB6F1AFC27BCEA9600247B89 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DB6F1AFB27BCEA9600247B89 /* GoogleService-Info.plist */; };
 		DB6F1B0227BE4A6000247B89 /* ResisterUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1B0127BE4A6000247B89 /* ResisterUserViewController.swift */; };
 		DB6F1B0427BF829100247B89 /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1B0327BF829100247B89 /* UserInfo.swift */; };
+		DB6F1B0727C34D7100247B89 /* EatDiaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1B0627C34D7100247B89 /* EatDiaryViewController.swift */; };
+		DB6F1B0927C34E1F00247B89 /* DiaryMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1B0827C34E1F00247B89 /* DiaryMapViewController.swift */; };
+		DB6F1B2B27C3781800247B89 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1B2A27C3781800247B89 /* ProfileViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +38,9 @@
 		DB6F1B0127BE4A6000247B89 /* ResisterUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResisterUserViewController.swift; sourceTree = "<group>"; };
 		DB6F1B0327BF829100247B89 /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
 		DB6F1B0527C2135400247B89 /* EatingToday.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EatingToday.entitlements; sourceTree = "<group>"; };
+		DB6F1B0627C34D7100247B89 /* EatDiaryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EatDiaryViewController.swift; sourceTree = "<group>"; };
+		DB6F1B0827C34E1F00247B89 /* DiaryMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaryMapViewController.swift; sourceTree = "<group>"; };
+		DB6F1B2A27C3781800247B89 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +104,9 @@
 				DB6F1AF927BBFA0800247B89 /* LoginViewController.swift */,
 				DB6F1B0127BE4A6000247B89 /* ResisterUserViewController.swift */,
 				DB6F1B0327BF829100247B89 /* UserInfo.swift */,
+				DB6F1B0627C34D7100247B89 /* EatDiaryViewController.swift */,
+				DB6F1B0827C34E1F00247B89 /* DiaryMapViewController.swift */,
+				DB6F1B2A27C3781800247B89 /* ProfileViewController.swift */,
 			);
 			path = EatingToday;
 			sourceTree = "<group>";
@@ -221,6 +230,9 @@
 				DB6F1AE427BBF93100247B89 /* AppDelegate.swift in Sources */,
 				DB6F1AF827BBF98A00247B89 /* MainViewController.swift in Sources */,
 				DB6F1B0227BE4A6000247B89 /* ResisterUserViewController.swift in Sources */,
+				DB6F1B0727C34D7100247B89 /* EatDiaryViewController.swift in Sources */,
+				DB6F1B0927C34E1F00247B89 /* DiaryMapViewController.swift in Sources */,
+				DB6F1B2B27C3781800247B89 /* ProfileViewController.swift in Sources */,
 				DB6F1B0427BF829100247B89 /* UserInfo.swift in Sources */,
 				DB6F1AE627BBF93100247B89 /* SceneDelegate.swift in Sources */,
 			);

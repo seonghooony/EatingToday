@@ -98,31 +98,45 @@ class ResisterUserViewController: UIViewController {
         view.backgroundColor = UIColor(displayP3Red: 248/255, green: 237/255, blue: 227/255, alpha: 1)
         
         self.view.addSubview(self.titleLabel)
-        self.titleLabel.text = "EatingToday"
+        self.titleLabel.text = "Eatingram"
         self.titleLabel.textAlignment = .center
-        self.titleLabel.font = UIFont(name: "Chalkduster", size: 25)
+        self.titleLabel.font = UIFont(name: "Marker Felt", size: 25)
         self.titleLabel.textColor = UIColor(displayP3Red: 243/255, green: 129/255, blue: 129/255, alpha: 1)
 
         self.view.addSubview(self.emailField)
+        self.emailField.delegate = self
+        self.emailField.keyboardType = .emailAddress
         self.emailField.backgroundColor = UIColor(displayP3Red: 251/255, green: 248/255, blue: 241/255, alpha: 1)
-        self.emailField.placeholder = "이메일"
+        self.emailField.textColor = UIColor(displayP3Red: 1/255, green: 1/255, blue: 1/255, alpha: 1)
+        self.emailField.attributedPlaceholder = NSAttributedString(string: "Email", attributes: [NSAttributedString.Key.foregroundColor : UIColor.gray])
         self.emailField.autocapitalizationType = .none
+        self.emailField.layer.cornerRadius = 7
+        self.emailField.addLeftPadding()
         
         self.view.addSubview(self.passwordField)
+        self.passwordField.delegate = self
         self.passwordField.backgroundColor = UIColor(displayP3Red: 251/255, green: 248/255, blue: 241/255, alpha: 1)
-        self.passwordField.placeholder = "비밀번호"
+        self.passwordField.textColor = UIColor(displayP3Red: 1/255, green: 1/255, blue: 1/255, alpha: 1)
+        self.passwordField.attributedPlaceholder = NSAttributedString(string: "Password", attributes: [NSAttributedString.Key.foregroundColor : UIColor.gray])
         self.passwordField.isSecureTextEntry = true
         self.passwordField.autocapitalizationType = .none
+        self.passwordField.layer.cornerRadius = 7
+        self.passwordField.addLeftPadding()
         
         self.view.addSubview(self.nicknameField)
+        self.nicknameField.delegate = self
         self.nicknameField.backgroundColor = UIColor(displayP3Red: 251/255, green: 248/255, blue: 241/255, alpha: 1)
-        self.nicknameField.placeholder = "닉네임"
+        self.nicknameField.textColor = UIColor(displayP3Red: 1/255, green: 1/255, blue: 1/255, alpha: 1)
+        self.nicknameField.attributedPlaceholder = NSAttributedString(string: "Nickname", attributes: [NSAttributedString.Key.foregroundColor : UIColor.gray])
         self.nicknameField.autocapitalizationType = .none
+        self.nicknameField.layer.cornerRadius = 7
+        self.nicknameField.addLeftPadding()
         
         self.view.addSubview(self.resisterButton)
         self.resisterButton.backgroundColor = UIColor(displayP3Red: 33/255, green: 159/255, blue: 148/255, alpha: 1)
         self.resisterButton.setTitle("회원가입", for: .normal)
-        self.resisterButton.layer.cornerRadius = 5
+        self.resisterButton.layer.cornerRadius = 10
+        self.resisterButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
         self.resisterButton.addTarget(self, action: #selector(resisterClicked), for: .touchUpInside)
         
     }
@@ -135,30 +149,55 @@ class ResisterUserViewController: UIViewController {
         
         self.emailField.snp.makeConstraints{ make in
             make.top.equalTo(self.titleLabel.snp.bottom).offset(60)
-            make.height.equalTo(40)
+            make.height.equalTo(60)
             make.leading.equalToSuperview().offset(40)
             make.trailing.equalToSuperview().offset(-40)
         }
         
         self.passwordField.snp.makeConstraints{ make in
             make.top.equalTo(self.emailField.snp.bottom).offset(10)
-            make.height.equalTo(40)
+            make.height.equalTo(60)
             make.leading.equalToSuperview().offset(40)
             make.trailing.equalToSuperview().offset(-40)
         }
         
         self.nicknameField.snp.makeConstraints{ make in
             make.top.equalTo(self.passwordField.snp.bottom).offset(10)
-            make.height.equalTo(40)
+            make.height.equalTo(60)
             make.leading.equalToSuperview().offset(40)
             make.trailing.equalToSuperview().offset(-40)
         }
         
         self.resisterButton.snp.makeConstraints{ make in
             make.bottom.equalToSuperview().offset(-50)
-            make.height.equalTo(50)
+            make.height.equalTo(60)
             make.leading.equalToSuperview().offset(40)
             make.trailing.equalToSuperview().offset(-40)
         }
+    }
+}
+extension UITextField {
+    func addLeftPadding() {
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 20, height: self.frame.height))
+        self.leftView = paddingView
+        self.leftViewMode = ViewMode.always
+    }
+}
+
+extension ResisterUserViewController: UITextFieldDelegate {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField == emailField {
+            passwordField.becomeFirstResponder()
+        } else if textField == passwordField {
+            nicknameField.becomeFirstResponder()
+        } else if textField == nicknameField {
+            nicknameField.resignFirstResponder()
+        }
+        
+        return true
     }
 }
