@@ -80,12 +80,12 @@ class EatTableViewCell: UITableViewCell {
         imageCollectionView.isScrollEnabled = true
         imageCollectionView.showsVerticalScrollIndicator = false
         imageCollectionView.showsHorizontalScrollIndicator = false
-        imageCollectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        imageCollectionView.register(ImageCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         contentView.isUserInteractionEnabled = false
         self.imageContentView.addSubview(imageCollectionView)
         
         pageControl.hidesForSinglePage = true
-        pageControl.numberOfPages = 5
+        pageControl.numberOfPages = images.count
         pageControl.pageIndicatorTintColor = .darkGray
         self.imageContentView.addSubview(pageControl)
 
@@ -137,11 +137,12 @@ class EatTableViewCell: UITableViewCell {
 
 extension EatTableViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return images.count
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
-        cell.backgroundColor = UIColor.blue
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? ImageCollectionViewCell else { return UICollectionViewCell() }
+        cell.backgroundColor = UIColor.brown
+        cell.imageView.image = images[indexPath.row]
         return cell
     }
     
@@ -165,7 +166,7 @@ extension EatTableViewCell: UICollectionViewDelegate {
 
         // Calculate conditions
         let pageWidth = self.bounds.width// The width your page should have (plus a possible margin)
-        let collectionViewItemCount = 5// The number of items in this section
+        let collectionViewItemCount = images.count// The number of items in this section
         let proportionalOffset = imageCollectionView.contentOffset.x / pageWidth
         let indexOfMajorCell = Int(round(proportionalOffset))
         let swipeVelocityThreshold: CGFloat = 0.5

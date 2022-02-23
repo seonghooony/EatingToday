@@ -22,6 +22,7 @@
 		DB6F1B2B27C3781800247B89 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1B2A27C3781800247B89 /* ProfileViewController.swift */; };
 		DB6F1B2F27C48F0200247B89 /* EatTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1B2E27C48F0200247B89 /* EatTableViewCell.swift */; };
 		DB6F1B3727C55B0E00247B89 /* ImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1B3627C55B0E00247B89 /* ImageCollectionViewCell.swift */; };
+		DB6F1B3927C5ECEA00247B89 /* AddEatDiaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1B3827C5ECEA00247B89 /* AddEatDiaryViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +46,7 @@
 		DB6F1B2A27C3781800247B89 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		DB6F1B2E27C48F0200247B89 /* EatTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EatTableViewCell.swift; sourceTree = "<group>"; };
 		DB6F1B3627C55B0E00247B89 /* ImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCollectionViewCell.swift; sourceTree = "<group>"; };
+		DB6F1B3827C5ECEA00247B89 /* AddEatDiaryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEatDiaryViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,6 +139,7 @@
 				DB6F1B0627C34D7100247B89 /* EatDiaryViewController.swift */,
 				DB6F1B2E27C48F0200247B89 /* EatTableViewCell.swift */,
 				DB6F1B3627C55B0E00247B89 /* ImageCollectionViewCell.swift */,
+				DB6F1B3827C5ECEA00247B89 /* AddEatDiaryViewController.swift */,
 			);
 			path = Diary;
 			sourceTree = "<group>";
@@ -281,6 +284,7 @@
 				DB6F1B0927C34E1F00247B89 /* DiaryMapViewController.swift in Sources */,
 				DB6F1B2F27C48F0200247B89 /* EatTableViewCell.swift in Sources */,
 				DB6F1B2B27C3781800247B89 /* ProfileViewController.swift in Sources */,
+				DB6F1B3927C5ECEA00247B89 /* AddEatDiaryViewController.swift in Sources */,
 				DB6F1B0427BF829100247B89 /* UserInfo.swift in Sources */,
 				DB6F1AE627BBF93100247B89 /* SceneDelegate.swift in Sources */,
 			);

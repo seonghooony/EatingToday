@@ -33,11 +33,28 @@ class EatDiaryViewController: UIViewController {
         self.constraintConfigure()
     }
     
+    @objc func addDairyButtonTapped() {
+        print("클릭")
+        let addDairyVC = AddEatDiaryViewController()
+        addDairyVC.modalPresentationStyle = UIModalPresentationStyle.fullScreen
+        self.present(addDairyVC, animated: true, completion: nil)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: animated)
+    }
+    
     func viewConfigure() {
         
         self.view.addSubview(self.headView)
         self.headView.backgroundColor = .white
-        
+    
         self.headView.addSubview(titleButton)
         self.titleButton.setTitle("Eatingram", for: .normal)
         self.titleButton.setTitleColor(UIColor(displayP3Red: 243/255, green: 129/255, blue: 129/255, alpha: 1), for: .normal)
@@ -47,6 +64,7 @@ class EatDiaryViewController: UIViewController {
         self.headView.addSubview(diaryAddButton)
         self.diaryAddButton.setImage(UIImage(systemName: "plus.app"), for: .normal)
         self.diaryAddButton.imageView?.tintColor = .black
+        self.diaryAddButton.addTarget(self, action: #selector(addDairyButtonTapped), for: .touchUpInside)
         
         self.view.addSubview(self.mainView)
         self.mainView.backgroundColor = .white
