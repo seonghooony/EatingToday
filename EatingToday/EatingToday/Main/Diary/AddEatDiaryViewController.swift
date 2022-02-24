@@ -85,7 +85,7 @@ class AddEatDiaryViewController: UIViewController {
         self.headView.addSubview(self.registerButton)
         self.registerButton.setTitle("등록", for: .normal)
         self.registerButton.setTitleColor(UIColor(displayP3Red: 1/255, green: 1/255, blue: 1/255, alpha: 1), for: .normal)
-        
+         
         //self.view.addSubview(self.mainView)
         
     }
