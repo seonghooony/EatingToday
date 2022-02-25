@@ -36,8 +36,11 @@ class EatDiaryViewController: UIViewController {
     @objc func addDairyButtonTapped() {
         print("클릭")
         let addDairyVC = AddEatDiaryViewController()
-        addDairyVC.modalPresentationStyle = UIModalPresentationStyle.fullScreen
-        self.present(addDairyVC, animated: true, completion: nil)
+//        addDairyVC.modalPresentationStyle = UIModalPresentationStyle.fullScreen
+//        self.present(addDairyVC, animated: true, completion: nil)
+        
+        
+        navigationController?.pushViewController(addDairyVC, animated: true)
     }
     
     override func viewWillAppear(_ animated: Bool) {
