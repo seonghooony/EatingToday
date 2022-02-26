@@ -99,7 +99,7 @@ class AddEatDiaryViewController: UIViewController {
         mainScrollView.isScrollEnabled = true
         
         self.mainScrollView.addSubview(scrollContainerView)
-        self.scrollContainerView.backgroundColor = .brown
+        self.scrollContainerView.backgroundColor = .lightGray
         
         self.scrollContainerView.addSubview(self.storeNameView)
         self.storeNameView.backgroundColor = .white
@@ -108,18 +108,22 @@ class AddEatDiaryViewController: UIViewController {
         
         self.storeNameView.addSubview(self.storeNameLabel)
         self.storeNameLabel.text = "가게 이름"
-        //self.storeNameLabel.textAlignment = .center
+        self.storeNameLabel.textAlignment = .center
         
         self.storeNameView.addSubview(self.storeNameField)
         self.storeNameField.backgroundColor = .clear
         self.storeNameField.layer.cornerRadius = 20
-        self.storeNameField.layer.addBorder([.all], color: .black, width: 2.0)
+        self.storeNameField.layer.borderWidth = 1.5
+        self.storeNameField.layer.borderColor = UIColor.black.cgColor
+        self.storeNameField.placeholder = "방문하신 가게 명을 입력해주세요."
+        self.storeNameField.addLeftPadding()
+        
         
         
         self.scrollContainerView.addSubview(self.imageView)
-        self.imageView.backgroundColor = .red
-//        self.imageView.addSubview(self.imageLabel)
-//        self.imageView.addSubview(self.imageUiView)
+        self.imageView.backgroundColor = .white
+        self.imageView.addSubview(self.imageLabel)
+        self.imageView.addSubview(self.imageUiView)
 //        
 //        self.mainScrollView.addSubview(self.dateView)
 //        self.dateView.addSubview(self.dateLabel)
@@ -214,7 +218,7 @@ class AddEatDiaryViewController: UIViewController {
         }
         
         self.imageView.snp.makeConstraints{ make in
-            make.top.equalToSuperview().offset(1000)
+            make.top.equalTo(self.storeNameView.snp.bottom).offset(1)
             make.leading.trailing.equalTo(self.view)
             make.height.equalTo(200)
             make.bottom.equalToSuperview()//스크롤바가 고정높이가 아니라면 스크롤바의 마지막에 꼭 넣어줘야함.
@@ -247,4 +251,5 @@ extension CALayer {
         }
     }
 }
+
 
