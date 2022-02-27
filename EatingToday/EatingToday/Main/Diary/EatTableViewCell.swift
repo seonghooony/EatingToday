@@ -80,7 +80,7 @@ class EatTableViewCell: UITableViewCell {
         imageCollectionView.isScrollEnabled = true
         imageCollectionView.showsVerticalScrollIndicator = false
         imageCollectionView.showsHorizontalScrollIndicator = false
-        imageCollectionView.register(ImageCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        imageCollectionView.register(ImageCollectionViewCell.self, forCellWithReuseIdentifier: "ImageCollectionViewCell")
         contentView.isUserInteractionEnabled = false
         self.imageContentView.addSubview(imageCollectionView)
         
@@ -140,7 +140,7 @@ extension EatTableViewCell: UICollectionViewDataSource {
         return images.count
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? ImageCollectionViewCell else { return UICollectionViewCell() }
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageCollectionViewCell", for: indexPath) as? ImageCollectionViewCell else { return UICollectionViewCell() }
         cell.backgroundColor = UIColor.brown
         cell.imageView.image = images[indexPath.row]
         return cell

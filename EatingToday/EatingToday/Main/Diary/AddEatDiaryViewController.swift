@@ -7,6 +7,9 @@
 
 import UIKit
 import SnapKit
+import BSImagePicker
+import Photos
+//import MSPeekCollectionViewDelegateImplementation
 
 class AddEatDiaryViewController: UIViewController {
     
@@ -26,7 +29,23 @@ class AddEatDiaryViewController: UIViewController {
     let imageView = UIView()
     let imageLabel = UILabel()
     let imageUiView = UIView()
-    let imagesUrl = [String()]
+    var imageCollectionView: UICollectionView = {
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.scrollDirection = .horizontal
+        //flowLayout.minimumLineSpacing = 20
+        //flowLayout.sectionInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+        let collectionView = UICollectionView(frame: .init(x: 0, y: 0, width: 100, height: 100), collectionViewLayout: flowLayout)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.backgroundColor = UIColor.clear
+        
+        return collectionView
+    }()
+//    var behavior = MSCollectionViewPeekingBehavior(cellSpacing: 0, cellPeekWidth: 0, minimumItemsToScroll: 1, maximumItemsToScroll: 1, numberOfItemsToShow: 1, scrollDirection: .horizontal, velocityThreshold: 0)
+    let imageAddButton = UIButton()
+    var imageAssets = Array<PHAsset>()
+    var selectedImages = Array<UIImage>()
+    var selectedAssets = Array<PHAsset>()
+    var imagesUrl = [String()]
     
     let dateView = UIView()
     let dateLabel = UILabel()
@@ -74,6 +93,66 @@ class AddEatDiaryViewController: UIViewController {
         navigationController?.popViewController(animated: true)
     }
     
+    func tappedImageAddButton() {
+        let imagePicker = ImagePickerController()
+        
+        imagePicker.settings.selection.max = 10
+        imagePicker.settings.fetch.assets.supportedMediaTypes = [.image]
+        
+        presentImagePicker(
+            imagePicker,
+            select: { (assets) in
+                
+            },
+            deselect: { (assets) in
+                
+            },
+            cancel: { (assets) in
+                
+            },
+            finish: { (assets) in
+                self.imageAssets.removeAll()
+                for i in 0..<assets.count {
+                    self.imageAssets.append(assets[i])
+                }
+                print("선택 에셋이미지 개수 : \(self.imageAssets.count)")
+                self.convertAssetToImages()
+                //self.delegate
+                print("선택 이미지 개수 : \(self.selectedImages.count)")
+                self.imageCollectionView.reloadData()
+
+                
+            }
+        )
+        
+    }
+    
+    func convertAssetToImages() {
+        if self.imageAssets.count != 0 {
+            for i in 0..<self.imageAssets.count {
+                let imageManager = PHImageManager.default()
+                let option = PHImageRequestOptions()
+                option.isSynchronous = true
+                var thumbnail = UIImage()
+                
+                imageManager.requestImage(
+                    for: self.imageAssets[i],
+                       targetSize: CGSize(width: 100, height: 100),
+                    contentMode: .aspectFill,
+                    options: option
+                ) { (result, info) in
+                    thumbnail = result!
+                }
+                
+                let data = thumbnail.jpegData(compressionQuality: 0.7)
+                let newImage = UIImage(data: data!)
+                
+                self.selectedImages.append(newImage! as UIImage)
+                self.selectedAssets.append(imageAssets[i])
+            }
+        }
+    }
+    
     func viewConfigure() {
         self.view.backgroundColor = .white
         
@@ -99,11 +178,11 @@ class AddEatDiaryViewController: UIViewController {
         mainScrollView.isScrollEnabled = true
         
         self.mainScrollView.addSubview(scrollContainerView)
-        self.scrollContainerView.backgroundColor = .lightGray
+        self.scrollContainerView.backgroundColor = UIColor(displayP3Red: 230/255, green: 230/255, blue: 230/255, alpha: 1)
         
         self.scrollContainerView.addSubview(self.storeNameView)
         self.storeNameView.backgroundColor = .white
-        self.storeNameView.layer.addBorder([.top, .bottom], color: UIColor.lightGray, width: 1.0)
+        //self.storeNameView.layer.addBorder([.top, .bottom], color: UIColor.lightGray, width: 1.0)
         
         
         self.storeNameView.addSubview(self.storeNameLabel)
@@ -122,9 +201,28 @@ class AddEatDiaryViewController: UIViewController {
         
         self.scrollContainerView.addSubview(self.imageView)
         self.imageView.backgroundColor = .white
+        
         self.imageView.addSubview(self.imageLabel)
+        self.imageLabel.text = "사진 등록"
+        self.imageLabel.textAlignment = .center
+        
         self.imageView.addSubview(self.imageUiView)
-//        
+        self.imageUiView.backgroundColor = .clear
+        
+        self.imageCollectionView.delegate = self
+        self.imageCollectionView.dataSource = self
+        imageCollectionView.register(AddImageCollectionViewCell.self, forCellWithReuseIdentifier: "AddImageCollectionViewCell")
+        self.imageUiView.addSubview(imageCollectionView)
+//        self.imageCollectionView.configureForPeekingBehavior(behavior: behavior)
+        
+//        self.imageUiView.addSubview(self.imageAddButton)
+//        self.imageAddButton.setImage(UIImage(systemName: "plus"), for: .normal)
+//        self.imageAddButton.layer.borderColor = UIColor.lightGray.cgColor
+//        self.imageAddButton.layer.borderWidth = 2
+//        self.imageAddButton.layer.cornerRadius = 10
+//        self.imageAddButton.tintColor = .black
+//        self.imageAddButton.addTarget(self, action: #selector(tappedImageAddButton), for: .touchUpInside)
+        
 //        self.mainScrollView.addSubview(self.dateView)
 //        self.dateView.addSubview(self.dateLabel)
 //        //self.dateView.addSubview(self.datepicker)
@@ -185,7 +283,6 @@ class AddEatDiaryViewController: UIViewController {
         
         self.mainScrollView.snp.makeConstraints { make in
             make.top.bottom.leading.trailing.equalToSuperview()
-            
         }
         
         self.scrollContainerView.snp.makeConstraints { make in
@@ -205,51 +302,98 @@ class AddEatDiaryViewController: UIViewController {
         self.storeNameLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(10)
             make.leading.equalToSuperview().offset(10)
-            
         }
         
         self.storeNameField.snp.makeConstraints{ make in
             make.top.equalTo(storeNameLabel.snp.bottom).offset(10)
-            make.leading.equalToSuperview().offset(10)
-            make.trailing.equalToSuperview().offset(-10)
+            make.leading.equalToSuperview().offset(15)
+            make.trailing.equalToSuperview().offset(-15)
             make.height.equalTo(40)
-            
-
         }
         
         self.imageView.snp.makeConstraints{ make in
-            make.top.equalTo(self.storeNameView.snp.bottom).offset(1)
+            make.top.equalTo(self.storeNameView.snp.bottom).offset(0.5)
             make.leading.trailing.equalTo(self.view)
             make.height.equalTo(200)
             make.bottom.equalToSuperview()//스크롤바가 고정높이가 아니라면 스크롤바의 마지막에 꼭 넣어줘야함.
         }
+        
+        self.imageLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(10)
+            make.leading.equalToSuperview().offset(10)
+        }
+        
+        self.imageUiView.snp.makeConstraints { make in
+            make.top.equalTo(self.imageLabel.snp.bottom).offset(10)
+            make.leading.equalToSuperview().offset(10)
+            make.trailing.equalToSuperview().offset(-10)
+            make.height.equalTo(100)
+        }
+        
+        self.imageCollectionView.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview().offset(0)
+            make.leading.equalToSuperview().offset(10)
+            make.trailing.equalToSuperview().offset(-10)
+        }
+        
+//        self.imageAddButton.snp.makeConstraints { make in
+//            make.centerY.equalTo(self.imageUiView.snp.centerY)
+//            make.leading.equalToSuperview().offset(10)
+//            make.height.width.equalTo(80)
+//        }
+//        self.imageAddButton.imageView?.snp.makeConstraints { make in
+//            make.center.equalToSuperview()
+//            make.height.width.equalTo(50)
+//        }
     }
 }
 
-extension CALayer {
-    func addBorder(_ arr_edge: [UIRectEdge], color: UIColor, width: CGFloat) {
-        for edge in arr_edge {
-            let border = CALayer()
-            switch edge {
-            case UIRectEdge.top:
-                border.frame = CGRect.init(x: 0, y: 0, width: frame.width, height: width)
-                break
-            case UIRectEdge.bottom:
-                border.frame = CGRect.init(x: 0, y: frame.height - width, width: frame.width, height: width)
-                break
-            case UIRectEdge.left:
-                border.frame = CGRect.init(x: 0, y: 0, width: width, height: frame.height)
-                break
-            case UIRectEdge.right:
-                border.frame = CGRect.init(x: frame.width - width, y: 0, width: width, height: frame.height)
-                break
-            default:
-                break
-            }
-            border.backgroundColor = color.cgColor;
-            self.addSublayer(border)
+
+extension AddEatDiaryViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return self.selectedImages.count + 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AddImageCollectionViewCell", for: indexPath) as? AddImageCollectionViewCell else { return UICollectionViewCell() }
+        print("생성 셀 인덱스 : \(indexPath.row)")
+        if indexPath.row == 0 {
+            cell.imageView.image = UIImage(systemName: "plus.app")
+//            cell.imageView.layer.borderColor = UIColor.lightGray.cgColor
+//            cell.imageView.layer.borderWidth = 2
+//            cell.imageView.layer.cornerRadius = 10
+            cell.imageView.tintColor = .black
+        }else if indexPath.row > 0 {
+            
+            cell.imageView.image = selectedImages[indexPath.row - 1]
+            
+        }
+        
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if indexPath.row == 0 {
+            self.tappedImageAddButton()
+        } else {
+            print("클릭 인덱스 : \(indexPath.row)")
         }
     }
+    
+    
+//    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+//        behavior.scrollViewWillEndDragging(scrollView, withVelocity: velocity, targetContentOffset: targetContentOffset)
+//    }
+//
+//    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+//        print(behavior.currentIndex)
+//    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 80, height: 80)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 5
+    }
 }
-
-

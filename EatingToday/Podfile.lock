@@ -324,6 +324,7 @@ PODS:
   - Kingfisher (7.1.2)
   - leveldb-library (1.22.1)
   - lottie-ios (3.3.0)
+  - MSPeekCollectionViewDelegateImplementation (3.2.0)
   - nanopb (1.30906.0):
     - nanopb/decode (= 1.30906.0)
     - nanopb/encode (= 1.30906.0)
@@ -342,6 +343,7 @@ DEPENDENCIES:
   - GoogleSignIn
   - Kingfisher
   - lottie-ios
+  - MSPeekCollectionViewDelegateImplementation
   - SnapKit
 
 SPEC REPOS:
@@ -368,6 +370,7 @@ SPEC REPOS:
     - Kingfisher
     - leveldb-library
     - lottie-ios
+    - MSPeekCollectionViewDelegateImplementation
     - nanopb
     - PromisesObjC
     - SnapKit
@@ -395,10 +398,11 @@ SPEC CHECKSUMS:
   Kingfisher: 44ed6a8504763f27bab46163adfac83f5deb240c
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
   lottie-ios: 6ac74dcc09904798f59b18cb3075c089d76be9ae
+  MSPeekCollectionViewDelegateImplementation: be35a217bd302976a9e4476151be992c1f150127
   nanopb: 59317e09cf1f1a0af72f12af412d54edf52603fc
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
 
-PODFILE CHECKSUM: 5711cdf83164a7e107bff00fbe8f31ff74a6649b
+PODFILE CHECKSUM: ecac0487a234abd623483a0d66c0811c0a326ce1
 
 COCOAPODS: 1.11.2
