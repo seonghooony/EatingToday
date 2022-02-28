@@ -9,7 +9,6 @@ import UIKit
 import SnapKit
 import BSImagePicker
 import Photos
-//import MSPeekCollectionViewDelegateImplementation
 
 class AddEatDiaryViewController: UIViewController {
     
@@ -32,16 +31,14 @@ class AddEatDiaryViewController: UIViewController {
     var imageCollectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .horizontal
-        //flowLayout.minimumLineSpacing = 20
-        //flowLayout.sectionInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+
         let collectionView = UICollectionView(frame: .init(x: 0, y: 0, width: 100, height: 100), collectionViewLayout: flowLayout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = UIColor.clear
         
         return collectionView
     }()
-//    var behavior = MSCollectionViewPeekingBehavior(cellSpacing: 0, cellPeekWidth: 0, minimumItemsToScroll: 1, maximumItemsToScroll: 1, numberOfItemsToShow: 1, scrollDirection: .horizontal, velocityThreshold: 0)
-    let imageAddButton = UIButton()
+
     var imageAssets = Array<PHAsset>()
     var selectedImages = Array<UIImage>()
     var selectedAssets = Array<PHAsset>()
@@ -49,8 +46,9 @@ class AddEatDiaryViewController: UIViewController {
     
     let dateView = UIView()
     let dateLabel = UILabel()
+    let dateField = UITextField()
     let datepicker = UIDatePicker()
-    let date = Date()
+    var eatDate = Date()
     
     let locationView = UIView()
     let locationLabel = UILabel()
@@ -75,6 +73,24 @@ class AddEatDiaryViewController: UIViewController {
         super.viewDidLoad()
         viewConfigure()
         constraintConfigure()
+        scrollViewEndEditing()
+    }
+    
+    // 스크롤뷰에서 클릭시 endEditing 기능 먹도록 함
+    func scrollViewEndEditing() {
+        let singleTap = UITapGestureRecognizer(target: self, action: #selector(self.endEdit))
+        singleTap.numberOfTapsRequired = 1
+        singleTap.isEnabled = true
+        singleTap.cancelsTouchesInView = false
+        self.mainScrollView.addGestureRecognizer(singleTap)
+    }
+    @objc func endEdit() {
+        self.view.endEditing(true)
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        //빈 화면을 눌러줄때 마다 하단 키보드나 데이트피커가 사라짐
+        self.view.endEditing(true)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -92,11 +108,38 @@ class AddEatDiaryViewController: UIViewController {
     @objc func back() {
         navigationController?.popViewController(animated: true)
     }
+    @objc func datepickerDoneTapped() {
+        self.view.endEditing(true)
+    }
+    
+    private func configureDatePicker() {
+        let toolbar = UIToolbar()
+        toolbar.sizeToFit()
+        let leftButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
+        let doneButton = UIBarButtonItem(title: "완료", style: .done, target: nil, action: #selector(datepickerDoneTapped))
+        //toolbar.setItems(leftButton, doneButton], animated: true)
+        toolbar.items = [leftButton, doneButton]
+        
+        self.datepicker.datePickerMode = .date
+        self.datepicker.preferredDatePickerStyle = .wheels
+        self.datepicker.addTarget(self, action: #selector(datePickerValueDidChanged(_:)), for: .valueChanged)
+        self.dateField.inputAccessoryView = toolbar
+        self.dateField.inputView = self.datepicker
+    }
+    @objc private func datePickerValueDidChanged(_ datePicker: UIDatePicker) {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy 년 MM 월 dd 일 (EEEEE)"
+        formatter.locale = Locale(identifier: "ko_KR")
+        
+        
+        self.eatDate = datePicker.date
+        self.dateField.text = formatter.string(from: datePicker.date)
+    }
     
     func tappedImageAddButton() {
         let imagePicker = ImagePickerController()
         
-        imagePicker.settings.selection.max = 10
+        imagePicker.settings.selection.max = 10 - selectedImages.count
         imagePicker.settings.fetch.assets.supportedMediaTypes = [.image]
         
         presentImagePicker(
@@ -213,19 +256,24 @@ class AddEatDiaryViewController: UIViewController {
         self.imageCollectionView.dataSource = self
         imageCollectionView.register(AddImageCollectionViewCell.self, forCellWithReuseIdentifier: "AddImageCollectionViewCell")
         self.imageUiView.addSubview(imageCollectionView)
-//        self.imageCollectionView.configureForPeekingBehavior(behavior: behavior)
         
-//        self.imageUiView.addSubview(self.imageAddButton)
-//        self.imageAddButton.setImage(UIImage(systemName: "plus"), for: .normal)
-//        self.imageAddButton.layer.borderColor = UIColor.lightGray.cgColor
-//        self.imageAddButton.layer.borderWidth = 2
-//        self.imageAddButton.layer.cornerRadius = 10
-//        self.imageAddButton.tintColor = .black
-//        self.imageAddButton.addTarget(self, action: #selector(tappedImageAddButton), for: .touchUpInside)
+        self.mainScrollView.addSubview(self.dateView)
+        self.dateView.backgroundColor = .white
         
-//        self.mainScrollView.addSubview(self.dateView)
-//        self.dateView.addSubview(self.dateLabel)
-//        //self.dateView.addSubview(self.datepicker)
+        self.dateView.addSubview(self.dateLabel)
+        self.dateLabel.text = "먹은 날짜"
+        self.dateLabel.textAlignment = .center
+        
+        self.dateView.addSubview(self.dateField)
+        self.dateField.backgroundColor = .clear
+        self.dateField.layer.cornerRadius = 20
+        self.dateField.layer.borderWidth = 1.5
+        self.dateField.layer.borderColor = UIColor.black.cgColor
+        self.dateField.placeholder = "식사한 날짜를 선택해주세요."
+        self.dateField.addLeftPadding()
+        //self.dateField.
+        self.configureDatePicker()
+        
 //        
 //        self.mainView.addSubview(self.locationView)
 //        self.locationView.addSubview(self.locationLabel)
@@ -314,8 +362,8 @@ class AddEatDiaryViewController: UIViewController {
         self.imageView.snp.makeConstraints{ make in
             make.top.equalTo(self.storeNameView.snp.bottom).offset(0.5)
             make.leading.trailing.equalTo(self.view)
-            make.height.equalTo(200)
-            make.bottom.equalToSuperview()//스크롤바가 고정높이가 아니라면 스크롤바의 마지막에 꼭 넣어줘야함.
+            make.height.equalTo(150)
+            //make.bottom.equalToSuperview()//스크롤바가 고정높이가 아니라면 스크롤바의 마지막에 꼭 넣어줘야함.
         }
         
         self.imageLabel.snp.makeConstraints { make in
@@ -336,32 +384,41 @@ class AddEatDiaryViewController: UIViewController {
             make.trailing.equalToSuperview().offset(-10)
         }
         
-//        self.imageAddButton.snp.makeConstraints { make in
-//            make.centerY.equalTo(self.imageUiView.snp.centerY)
-//            make.leading.equalToSuperview().offset(10)
-//            make.height.width.equalTo(80)
-//        }
-//        self.imageAddButton.imageView?.snp.makeConstraints { make in
-//            make.center.equalToSuperview()
-//            make.height.width.equalTo(50)
-//        }
+        self.dateView.snp.makeConstraints { make in
+            make.top.equalTo(self.imageView.snp.bottom).offset(0.5)
+            make.leading.trailing.equalTo(self.view)
+            make.height.equalTo(100)
+            make.bottom.equalToSuperview()//스크롤바가 고정높이가 아니라면 스크롤바의 마지막에 꼭 넣어줘야함.
+        }
+        
+        self.dateLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(10)
+            make.leading.equalToSuperview().offset(10)
+        }
+        
+        self.dateField.snp.makeConstraints { make in
+            make.top.equalTo(self.dateLabel.snp.bottom).offset(10)
+            make.leading.equalToSuperview().offset(10)
+            make.trailing.equalToSuperview().offset(-10)
+            make.height.equalTo(40)
+        }
+        
     }
 }
 
 
 extension AddEatDiaryViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    //셀 개수
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.selectedImages.count + 1
     }
     
+    //셀 생성
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AddImageCollectionViewCell", for: indexPath) as? AddImageCollectionViewCell else { return UICollectionViewCell() }
         print("생성 셀 인덱스 : \(indexPath.row)")
         if indexPath.row == 0 {
             cell.imageView.image = UIImage(systemName: "plus.app")
-//            cell.imageView.layer.borderColor = UIColor.lightGray.cgColor
-//            cell.imageView.layer.borderWidth = 2
-//            cell.imageView.layer.cornerRadius = 10
             cell.imageView.tintColor = .black
         }else if indexPath.row > 0 {
             
@@ -372,28 +429,31 @@ extension AddEatDiaryViewController: UICollectionViewDataSource, UICollectionVie
         return cell
     }
     
+    //셀 클릭
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if indexPath.row == 0 {
-            self.tappedImageAddButton()
+        if selectedImages.count < 10 {
+            if indexPath.row == 0 {
+                self.tappedImageAddButton()
+            } else {
+                print("클릭 인덱스 : \(indexPath.row)")
+            }
         } else {
-            print("클릭 인덱스 : \(indexPath.row)")
+            print("10개 이상")
         }
+        
     }
     
-    
-//    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-//        behavior.scrollViewWillEndDragging(scrollView, withVelocity: velocity, targetContentOffset: targetContentOffset)
-//    }
-//
-//    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-//        print(behavior.currentIndex)
-//    }
-    
+    //셀 크기
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 80, height: 80)
     }
     
+    //셀간 최소간격
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 5
     }
 }
+
+
+
+
