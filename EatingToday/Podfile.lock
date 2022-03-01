@@ -212,6 +212,7 @@ PODS:
     - abseil/base/base_internal
     - abseil/base/config
     - abseil/meta/type_traits
+  - Alamofire (5.5.0)
   - AppAuth (1.4.0):
     - AppAuth/Core (= 1.4.0)
     - AppAuth/ExternalUserAgent (= 1.4.0)
@@ -321,10 +322,9 @@ PODS:
     - AppAuth/Core (~> 1.4)
     - GTMSessionFetcher/Core (~> 1.5)
   - GTMSessionFetcher/Core (1.7.0)
-  - Kingfisher (7.1.2)
+  - Kingfisher (7.2.0)
   - leveldb-library (1.22.1)
   - lottie-ios (3.3.0)
-  - MSPeekCollectionViewDelegateImplementation (3.2.0)
   - nanopb (1.30906.0):
     - nanopb/decode (= 1.30906.0)
     - nanopb/encode (= 1.30906.0)
@@ -334,6 +334,7 @@ PODS:
   - SnapKit (5.0.1)
 
 DEPENDENCIES:
+  - Alamofire
   - BSImagePicker (~> 3.1)
   - Firebase/Auth
   - Firebase/Database
@@ -343,12 +344,12 @@ DEPENDENCIES:
   - GoogleSignIn
   - Kingfisher
   - lottie-ios
-  - MSPeekCollectionViewDelegateImplementation
   - SnapKit
 
 SPEC REPOS:
   trunk:
     - abseil
+    - Alamofire
     - AppAuth
     - BoringSSL-GRPC
     - BSImagePicker
@@ -370,13 +371,13 @@ SPEC REPOS:
     - Kingfisher
     - leveldb-library
     - lottie-ios
-    - MSPeekCollectionViewDelegateImplementation
     - nanopb
     - PromisesObjC
     - SnapKit
 
 SPEC CHECKSUMS:
   abseil: 6c8eb7892aefa08d929b39f9bb108e5367e3228f
+  Alamofire: 1c4fb5369c3fe93d2857c780d8bbe09f06f97e7c
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
   BoringSSL-GRPC: 8edf627ee524575e2f8d19d56f068b448eea3879
   BSImagePicker: 0fe04b574d4d6b81093785d2af6c26227efc8428
@@ -395,14 +396,13 @@ SPEC CHECKSUMS:
   gRPC-Core: 4afa11bfbedf7cdecd04de535a9e046893404ed5
   GTMAppAuth: ad5c2b70b9a8689e1a04033c9369c4915bfcbe89
   GTMSessionFetcher: 43748f93435c2aa068b1cbe39655aaf600652e91
-  Kingfisher: 44ed6a8504763f27bab46163adfac83f5deb240c
+  Kingfisher: 3ac0b75b155cabc0e544877d1a4deea29feece92
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
   lottie-ios: 6ac74dcc09904798f59b18cb3075c089d76be9ae
-  MSPeekCollectionViewDelegateImplementation: be35a217bd302976a9e4476151be992c1f150127
   nanopb: 59317e09cf1f1a0af72f12af412d54edf52603fc
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
 
-PODFILE CHECKSUM: ecac0487a234abd623483a0d66c0811c0a326ce1
+PODFILE CHECKSUM: 1664e523a0d662d0c630946862d65967736f21f5
 
 COCOAPODS: 1.11.2

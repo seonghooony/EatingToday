@@ -24,6 +24,8 @@
 		DB6F1B3727C55B0E00247B89 /* ImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1B3627C55B0E00247B89 /* ImageCollectionViewCell.swift */; };
 		DB6F1B3927C5ECEA00247B89 /* AddEatDiaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1B3827C5ECEA00247B89 /* AddEatDiaryViewController.swift */; };
 		DB6F1B3B27CB542A00247B89 /* AddImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1B3A27CB542A00247B89 /* AddImageCollectionViewCell.swift */; };
+		DB6F1B3F27CE042C00247B89 /* SearchKakaoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1B3E27CE042C00247B89 /* SearchKakaoViewController.swift */; };
+		DB6F1B4127CE20C900247B89 /* SearchResultOverview.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1B4027CE20C900247B89 /* SearchResultOverview.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -49,6 +51,8 @@
 		DB6F1B3627C55B0E00247B89 /* ImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		DB6F1B3827C5ECEA00247B89 /* AddEatDiaryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEatDiaryViewController.swift; sourceTree = "<group>"; };
 		DB6F1B3A27CB542A00247B89 /* AddImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddImageCollectionViewCell.swift; sourceTree = "<group>"; };
+		DB6F1B3E27CE042C00247B89 /* SearchKakaoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchKakaoViewController.swift; sourceTree = "<group>"; };
+		DB6F1B4027CE20C900247B89 /* SearchResultOverview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultOverview.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -138,11 +142,8 @@
 		DB6F1B3027C4916600247B89 /* Diary */ = {
 			isa = PBXGroup;
 			children = (
-				DB6F1B0627C34D7100247B89 /* EatDiaryViewController.swift */,
-				DB6F1B2E27C48F0200247B89 /* EatTableViewCell.swift */,
-				DB6F1B3627C55B0E00247B89 /* ImageCollectionViewCell.swift */,
-				DB6F1B3827C5ECEA00247B89 /* AddEatDiaryViewController.swift */,
-				DB6F1B3A27CB542A00247B89 /* AddImageCollectionViewCell.swift */,
+				DB6F1B3C27CE03B500247B89 /* DiaryMain */,
+				DB6F1B3D27CE03DB00247B89 /* AddDiary */,
 			);
 			path = Diary;
 			sourceTree = "<group>";
@@ -161,6 +162,27 @@
 				DB6F1B2A27C3781800247B89 /* ProfileViewController.swift */,
 			);
 			path = Profile;
+			sourceTree = "<group>";
+		};
+		DB6F1B3C27CE03B500247B89 /* DiaryMain */ = {
+			isa = PBXGroup;
+			children = (
+				DB6F1B0627C34D7100247B89 /* EatDiaryViewController.swift */,
+				DB6F1B2E27C48F0200247B89 /* EatTableViewCell.swift */,
+				DB6F1B3627C55B0E00247B89 /* ImageCollectionViewCell.swift */,
+			);
+			path = DiaryMain;
+			sourceTree = "<group>";
+		};
+		DB6F1B3D27CE03DB00247B89 /* AddDiary */ = {
+			isa = PBXGroup;
+			children = (
+				DB6F1B3827C5ECEA00247B89 /* AddEatDiaryViewController.swift */,
+				DB6F1B3A27CB542A00247B89 /* AddImageCollectionViewCell.swift */,
+				DB6F1B3E27CE042C00247B89 /* SearchKakaoViewController.swift */,
+				DB6F1B4027CE20C900247B89 /* SearchResultOverview.swift */,
+			);
+			path = AddDiary;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -284,12 +306,14 @@
 				DB6F1AF827BBF98A00247B89 /* MainViewController.swift in Sources */,
 				DB6F1B0227BE4A6000247B89 /* ResisterUserViewController.swift in Sources */,
 				DB6F1B0727C34D7100247B89 /* EatDiaryViewController.swift in Sources */,
+				DB6F1B4127CE20C900247B89 /* SearchResultOverview.swift in Sources */,
 				DB6F1B0927C34E1F00247B89 /* DiaryMapViewController.swift in Sources */,
 				DB6F1B2F27C48F0200247B89 /* EatTableViewCell.swift in Sources */,
 				DB6F1B3B27CB542A00247B89 /* AddImageCollectionViewCell.swift in Sources */,
 				DB6F1B2B27C3781800247B89 /* ProfileViewController.swift in Sources */,
 				DB6F1B3927C5ECEA00247B89 /* AddEatDiaryViewController.swift in Sources */,
 				DB6F1B0427BF829100247B89 /* UserInfo.swift in Sources */,
+				DB6F1B3F27CE042C00247B89 /* SearchKakaoViewController.swift in Sources */,
 				DB6F1AE627BBF93100247B89 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

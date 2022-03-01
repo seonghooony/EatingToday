@@ -16,4 +16,5 @@ target 'EatingToday' do
   pod 'SnapKit'
   pod 'Firebase/Storage'
   pod 'BSImagePicker', '~> 3.1'
+  pod 'Alamofire'
 end
