@@ -242,7 +242,7 @@ class AddEatDiaryViewController: UIViewController {
         
         self.storeNameView.addSubview(self.storeNameLabel)
         self.storeNameLabel.text = "가게 이름"
-        self.storeNameLabel.textAlignment = .center
+        self.storeNameLabel.textAlignment = .center 
         
         self.storeNameView.addSubview(self.storeNameField)
         self.storeNameField.backgroundColor = .clear
