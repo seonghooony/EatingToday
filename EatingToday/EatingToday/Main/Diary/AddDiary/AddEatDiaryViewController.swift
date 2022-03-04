@@ -117,11 +117,9 @@ class AddEatDiaryViewController: UIViewController {
         print("클릭")
         let searchKakaoVC = SearchKakaoViewController()
 //        addDairyVC.modalPresentationStyle = UIModalPresentationStyle.fullScreen
-//        self.present(addDairyVC, animated: true, completion: nil)
         
-        
-        navigationController?.pushViewController(searchKakaoVC, animated: true)
-        //self.present(SearchKakaoViewController, animated: true, completion: nil)
+//        navigationController?.pushViewController(searchKakaoVC, animated: true)
+        self.present(searchKakaoVC, animated: true, completion: nil)
     }
     
     private func configureDatePicker() {
@@ -242,7 +240,7 @@ class AddEatDiaryViewController: UIViewController {
         
         self.storeNameView.addSubview(self.storeNameLabel)
         self.storeNameLabel.text = "가게 이름"
-        self.storeNameLabel.textAlignment = .center 
+        self.storeNameLabel.textAlignment = .center
         
         self.storeNameView.addSubview(self.storeNameField)
         self.storeNameField.backgroundColor = .clear
@@ -250,6 +248,8 @@ class AddEatDiaryViewController: UIViewController {
         self.storeNameField.layer.borderWidth = 1.5
         self.storeNameField.layer.borderColor = UIColor.black.cgColor
         self.storeNameField.setTitle("방문하신 가게 명을 입력해주세요.", for: .normal)
+        self.storeNameField.titleLabel?.font = UIFont.systemFont(ofSize: 17)
+        self.storeNameField.titleLabel?.textAlignment = .left
         self.storeNameField.setTitleColor(.lightGray, for: .normal)
         //self.storeNameField.placeholder = "방문하신 가게 명을 입력해주세요."
         //self.storeNameField.addLeftPadding()
@@ -284,7 +284,8 @@ class AddEatDiaryViewController: UIViewController {
         self.dateField.layer.cornerRadius = 20
         self.dateField.layer.borderWidth = 1.5
         self.dateField.layer.borderColor = UIColor.black.cgColor
-        self.dateField.placeholder = "식사한 날짜를 선택해주세요."
+        //self.dateField.placeholder = "식사하신 날짜를 선택해주세요."
+        self.dateField.attributedPlaceholder = NSAttributedString(string: "식사하신 날짜를 선택해주세요.", attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
         self.dateField.addLeftPadding()
         //self.dateField.
         self.configureDatePicker()
@@ -320,8 +321,8 @@ class AddEatDiaryViewController: UIViewController {
         
         self.backButton.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(20)
-            make.top.equalToSuperview().offset(50)
-            make.height.equalTo(50)
+            make.top.equalToSuperview().offset(60)
+            make.height.width.equalTo(30)
             
         }
         
@@ -372,6 +373,10 @@ class AddEatDiaryViewController: UIViewController {
             make.leading.equalToSuperview().offset(15)
             make.trailing.equalToSuperview().offset(-15)
             make.height.equalTo(40)
+        }
+        
+        self.storeNameField.titleLabel?.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(20)
         }
         
         self.imageView.snp.makeConstraints{ make in

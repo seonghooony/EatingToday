@@ -8,6 +8,11 @@
 import Foundation
 
 struct SearchResultOverview: Codable {
+    
+    let documents: [Document]
+    
+}
+struct Document: Codable {
     let address_name: String
     let road_address_name: String
     let phone: String
@@ -15,5 +20,4 @@ struct SearchResultOverview: Codable {
     let place_url: String
     let x: String
     let y: String
-    
 }

@@ -26,6 +26,7 @@
 		DB6F1B3B27CB542A00247B89 /* AddImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1B3A27CB542A00247B89 /* AddImageCollectionViewCell.swift */; };
 		DB6F1B3F27CE042C00247B89 /* SearchKakaoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1B3E27CE042C00247B89 /* SearchKakaoViewController.swift */; };
 		DB6F1B4127CE20C900247B89 /* SearchResultOverview.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1B4027CE20C900247B89 /* SearchResultOverview.swift */; };
+		DB6F1B4727D22A0C00247B89 /* SearchResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1B4627D22A0C00247B89 /* SearchResultTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -53,6 +54,7 @@
 		DB6F1B3A27CB542A00247B89 /* AddImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		DB6F1B3E27CE042C00247B89 /* SearchKakaoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchKakaoViewController.swift; sourceTree = "<group>"; };
 		DB6F1B4027CE20C900247B89 /* SearchResultOverview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultOverview.swift; sourceTree = "<group>"; };
+		DB6F1B4627D22A0C00247B89 /* SearchResultTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -177,12 +179,21 @@
 		DB6F1B3D27CE03DB00247B89 /* AddDiary */ = {
 			isa = PBXGroup;
 			children = (
-				DB6F1B3827C5ECEA00247B89 /* AddEatDiaryViewController.swift */,
 				DB6F1B3A27CB542A00247B89 /* AddImageCollectionViewCell.swift */,
-				DB6F1B3E27CE042C00247B89 /* SearchKakaoViewController.swift */,
-				DB6F1B4027CE20C900247B89 /* SearchResultOverview.swift */,
+				DB6F1B3827C5ECEA00247B89 /* AddEatDiaryViewController.swift */,
+				DB6F1B4327D1FBBF00247B89 /* Search */,
 			);
 			path = AddDiary;
+			sourceTree = "<group>";
+		};
+		DB6F1B4327D1FBBF00247B89 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				DB6F1B3E27CE042C00247B89 /* SearchKakaoViewController.swift */,
+				DB6F1B4027CE20C900247B89 /* SearchResultOverview.swift */,
+				DB6F1B4627D22A0C00247B89 /* SearchResultTableViewCell.swift */,
+			);
+			path = Search;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -302,6 +313,7 @@
 			files = (
 				DB6F1AFA27BBFA0800247B89 /* LoginViewController.swift in Sources */,
 				DB6F1B3727C55B0E00247B89 /* ImageCollectionViewCell.swift in Sources */,
+				DB6F1B4727D22A0C00247B89 /* SearchResultTableViewCell.swift in Sources */,
 				DB6F1AE427BBF93100247B89 /* AppDelegate.swift in Sources */,
 				DB6F1AF827BBF98A00247B89 /* MainViewController.swift in Sources */,
 				DB6F1B0227BE4A6000247B89 /* ResisterUserViewController.swift in Sources */,
