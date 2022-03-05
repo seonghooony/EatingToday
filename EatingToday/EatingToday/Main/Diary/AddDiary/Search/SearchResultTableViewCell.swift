@@ -16,8 +16,9 @@ class SearchResultTableViewCell: UITableViewCell {
     
     var cellDelegate: goUrlCellInfoDelegate?
     
-    let storeName = UILabel()
-    let addressName = UILabel()
+    let storeNameLabel = UILabel()
+    let addressNameLabel = UILabel()
+    let phoneLabel = UILabel()
     var link: String?
     let linkButton = UIButton()
 
@@ -35,32 +36,42 @@ class SearchResultTableViewCell: UITableViewCell {
     }
     
     func viewConfigure() {
-        self.addSubview(self.storeName)
-        self.addSubview(self.addressName)
+        self.addSubview(self.storeNameLabel)
+        self.addSubview(self.addressNameLabel)
+        self.addSubview(self.phoneLabel)
         self.addSubview(self.linkButton)
+        self.linkButton.setTitle("상세보기", for: .normal)
+        self.linkButton.setTitleColor(.black, for: .normal)
         self.linkButton.addTarget(self, action: #selector(goUrl), for: .touchUpInside)
     
     }
     
     func constraintConfigure() {
         
-        self.storeName.snp.makeConstraints{ make in
+        self.storeNameLabel.snp.makeConstraints{ make in
             make.top.equalToSuperview().offset(0)
             make.height.equalTo(30)
             make.leading.equalToSuperview().offset(0)
             make.trailing.equalToSuperview().offset(0)
         }
         
-        self.addressName.snp.makeConstraints{ make in
-            make.top.equalTo(self.storeName.snp.bottom).offset(2)
+        self.addressNameLabel.snp.makeConstraints{ make in
+            make.top.equalTo(self.storeNameLabel.snp.bottom).offset(2)
             make.height.equalTo(30)
             make.leading.equalToSuperview().offset(0)
             make.trailing.equalToSuperview().offset(0)
         }
-        self.linkButton.snp.makeConstraints{ make in
-            make.top.equalTo(self.addressName.snp.bottom).offset(2)
+        
+        self.phoneLabel.snp.makeConstraints{ make in
+            make.top.equalTo(self.addressNameLabel.snp.bottom).offset(2)
             make.height.equalTo(30)
             make.leading.equalToSuperview().offset(0)
+            //make.trailing.equalToSuperview().offset(0)
+        }
+        self.linkButton.snp.makeConstraints{ make in
+            make.top.equalTo(self.addressNameLabel.snp.bottom).offset(2)
+            make.height.equalTo(30)
+            make.trailing.equalToSuperview().offset(0)
             //make.trailing.equalToSuperview().offset(0)
         }
     

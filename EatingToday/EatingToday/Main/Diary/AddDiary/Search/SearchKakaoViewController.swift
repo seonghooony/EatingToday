@@ -54,13 +54,19 @@ class SearchKakaoViewController: UIViewController {
     
     func viewConfigure() {
         self.view.backgroundColor = .white
-        self.view.addSubview(self.closeButton)
+        //self.view.addSubview(self.closeButton)
+        self.view.layer.cornerRadius = 15
+        
+        
+        self.headView.addSubview(self.closeButton)
         self.closeButton.setImage(UIImage(systemName: "xmark"), for: .normal)
         self.closeButton.tintColor = UIColor(displayP3Red: 1/255, green: 1/255, blue: 1/255, alpha: 1)
         self.closeButton.addTarget(self, action: #selector(close), for: .touchUpInside)
         
         self.view.addSubview(self.headView)
-        //self.headView.backgroundColor = .red
+        self.headView.backgroundColor = UIColor(displayP3Red: 246/255, green: 238/255, blue: 223/255, alpha: 1)
+        self.headView.layer.cornerRadius = 15
+        
         
         self.headView.addSubview(self.searchHeadLabel)
         self.searchHeadLabel.text = "가게 이름 검색"
@@ -68,6 +74,7 @@ class SearchKakaoViewController: UIViewController {
         
         self.headView.addSubview(self.searchTextField)
         //self.searchTextField.placeholder = "가게 이름을 입력해주세요."
+        self.searchTextField.backgroundColor = .white
         self.searchTextField.layer.cornerRadius = 20
         self.searchTextField.layer.borderWidth = 1.5
         self.searchTextField.layer.borderColor = UIColor.black.cgColor
@@ -79,10 +86,10 @@ class SearchKakaoViewController: UIViewController {
         
         
         self.view.addSubview(self.mainView)
-        self.mainView.backgroundColor = .blue
+        self.mainView.backgroundColor = .white
         
         self.mainView.addSubview(resultTableView)
-        
+        self.resultTableView.backgroundColor = .clear
     }
     
     func constraintConfigure() {
@@ -95,13 +102,13 @@ class SearchKakaoViewController: UIViewController {
         }
         
         self.headView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(70)
+            make.top.equalToSuperview()
             make.leading.trailing.equalToSuperview()
-            make.height.equalTo(100)
+            make.height.equalTo(170)
         }
         
         self.searchHeadLabel.snp.makeConstraints{ make in
-            make.top.equalToSuperview().offset(10)
+            make.top.equalToSuperview().offset(80)
             make.leading.equalToSuperview().offset(10)
         }
         
@@ -122,8 +129,8 @@ class SearchKakaoViewController: UIViewController {
         self.resultTableView.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(5)
             make.bottom.equalToSuperview().offset(-5)
-            make.leading.equalToSuperview().offset(5)
-            make.trailing.equalToSuperview().offset(-5)
+            make.leading.equalToSuperview().offset(10)
+            make.trailing.equalToSuperview().offset(-10)
             
         }
     }
@@ -219,12 +226,13 @@ extension SearchKakaoViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SearchResultTableViewCell", for: indexPath) as? SearchResultTableViewCell
         cell?.selectionStyle = .none
-        cell?.backgroundColor = .brown
-        cell?.storeName.text = resultList?.documents[indexPath.row].place_name
-        cell?.addressName.text = resultList?.documents[indexPath.row].address_name
+        cell?.backgroundColor = .clear
+        cell?.storeNameLabel.text = resultList?.documents[indexPath.row].place_name
+        cell?.addressNameLabel.text = resultList?.documents[indexPath.row].address_name
+        cell?.phoneLabel.text = resultList?.documents[indexPath.row].phone
         cell?.link = resultList?.documents[indexPath.row].place_url
         cell?.cellDelegate = self
-        cell?.linkButton.setTitle("상세보기", for: .normal)
+        //cell?.linkButton.setTitle("상세보기", for: .normal)
         
         cell?.contentView.isUserInteractionEnabled = false
         
