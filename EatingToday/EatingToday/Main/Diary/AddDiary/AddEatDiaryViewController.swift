@@ -10,7 +10,11 @@ import SnapKit
 import BSImagePicker
 import Photos
 
+
+
 class AddEatDiaryViewController: UIViewController {
+    
+    var selectedPlace: SelectedSearchResultDocument?
     
     let headView = UIView()
     let titleLabel = UILabel()
@@ -119,6 +123,7 @@ class AddEatDiaryViewController: UIViewController {
 //        addDairyVC.modalPresentationStyle = UIModalPresentationStyle.fullScreen
         
 //        navigationController?.pushViewController(searchKakaoVC, animated: true)
+        searchKakaoVC.resultDelegate = self
         self.present(searchKakaoVC, animated: true, completion: nil)
     }
     
@@ -131,6 +136,7 @@ class AddEatDiaryViewController: UIViewController {
         toolbar.items = [leftButton, doneButton]
         
         self.datepicker.datePickerMode = .date
+        self.datepicker.locale = Locale(identifier: "ko_KR")
         self.datepicker.preferredDatePickerStyle = .wheels
         self.datepicker.addTarget(self, action: #selector(datePickerValueDidChanged(_:)), for: .valueChanged)
         self.dateField.inputAccessoryView = toolbar
@@ -206,6 +212,20 @@ class AddEatDiaryViewController: UIViewController {
         }
     }
     
+    func showAlert(msg: String) {
+        let alert = UIAlertController(
+            title: "알림",
+            message: """
+            \(msg)
+            """,
+            preferredStyle: .alert
+        )
+        let confirm = UIAlertAction(title: "확인", style: .default, handler: nil)
+        
+        alert.addAction(confirm)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
     func viewConfigure() {
         self.view.backgroundColor = .white
         
@@ -244,7 +264,7 @@ class AddEatDiaryViewController: UIViewController {
         
         self.storeNameView.addSubview(self.storeNameField)
         self.storeNameField.backgroundColor = .clear
-        self.storeNameField.layer.cornerRadius = 20
+        self.storeNameField.layer.cornerRadius = 22.5
         self.storeNameField.layer.borderWidth = 1.5
         self.storeNameField.layer.borderColor = UIColor.black.cgColor
         self.storeNameField.setTitle("방문하신 가게 명을 입력해주세요.", for: .normal)
@@ -281,7 +301,7 @@ class AddEatDiaryViewController: UIViewController {
         
         self.dateView.addSubview(self.dateField)
         self.dateField.backgroundColor = .clear
-        self.dateField.layer.cornerRadius = 20
+        self.dateField.layer.cornerRadius = 22.5
         self.dateField.layer.borderWidth = 1.5
         self.dateField.layer.borderColor = UIColor.black.cgColor
         //self.dateField.placeholder = "식사하신 날짜를 선택해주세요."
@@ -365,14 +385,14 @@ class AddEatDiaryViewController: UIViewController {
 
         self.storeNameLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(10)
-            make.leading.equalToSuperview().offset(10)
+            make.leading.equalToSuperview().offset(20)
         }
         
         self.storeNameField.snp.makeConstraints{ make in
             make.top.equalTo(storeNameLabel.snp.bottom).offset(10)
-            make.leading.equalToSuperview().offset(15)
-            make.trailing.equalToSuperview().offset(-15)
-            make.height.equalTo(40)
+            make.leading.equalToSuperview().offset(20)
+            make.trailing.equalToSuperview().offset(-20)
+            make.height.equalTo(45)
         }
         
         self.storeNameField.titleLabel?.snp.makeConstraints { make in
@@ -388,7 +408,7 @@ class AddEatDiaryViewController: UIViewController {
         
         self.imageLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(10)
-            make.leading.equalToSuperview().offset(10)
+            make.leading.equalToSuperview().offset(20)
         }
         
         self.imageUiView.snp.makeConstraints { make in
@@ -413,14 +433,14 @@ class AddEatDiaryViewController: UIViewController {
         
         self.dateLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(10)
-            make.leading.equalToSuperview().offset(10)
+            make.leading.equalToSuperview().offset(20)
         }
         
         self.dateField.snp.makeConstraints { make in
             make.top.equalTo(self.dateLabel.snp.bottom).offset(10)
-            make.leading.equalToSuperview().offset(10)
-            make.trailing.equalToSuperview().offset(-10)
-            make.height.equalTo(40)
+            make.leading.equalToSuperview().offset(20)
+            make.trailing.equalToSuperview().offset(-20)
+            make.height.equalTo(45)
         }
         
     }
@@ -437,28 +457,62 @@ extension AddEatDiaryViewController: UICollectionViewDataSource, UICollectionVie
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AddImageCollectionViewCell", for: indexPath) as? AddImageCollectionViewCell else { return UICollectionViewCell() }
         print("생성 셀 인덱스 : \(indexPath.row)")
+        
+        cell.cellIndex = indexPath.row
         if indexPath.row == 0 {
             cell.imageView.image = UIImage(systemName: "plus.app")
             cell.imageView.tintColor = .black
+            cell.deleteButton.isHidden = true
         }else if indexPath.row > 0 {
             
             cell.imageView.image = selectedImages[indexPath.row - 1]
+            cell.deleteButton.isHidden = false
             
         }
+        
+        //삭제버튼 위임
+        cell.deleteIndexImageDelegate = self
+        
         
         return cell
     }
     
+    
+    
     //셀 클릭
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if selectedImages.count < 10 {
-            if indexPath.row == 0 {
-                self.tappedImageAddButton()
+        if indexPath.row == 0 {
+            if selectedImages.count >= 10 {
+                self.showAlert(msg: "이미지는 10개 이하로 선택 가능합니다.")
             } else {
-                print("클릭 인덱스 : \(indexPath.row)")
+                self.tappedImageAddButton()
             }
-        } else {
-            print("10개 이상")
+        } else if indexPath.row > 0 {
+            print("클릭 인덱스 : \(indexPath.row)")
+            let popDetailImageViewController = PopDetailImageViewController()
+            popDetailImageViewController.modalPresentationStyle = .overFullScreen
+            
+            let imageManager = PHImageManager.default()
+            let option = PHImageRequestOptions()
+            option.isSynchronous = true
+            var thumbnail = UIImage()
+            
+            imageManager.requestImage(
+                for: self.selectedAssets[indexPath.row - 1],
+                   targetSize: CGSize(width: self.selectedAssets[indexPath.row - 1].pixelWidth, height: self.selectedAssets[indexPath.row - 1].pixelHeight),
+                contentMode: .aspectFill,
+                options: option
+            ) { (result, info) in
+                thumbnail = result!
+            }
+            
+            let data = thumbnail.jpegData(compressionQuality: 1)
+            let newImage = UIImage(data: data!)
+            
+            popDetailImageViewController.detailImageView.contentMode = .scaleAspectFit
+            popDetailImageViewController.detailImageView.image = newImage
+            
+            self.present(popDetailImageViewController, animated: false, completion: nil)
         }
         
     }
@@ -476,4 +530,20 @@ extension AddEatDiaryViewController: UICollectionViewDataSource, UICollectionVie
 
 
 
+extension AddEatDiaryViewController: selectedStorePlaceDelegate {
+    func showSelectedStorePlace(document: SelectedSearchResultDocument) {
+        self.selectedPlace = document
+        debugPrint(document)
+        self.storeNameField.setTitle(self.selectedPlace?.place_name, for: .normal)
+        self.storeNameField.setTitleColor(.black, for: .normal)
+        
+    }
+}
 
+extension AddEatDiaryViewController: deleteIndexImageDelegate {
+    func deleteIndexImage(index: Int) {
+        self.selectedAssets.remove(at: index)
+        self.selectedImages.remove(at: index)
+        self.imageCollectionView.reloadData()
+    }
+}

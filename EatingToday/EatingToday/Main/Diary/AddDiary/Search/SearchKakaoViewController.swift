@@ -8,10 +8,16 @@ import Foundation
 import UIKit
 import Alamofire
 
+protocol selectedStorePlaceDelegate: AnyObject {
+    func showSelectedStorePlace(document: SelectedSearchResultDocument)
+}
+
 class SearchKakaoViewController: UIViewController {
     
     var resultList: SearchResultOverview?
     var SearchKeyword: String?
+    
+    var resultDelegate: selectedStorePlaceDelegate?
     
     let closeButton = UIButton()
     
@@ -39,7 +45,22 @@ class SearchKakaoViewController: UIViewController {
         super.viewDidLoad()
         viewConfigure()
         constraintConfigure()
+        scrollViewEndEditing()
         //searchKakaoApiPlace()
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        //빈 화면을 눌러줄때 마다 하단 키보드나 데이트피커가 사라짐
+        self.view.endEditing(true)
+    }
+    
+    // 스크롤뷰에서 클릭시 endEditing 기능 먹도록 함
+    func scrollViewEndEditing() {
+        let singleTap = UITapGestureRecognizer(target: self, action: #selector(self.endEdit))
+        singleTap.numberOfTapsRequired = 1
+        singleTap.isEnabled = true
+        singleTap.cancelsTouchesInView = false
+        self.resultTableView.addGestureRecognizer(singleTap)
     }
     
     @objc func close() {
@@ -50,6 +71,10 @@ class SearchKakaoViewController: UIViewController {
         if currentkeword.count > 0 {
             searchKakaoApiPlace(keyword: self.searchTextField.text ?? "서울")
         }
+    }
+    
+    @objc func endEdit() {
+        self.view.endEditing(true)
     }
     
     func viewConfigure() {
@@ -75,7 +100,7 @@ class SearchKakaoViewController: UIViewController {
         self.headView.addSubview(self.searchTextField)
         //self.searchTextField.placeholder = "가게 이름을 입력해주세요."
         self.searchTextField.backgroundColor = .white
-        self.searchTextField.layer.cornerRadius = 20
+        self.searchTextField.layer.cornerRadius = 22.5
         self.searchTextField.layer.borderWidth = 1.5
         self.searchTextField.layer.borderColor = UIColor.black.cgColor
         self.searchTextField.attributedPlaceholder = NSAttributedString(string: "가게 이름을 입력해주세요.", attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
@@ -93,7 +118,13 @@ class SearchKakaoViewController: UIViewController {
     }
     
     func constraintConfigure() {
-    
+        
+        self.headView.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(140)
+        }
+        
         self.closeButton.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(20)
             make.top.equalToSuperview().offset(20)
@@ -101,22 +132,17 @@ class SearchKakaoViewController: UIViewController {
             
         }
         
-        self.headView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.leading.trailing.equalToSuperview()
-            make.height.equalTo(170)
-        }
-        
         self.searchHeadLabel.snp.makeConstraints{ make in
-            make.top.equalToSuperview().offset(80)
-            make.leading.equalToSuperview().offset(10)
+            make.top.equalToSuperview().offset(30)
+            make.centerX.equalToSuperview()
+            //make.leading.equalToSuperview().offset(10)
         }
         
         self.searchTextField.snp.makeConstraints{ make in
-            make.top.equalTo(searchHeadLabel.snp.bottom).offset(10)
-            make.leading.equalToSuperview().offset(15)
-            make.trailing.equalToSuperview().offset(-15)
-            make.height.equalTo(40)
+            make.top.equalTo(searchHeadLabel.snp.bottom).offset(20)
+            make.leading.equalToSuperview().offset(20)
+            make.trailing.equalToSuperview().offset(-20)
+            make.height.equalTo(45)
         }
         
         
@@ -129,8 +155,8 @@ class SearchKakaoViewController: UIViewController {
         self.resultTableView.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(5)
             make.bottom.equalToSuperview().offset(-5)
-            make.leading.equalToSuperview().offset(10)
-            make.trailing.equalToSuperview().offset(-10)
+            make.leading.equalToSuperview().offset(20)
+            make.trailing.equalToSuperview().offset(-20)
             
         }
     }
@@ -247,6 +273,17 @@ extension SearchKakaoViewController: UITableViewDelegate {
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("선택됨")
+        let selectedDocument = SelectedSearchResultDocument(
+            address_name: resultList?.documents[indexPath.row].address_name,
+            road_address_name: resultList?.documents[indexPath.row].road_address_name,
+            phone: resultList?.documents[indexPath.row].phone,
+            place_name: resultList?.documents[indexPath.row].place_name,
+            place_url: resultList?.documents[indexPath.row].place_url,
+            x: resultList?.documents[indexPath.row].x,
+            y: resultList?.documents[indexPath.row].y
+        )
+        self.resultDelegate?.showSelectedStorePlace(document: selectedDocument)
+        self.dismiss(animated: true, completion: nil)
 
     }
 }
