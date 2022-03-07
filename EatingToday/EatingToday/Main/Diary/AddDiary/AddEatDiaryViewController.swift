@@ -74,6 +74,8 @@ class AddEatDiaryViewController: UIViewController {
     let storyLabel = UILabel()
     let storyField = UITextField()
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         viewConfigure()
@@ -460,8 +462,8 @@ extension AddEatDiaryViewController: UICollectionViewDataSource, UICollectionVie
         
         cell.cellIndex = indexPath.row
         if indexPath.row == 0 {
-            cell.imageView.image = UIImage(systemName: "plus.app")
-            cell.imageView.tintColor = .black
+            cell.imageView.image = UIImage(named: "logo_addimage")
+            ///<a href="https://www.flaticon.com/kr/free-icons/" title="사진 아이콘">사진 아이콘  제작자: Pixel perfect - Flaticon</a>
             cell.deleteButton.isHidden = true
         }else if indexPath.row > 0 {
             
@@ -472,7 +474,8 @@ extension AddEatDiaryViewController: UICollectionViewDataSource, UICollectionVie
         
         //삭제버튼 위임
         cell.deleteIndexImageDelegate = self
-        
+        cell.imageView.layer.cornerRadius = 10
+        cell.imageView.clipsToBounds = true
         
         return cell
     }
@@ -488,29 +491,53 @@ extension AddEatDiaryViewController: UICollectionViewDataSource, UICollectionVie
                 self.tappedImageAddButton()
             }
         } else if indexPath.row > 0 {
-            print("클릭 인덱스 : \(indexPath.row)")
+            
+            //이미지 상세보기 팝업
             let popDetailImageViewController = PopDetailImageViewController()
+            print("클릭 인덱스 : \(indexPath.row)")
+            popDetailImageViewController.detailImageView.image = nil
             popDetailImageViewController.modalPresentationStyle = .overFullScreen
             
             let imageManager = PHImageManager.default()
             let option = PHImageRequestOptions()
-            option.isSynchronous = true
+            option.isSynchronous = false
+            option.deliveryMode = .highQualityFormat
+            
+            option.progressHandler = { (progress, error, stop, info) in
+                print("progress: \(progress)")
+                if progress >= 1.0 {
+                    
+                }
+            }
+            option.isNetworkAccessAllowed = true
+            //option.version = .original
             var thumbnail = UIImage()
             
             imageManager.requestImage(
                 for: self.selectedAssets[indexPath.row - 1],
-                   targetSize: CGSize(width: self.selectedAssets[indexPath.row - 1].pixelWidth, height: self.selectedAssets[indexPath.row - 1].pixelHeight),
-                contentMode: .aspectFill,
+                   targetSize: PHImageManagerMaximumSize,
+                contentMode: .aspectFit,
                 options: option
             ) { (result, info) in
-                thumbnail = result!
+                print("이미지 생성중")
+                
+                if let result = result {
+                    print("이미지 생성완료")
+                    popDetailImageViewController.animationView.stop()
+                    popDetailImageViewController.animationView.isHidden = true
+                    
+                    thumbnail = result
+                    let data = thumbnail.jpegData(compressionQuality: 1)
+                    let newImage = UIImage(data: data!)
+                    popDetailImageViewController.detailImageView.contentMode = .scaleAspectFit
+                    popDetailImageViewController.detailImageView.image = newImage
+                    
+                    
+                }
+                
             }
             
-            let data = thumbnail.jpegData(compressionQuality: 1)
-            let newImage = UIImage(data: data!)
             
-            popDetailImageViewController.detailImageView.contentMode = .scaleAspectFit
-            popDetailImageViewController.detailImageView.image = newImage
             
             self.present(popDetailImageViewController, animated: false, completion: nil)
         }
@@ -547,3 +574,5 @@ extension AddEatDiaryViewController: deleteIndexImageDelegate {
         self.imageCollectionView.reloadData()
     }
 }
+
+

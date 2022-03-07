@@ -37,7 +37,9 @@ class AddImageCollectionViewCell: UICollectionViewCell {
     }
     
     func viewConfigure() {
+        
         self.addSubview(imageView)
+        
         self.addSubview(deleteButton)
         self.deleteButton.setImage(UIImage(systemName: "xmark.app.fill"), for: .normal)
         self.deleteButton.tintColor = .gray

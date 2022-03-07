@@ -29,6 +29,7 @@
 		DB6F1B4727D22A0C00247B89 /* SearchResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1B4627D22A0C00247B89 /* SearchResultTableViewCell.swift */; };
 		DB6F1B4927D466A900247B89 /* SelectedSearchResultDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1B4827D466A900247B89 /* SelectedSearchResultDocument.swift */; };
 		DB6F1B4B27D48B5900247B89 /* PopDetailImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1B4A27D48B5900247B89 /* PopDetailImageViewController.swift */; };
+		DB6F1B5227D6601300247B89 /* loadingImage.json in Resources */ = {isa = PBXBuildFile; fileRef = DB6F1B5127D6601300247B89 /* loadingImage.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -59,6 +60,7 @@
 		DB6F1B4627D22A0C00247B89 /* SearchResultTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultTableViewCell.swift; sourceTree = "<group>"; };
 		DB6F1B4827D466A900247B89 /* SelectedSearchResultDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedSearchResultDocument.swift; sourceTree = "<group>"; };
 		DB6F1B4A27D48B5900247B89 /* PopDetailImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopDetailImageViewController.swift; sourceTree = "<group>"; };
+		DB6F1B5127D6601300247B89 /* loadingImage.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loadingImage.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,13 +113,13 @@
 		DB6F1AE227BBF93100247B89 /* EatingToday */ = {
 			isa = PBXGroup;
 			children = (
+				DB6F1AE327BBF93100247B89 /* AppDelegate.swift */,
+				DB6F1AE527BBF93100247B89 /* SceneDelegate.swift */,
+				DB6F1AEE27BBF93200247B89 /* LaunchScreen.storyboard */,
 				DB6F1B2D27C4816200247B89 /* Main */,
 				DB6F1B2C27C4814100247B89 /* Login */,
 				DB6F1B0527C2135400247B89 /* EatingToday.entitlements */,
-				DB6F1AE327BBF93100247B89 /* AppDelegate.swift */,
-				DB6F1AE527BBF93100247B89 /* SceneDelegate.swift */,
 				DB6F1AEC27BBF93200247B89 /* Assets.xcassets */,
-				DB6F1AEE27BBF93200247B89 /* LaunchScreen.storyboard */,
 				DB6F1AF127BBF93200247B89 /* Info.plist */,
 				DB6F1AFB27BCEA9600247B89 /* GoogleService-Info.plist */,
 			);
@@ -183,9 +185,10 @@
 		DB6F1B3D27CE03DB00247B89 /* AddDiary */ = {
 			isa = PBXGroup;
 			children = (
-				DB6F1B3A27CB542A00247B89 /* AddImageCollectionViewCell.swift */,
 				DB6F1B3827C5ECEA00247B89 /* AddEatDiaryViewController.swift */,
 				DB6F1B4A27D48B5900247B89 /* PopDetailImageViewController.swift */,
+				DB6F1B5127D6601300247B89 /* loadingImage.json */,
+				DB6F1B3A27CB542A00247B89 /* AddImageCollectionViewCell.swift */,
 				DB6F1B4327D1FBBF00247B89 /* Search */,
 			);
 			path = AddDiary;
@@ -262,6 +265,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DB6F1B5227D6601300247B89 /* loadingImage.json in Resources */,
 				DB6F1AF027BBF93200247B89 /* LaunchScreen.storyboard in Resources */,
 				DB6F1AFC27BCEA9600247B89 /* GoogleService-Info.plist in Resources */,
 				DB6F1AED27BBF93200247B89 /* Assets.xcassets in Resources */,

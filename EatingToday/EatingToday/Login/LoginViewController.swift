@@ -12,6 +12,7 @@ import GoogleSignIn
 import FirebaseAuth
 import AuthenticationServices
 import CryptoKit
+import SkyFloatingLabelTextField
 
 class LoginViewController: UIViewController {
     
@@ -22,9 +23,22 @@ class LoginViewController: UIViewController {
     let titleImage = UIImageView()
     
     let titleLabel = UILabel()
-    let idFeild = UITextField()
-    let pwFeild = UITextField()
+    
+    let activeColor = UIColor(red: 50/255, green: 50/255, blue: 50/255, alpha: 1.0)
+    let inactiveColor = UIColor(red: 200/255, green: 200/255, blue: 200/255, alpha: 1.0)
+    let titleColor = UIColor(red: 0, green: 187/255, blue: 204/255, alpha: 1.0)
+    
+    let idLabel = UILabel()
+    let idFeild = SkyFloatingLabelTextField(frame: CGRect(x: 0, y: 0, width: CGFloat(UIScreen.main.bounds.width) * 0.85, height: 40))
+    let pwLabel = UILabel()
+    let pwFeild = SkyFloatingLabelTextField(frame: CGRect(x: 0, y: 0, width: CGFloat(UIScreen.main.bounds.width) * 0.85, height: 40))
+    
     let loginButton = UIButton()
+    
+    let loginHeadlineView = UIView()
+    let leftlineView = UIView()
+    let rightlineView = UIView()
+    let lineTextLabel = UILabel()
     
     let googleLoginButton = UIButton()
     let appleLoginButton = UIButton()
@@ -129,38 +143,133 @@ class LoginViewController: UIViewController {
     }
     
     func viewConfigure() {
-        view.backgroundColor = UIColor(displayP3Red: 200/255, green: 92/255, blue: 92/255, alpha: 1)
+        //view.backgroundColor = UIColor(displayP3Red: 200/255, green: 92/255, blue: 92/255, alpha: 1)
+        view.backgroundColor = .white
         
         self.view.addSubview(self.titleImage)
-        self.titleImage.image = UIImage(systemName: "pencil")
+        self.titleImage.image = UIImage(named: "logo_lamen")
+        ///<a href="https://www.flaticon.com/kr/free-icons/" title="라면 아이콘">라면 아이콘  제작자: tulpahn - Flaticon</a>
         
         self.view.addSubview(self.titleLabel)
         self.titleLabel.text = "Eatingram"
         self.titleLabel.textAlignment = .center
         self.titleLabel.font = UIFont(name: "Marker Felt", size: 35)
-        self.titleLabel.textColor = UIColor(displayP3Red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
+        self.titleLabel.textColor = UIColor(displayP3Red: 1/255, green: 1/255, blue: 1/255, alpha: 1)
+        
+        self.view.addSubview(self.idLabel)
+        self.idLabel.text = "이메일"
+        self.idLabel.textColor = .black
+        self.idLabel.font = UIFont(name: "Helvetica Bold", size: 15)
         
         self.view.addSubview(self.idFeild)
-        self.idFeild.delegate = self
-        self.idFeild.keyboardType = .emailAddress
-        self.idFeild.backgroundColor = UIColor(displayP3Red: 248/255, green: 237/255, blue: 227/255, alpha: 1)
-        self.idFeild.textColor = UIColor(displayP3Red: 1/255, green: 1/255, blue: 1/255, alpha: 1)
-        self.idFeild.attributedPlaceholder = NSAttributedString(string: "Email", attributes: [NSAttributedString.Key.foregroundColor : UIColor.gray])
-        self.idFeild.autocapitalizationType = .none
-        self.idFeild.layer.cornerRadius = 10
-        self.idFeild.withImage(direction: .Left, image: UIImage(systemName: "person")!, colorSeparator: .clear, colorBorder: .clear)
+        self.idFeild.placeholder = "이메일을 입력해주세요."
+        self.idFeild.title = ""
         
+        //맞춤법 검사
+        self.idFeild.autocorrectionType = .no
+        //첫글자 자동 대문자
+        self.idFeild.autocapitalizationType = .none
+        //text키보드모드
+        self.idFeild.keyboardType = .emailAddress
+        //text 비밀번호 가림
+        self.idFeild.isSecureTextEntry = false
+        //커서 색상
+        self.idFeild.tintColor = titleColor
+        //안쪽 텍스트 색상
+        self.idFeild.textColor = .black
+        //안쪽 텍스트 폰트
+        self.idFeild.font = UIFont(name: "Helvetica", size: 18)
+        //기본 라인 색상
+        self.idFeild.lineColor = inactiveColor
+        //선택 라인 색상
+        self.idFeild.selectedLineColor = activeColor
+        //선택 위쪽 타이틀 색상
+        self.idFeild.selectedTitleColor = titleColor
+        //선택 위쪽 텍스트 폰트
+        self.idFeild.titleFont = UIFont(name: "Helvetica", size: 0)!
+        //기본 아래 선 굵기
+        self.idFeild.lineHeight = 1.0
+        //선택 시 아래 선 굵기
+        self.idFeild.selectedLineHeight = 2.0
+        //에러 시 색상
+        self.idFeild.errorColor = .red
+        //에러용 액션 추가
+//        self.idFeild.addTarget(self, action: #selector(emailFieldDidChange(_:)), for: .editingChanged)
+        //키보드 return 클릭시 반응하도록 위임
+        self.idFeild.delegate = self
+
+//        self.idFeild.delegate = self
+//        self.idFeild.keyboardType = .emailAddress
+//        self.idFeild.backgroundColor = UIColor(displayP3Red: 248/255, green: 237/255, blue: 227/255, alpha: 1)
+//        self.idFeild.textColor = UIColor(displayP3Red: 1/255, green: 1/255, blue: 1/255, alpha: 1)
+//        self.idFeild.attributedPlaceholder = NSAttributedString(string: "Email", attributes: [NSAttributedString.Key.foregroundColor : UIColor.gray])
+//        self.idFeild.autocapitalizationType = .none
+//        self.idFeild.layer.cornerRadius = 10
+//        self.idFeild.withImage(direction: .Left, image: UIImage(systemName: "person")!, colorSeparator: .clear, colorBorder: .clear)
+        
+        self.view.addSubview(self.pwLabel)
+        self.pwLabel.text = "비밀번호"
+        self.pwLabel.textColor = .black
+        self.pwLabel.font = UIFont(name: "Helvetica Bold", size: 15)
         
         self.view.addSubview(self.pwFeild)
-        self.pwFeild.delegate = self
-        self.pwFeild.backgroundColor = UIColor(displayP3Red: 248/255, green: 237/255, blue: 227/255, alpha: 1)
-        self.pwFeild.textColor = UIColor(displayP3Red: 1/255, green: 1/255, blue: 1/255, alpha: 1)
-        self.pwFeild.attributedPlaceholder = NSAttributedString(string: "Password", attributes: [NSAttributedString.Key.foregroundColor : UIColor.gray])
-        self.pwFeild.isSecureTextEntry = true
-        self.pwFeild.autocapitalizationType = .none
-        self.pwFeild.layer.cornerRadius = 10
-        self.pwFeild.withImage(direction: .Left, image: UIImage(systemName: "key")!, colorSeparator: .clear, colorBorder: .clear)
+        self.pwFeild.placeholder = "비밀번호를 입력해주세요."
+        self.pwFeild.title = ""
         
+        //첫글자 자동 대문자
+        self.pwFeild.autocapitalizationType = .none
+        //text키보드모드
+        //self.idFeild.keyboardType = .emailAddress
+        //text 비밀번호 가림
+        self.pwFeild.isSecureTextEntry = true
+        //커서 색상
+        self.pwFeild.tintColor = titleColor
+        //안쪽 텍스트 색상
+        self.pwFeild.textColor = .black
+        //안쪽 텍스트 폰트
+        self.pwFeild.font = UIFont(name: "Helvetica", size: 18)
+        //기본 라인 색상
+        self.pwFeild.lineColor = inactiveColor
+        //선택 라인 색상
+        self.pwFeild.selectedLineColor = activeColor
+        //선택 위쪽 타이틀 색상
+        self.pwFeild.selectedTitleColor = titleColor
+        //선택 위쪽 텍스트 폰트
+        self.pwFeild.titleFont = UIFont(name: "Helvetica", size: 0)!
+        //기본 아래 선 굵기
+        self.pwFeild.lineHeight = 1.0
+        //선택 시 아래 선 굵기
+        self.pwFeild.selectedLineHeight = 2.0
+        //에러 시 색상
+        self.pwFeild.errorColor = .red
+        //에러용 액션 추가
+//        self.pwFeild.addTarget(self, action: #selector(passwordFieldDidChange(_:)), for: .editingChanged)
+        //키보드 return 클릭 시 반응 하도록 위임
+        self.pwFeild.delegate = self
+        
+//        self.pwFeild.delegate = self
+//        self.pwFeild.backgroundColor = UIColor(displayP3Red: 248/255, green: 237/255, blue: 227/255, alpha: 1)
+//        self.pwFeild.textColor = UIColor(displayP3Red: 1/255, green: 1/255, blue: 1/255, alpha: 1)
+//        self.pwFeild.attributedPlaceholder = NSAttributedString(string: "Password", attributes: [NSAttributedString.Key.foregroundColor : UIColor.gray])
+//        self.pwFeild.isSecureTextEntry = true
+//        self.pwFeild.autocapitalizationType = .none
+//        self.pwFeild.layer.cornerRadius = 10
+//        self.pwFeild.withImage(direction: .Left, image: UIImage(systemName: "key")!, colorSeparator: .clear, colorBorder: .clear)
+        
+        
+
+        
+        self.view.addSubview(self.loginHeadlineView)
+        self.loginHeadlineView.addSubview(leftlineView)
+        self.leftlineView.backgroundColor = .lightGray
+        
+        self.loginHeadlineView.addSubview(lineTextLabel)
+        self.lineTextLabel.textColor = .lightGray
+        self.lineTextLabel.text = "간편 로그인"
+        self.lineTextLabel.font = UIFont(name: "Helvetica", size: 15)
+        
+        self.loginHeadlineView.addSubview(rightlineView)
+        self.rightlineView.backgroundColor = .lightGray
         
         self.view.addSubview(self.loginButton)
         self.loginButton.backgroundColor = UIColor(displayP3Red: 249/255, green: 151/255, blue: 93/255, alpha: 1)
@@ -174,7 +283,7 @@ class LoginViewController: UIViewController {
         self.googleLoginButton.setTitle("구글로 로그인", for: .normal)
         self.googleLoginButton.setTitleColor(.black, for: .normal)
         self.googleLoginButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
-        self.googleLoginButton.backgroundColor = UIColor(displayP3Red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
+        self.googleLoginButton.backgroundColor = UIColor(displayP3Red: 230/255, green: 230/255, blue: 230/255, alpha: 1)
         self.googleLoginButton.layer.cornerRadius = 20
         self.googleLoginButton.addTarget(self, action: #selector(googleLoginClicked), for: .touchUpInside)
         
@@ -189,45 +298,84 @@ class LoginViewController: UIViewController {
         
         self.view.addSubview(self.emailRegisterButton)
         self.emailRegisterButton.setTitle("아직 계정이 없어요.", for: .normal)
-        self.emailRegisterButton.setTitleColor(.white, for: .normal)
+        self.emailRegisterButton.setTitleColor(.black, for: .normal)
         self.emailRegisterButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
         self.emailRegisterButton.addTarget(self, action: #selector(emailResisterClicked), for: .touchUpInside)
     }
     
     func constraintConfigure() {
         self.titleImage.snp.makeConstraints{ make in
-            make.top.equalToSuperview().offset(150)
-            make.width.height.equalTo(100)
+            make.top.equalToSuperview().offset(80)
+            make.width.height.equalTo(150)
             make.centerX.equalToSuperview()
         }
         self.titleLabel.snp.makeConstraints{ make in
-            make.top.equalTo(self.titleImage.snp.bottom).offset(50)
+            make.top.equalTo(self.titleImage.snp.bottom).offset(25)
             make.centerX.equalToSuperview()
+        }
+        
+        self.idLabel.snp.makeConstraints { make in
+            make.top.equalTo(self.titleLabel.snp.bottom).offset(40)
+            make.leading.equalToSuperview().offset(40)
         }
 
         self.idFeild.snp.makeConstraints{ make in
-            make.top.equalTo(self.titleLabel.snp.bottom).offset(60)
-            make.height.equalTo(60)
+            make.top.equalTo(self.idLabel.snp.bottom).offset(0)
+            make.height.equalTo(50)
             make.leading.equalToSuperview().offset(40)
             make.trailing.equalToSuperview().offset(-40)
         }
+        
+        self.pwLabel.snp.makeConstraints { make in
+            make.top.equalTo(self.idFeild.snp.bottom).offset(30)
+            make.leading.equalToSuperview().offset(40)
+        }
 
         self.pwFeild.snp.makeConstraints{ make in
-            make.top.equalTo(self.idFeild.snp.bottom).offset(5)
-            make.height.equalTo(60)
+            make.top.equalTo(self.pwLabel.snp.bottom).offset(0)
+            make.height.equalTo(50)
             make.leading.equalToSuperview().offset(40)
             make.trailing.equalToSuperview().offset(-40)
         }
 
         self.loginButton.snp.makeConstraints{ make in
-            make.top.equalTo(self.pwFeild.snp.bottom).offset(6)
+            make.top.equalTo(self.pwFeild.snp.bottom).offset(10)
             make.height.equalTo(60)
 
             make.leading.equalToSuperview().offset(40)
             make.trailing.equalToSuperview().offset(-40)
         }
+        //        let loginHeadlineView = UIView()
+        //        let leftlineView = UIView()
+        //        let rightlineView = UIView()
+        //        let lineTextLabel = UILabel()
+        
+        self.loginHeadlineView.snp.makeConstraints { make in
+            make.top.equalTo(self.loginButton.snp.bottom).offset(20)
+            make.height.equalTo(50)
+            make.leading.equalToSuperview().offset(40)
+            make.trailing.equalToSuperview().offset(-40)
+        }
+        
+        self.leftlineView.snp.makeConstraints { make in
+            make.leading.equalToSuperview()
+            make.centerY.equalToSuperview()
+            make.trailing.equalTo(self.lineTextLabel.snp.leading).offset(-15)
+            make.height.equalTo(1)
+        }
+        self.lineTextLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+        }
+        self.rightlineView.snp.makeConstraints { make in
+            make.trailing.equalToSuperview()
+            make.centerY.equalToSuperview()
+            make.leading.equalTo(self.lineTextLabel.snp.trailing).offset(15)
+            make.height.equalTo(1)
+        }
+        
         self.googleLoginButton.snp.makeConstraints{ make in
-            make.top.equalTo(self.loginButton.snp.bottom).offset(50)
+            make.top.equalTo(self.loginHeadlineView.snp.bottom).offset(10)
             make.height.equalTo(50)
             make.leading.equalToSuperview().offset(40)
             make.trailing.equalToSuperview().offset(-40)
@@ -411,4 +559,31 @@ extension LoginViewController: UITextFieldDelegate {
         
         return true
     }
+    
+//    @objc func emailFieldDidChange(_ textField: UITextField) {
+//        if let text = textField.text {
+//            if let floatingLabelTextField = textField as? SkyFloatingLabelTextField {
+//                if (text.count < 3 || !text.contains("@")) {
+//                    floatingLabelTextField.errorMessage = " "
+//                } else {
+//                    floatingLabelTextField.errorMessage = ""
+//                }
+//
+//            }
+//        }
+//    }
+//
+//    @objc func passwordFieldDidChange(_ textField: UITextField) {
+//        if let text = textField.text {
+//            if let floatingLabelTextField = textField as? SkyFloatingLabelTextField {
+//                if (text.count < 6) {
+//                    floatingLabelTextField.errorMessage = " "
+//                } else {
+//                    floatingLabelTextField.errorMessage = ""
+//                }
+//
+//            }
+//        }
+//    }
 }
+

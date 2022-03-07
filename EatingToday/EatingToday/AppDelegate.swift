@@ -19,6 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //Firebase초기화
         FirebaseApp.configure()
         
+        
         return true
     }
     //구글 인증프로세스가 끝날때 앱이 수신하는 url을 처리하는 역할

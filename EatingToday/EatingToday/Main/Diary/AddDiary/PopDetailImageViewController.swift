@@ -7,12 +7,14 @@
 
 import UIKit
 import SnapKit
+import Lottie
 
 class PopDetailImageViewController: UIViewController {
     
     let containerScrollView = UIScrollView()
     let containerView = UIView()
     let detailImageView = UIImageView()
+    let animationView = AnimationView(name: "loadingImage")
     
     let popCloseButton = UIButton()
     
@@ -37,9 +39,7 @@ class PopDetailImageViewController: UIViewController {
 //        let pinch = UIPinchGestureRecognizer(target: self, action: #selector(doPinch(_:)))
 //        self.view.addGestureRecognizer(pinch)
         
-        
-        
-        
+
         self.view.addSubview(self.containerView)
 //        self.containerView.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5).cgColor
 //        self.containerView.layer.shadowOffset = CGSize(width: 1, height: 4)
@@ -47,6 +47,10 @@ class PopDetailImageViewController: UIViewController {
 //        self.containerView.layer.shadowOpacity = 1
 //        self.containerView.layer.cornerRadius = 10
         self.containerView.backgroundColor = .white
+        
+        self.containerView.addSubview(animationView)
+        self.animationView.play()
+        self.animationView.loopMode = .loop
         
         self.containerView.addSubview(self.containerScrollView)
         self.containerScrollView.setNeedsUpdateConstraints()
@@ -67,6 +71,11 @@ class PopDetailImageViewController: UIViewController {
     
     func constraintConfigure() {
         
+        self.animationView.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+            make.width.height.equalTo(200)
+        }
         
         self.containerView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
