@@ -164,7 +164,8 @@ class LoginViewController: UIViewController {
         self.view.addSubview(self.idFeild)
         self.idFeild.placeholder = "이메일을 입력해주세요."
         self.idFeild.title = ""
-        
+        //클리어버튼 생성
+        self.idFeild.clearButtonMode = .whileEditing
         //맞춤법 검사
         self.idFeild.autocorrectionType = .no
         //첫글자 자동 대문자
@@ -215,7 +216,8 @@ class LoginViewController: UIViewController {
         self.view.addSubview(self.pwFeild)
         self.pwFeild.placeholder = "비밀번호를 입력해주세요."
         self.pwFeild.title = ""
-        
+        //클리어버튼 생성
+        self.pwFeild.clearButtonMode = .whileEditing
         //첫글자 자동 대문자
         self.pwFeild.autocapitalizationType = .none
         //text키보드모드
@@ -304,8 +306,9 @@ class LoginViewController: UIViewController {
     }
     
     func constraintConfigure() {
+        let leadingTrailingSize = 30
         self.titleImage.snp.makeConstraints{ make in
-            make.top.equalToSuperview().offset(80)
+            make.top.equalToSuperview().offset(90)
             make.width.height.equalTo(150)
             make.centerX.equalToSuperview()
         }
@@ -315,35 +318,35 @@ class LoginViewController: UIViewController {
         }
         
         self.idLabel.snp.makeConstraints { make in
-            make.top.equalTo(self.titleLabel.snp.bottom).offset(40)
-            make.leading.equalToSuperview().offset(40)
+            make.top.equalTo(self.titleLabel.snp.bottom).offset(50)
+            make.leading.equalToSuperview().offset(leadingTrailingSize)
         }
 
         self.idFeild.snp.makeConstraints{ make in
             make.top.equalTo(self.idLabel.snp.bottom).offset(0)
             make.height.equalTo(50)
-            make.leading.equalToSuperview().offset(40)
-            make.trailing.equalToSuperview().offset(-40)
+            make.leading.equalToSuperview().offset(leadingTrailingSize)
+            make.trailing.equalToSuperview().offset(-leadingTrailingSize)
         }
         
         self.pwLabel.snp.makeConstraints { make in
             make.top.equalTo(self.idFeild.snp.bottom).offset(30)
-            make.leading.equalToSuperview().offset(40)
+            make.leading.equalToSuperview().offset(leadingTrailingSize)
         }
 
         self.pwFeild.snp.makeConstraints{ make in
             make.top.equalTo(self.pwLabel.snp.bottom).offset(0)
             make.height.equalTo(50)
-            make.leading.equalToSuperview().offset(40)
-            make.trailing.equalToSuperview().offset(-40)
+            make.leading.equalToSuperview().offset(leadingTrailingSize)
+            make.trailing.equalToSuperview().offset(-leadingTrailingSize)
         }
 
         self.loginButton.snp.makeConstraints{ make in
             make.top.equalTo(self.pwFeild.snp.bottom).offset(10)
             make.height.equalTo(60)
 
-            make.leading.equalToSuperview().offset(40)
-            make.trailing.equalToSuperview().offset(-40)
+            make.leading.equalToSuperview().offset(leadingTrailingSize)
+            make.trailing.equalToSuperview().offset(-leadingTrailingSize)
         }
         //        let loginHeadlineView = UIView()
         //        let leftlineView = UIView()
@@ -353,8 +356,8 @@ class LoginViewController: UIViewController {
         self.loginHeadlineView.snp.makeConstraints { make in
             make.top.equalTo(self.loginButton.snp.bottom).offset(20)
             make.height.equalTo(50)
-            make.leading.equalToSuperview().offset(40)
-            make.trailing.equalToSuperview().offset(-40)
+            make.leading.equalToSuperview().offset(leadingTrailingSize)
+            make.trailing.equalToSuperview().offset(-leadingTrailingSize)
         }
         
         self.leftlineView.snp.makeConstraints { make in
@@ -377,20 +380,20 @@ class LoginViewController: UIViewController {
         self.googleLoginButton.snp.makeConstraints{ make in
             make.top.equalTo(self.loginHeadlineView.snp.bottom).offset(10)
             make.height.equalTo(50)
-            make.leading.equalToSuperview().offset(40)
-            make.trailing.equalToSuperview().offset(-40)
+            make.leading.equalToSuperview().offset(leadingTrailingSize)
+            make.trailing.equalToSuperview().offset(-leadingTrailingSize)
         }
 
         self.appleLoginButton.snp.makeConstraints{ make in
             make.top.equalTo(self.googleLoginButton.snp.bottom).offset(10)
             make.height.equalTo(50)
-            make.leading.equalToSuperview().offset(40)
-            make.trailing.equalToSuperview().offset(-40)
+            make.leading.equalToSuperview().offset(leadingTrailingSize)
+            make.trailing.equalToSuperview().offset(-leadingTrailingSize)
         }
         self.emailRegisterButton.snp.makeConstraints{ make in
             make.top.equalTo(self.appleLoginButton.snp.bottom).offset(15)
-            make.leading.equalToSuperview().offset(40)
-            make.trailing.equalToSuperview().offset(-40)
+            make.leading.equalToSuperview().offset(leadingTrailingSize)
+            make.trailing.equalToSuperview().offset(-leadingTrailingSize)
         }
     }
 }
