@@ -92,10 +92,9 @@ class ResisterUserViewController: UIViewController {
         var aRect: CGRect = self.view.frame
         aRect.size.height -= keyboardHeight
         
-        
-        self.mainScrollView.setContentOffset(CGPoint(x: 0, y: (self.activeTextField?.frame.origin.y)! - (keyboardHeight - 15)), animated: true)
-//        if !aRect.contains((activeTextField?.frame.origin)!) {
-//        }
+        if let activeHeight = self.activeTextField?.frame.origin.y {
+            self.mainScrollView.setContentOffset(CGPoint(x: 0, y: activeHeight - (keyboardHeight - 15)), animated: true)
+        }
         
     }
     
@@ -158,7 +157,8 @@ class ResisterUserViewController: UIViewController {
         let singleTap = UITapGestureRecognizer(target: self, action: #selector(self.endEdit))
         singleTap.numberOfTapsRequired = 1
         singleTap.isEnabled = true
-        singleTap.cancelsTouchesInView = false
+        //멀티터치가 가능한지여부 뷰와 버튼 중복될경우 버튼만 눌리게 하기위해 true
+        singleTap.cancelsTouchesInView = true
         self.mainScrollView.addGestureRecognizer(singleTap)
     }
     
@@ -636,6 +636,7 @@ extension ResisterUserViewController: UITextFieldDelegate {
                 }
             }
         }
+        self.checkEnableResisterButton()
     }
     
     @objc func pwdConfirmFieldDidChange(_ textField: UITextField) {

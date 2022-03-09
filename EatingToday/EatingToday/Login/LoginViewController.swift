@@ -44,6 +44,9 @@ class LoginViewController: UIViewController {
     let appleLoginButton = UIButton()
     let emailRegisterButton = UIButton()
     
+    var emailValidation: Bool = false
+    var passwordValidation: Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.viewConfigure()
@@ -52,6 +55,18 @@ class LoginViewController: UIViewController {
     }
     
     @objc func loginClicked() {
+        
+        if !self.emailValidation  {
+            self.showErrorAlert(errorMsg: "이메일을 다시 확인해주세요.")
+            
+            return
+            
+        } else if !self.passwordValidation{
+            self.showErrorAlert(errorMsg: "비밀번호는 8~20자리 영문자,숫자,특수문자 조합입니다.")
+            
+            return
+        }
+        
         //firebase 이메일/비밀번호 로그인
         let email = idFeild.text ?? ""
         let password = pwFeild.text ?? ""
@@ -195,18 +210,10 @@ class LoginViewController: UIViewController {
         //에러 시 색상
         self.idFeild.errorColor = .red
         //에러용 액션 추가
-//        self.idFeild.addTarget(self, action: #selector(emailFieldDidChange(_:)), for: .editingChanged)
+        self.idFeild.addTarget(self, action: #selector(emailFieldDidChange(_:)), for: .editingChanged)
         //키보드 return 클릭시 반응하도록 위임
         self.idFeild.delegate = self
 
-//        self.idFeild.delegate = self
-//        self.idFeild.keyboardType = .emailAddress
-//        self.idFeild.backgroundColor = UIColor(displayP3Red: 248/255, green: 237/255, blue: 227/255, alpha: 1)
-//        self.idFeild.textColor = UIColor(displayP3Red: 1/255, green: 1/255, blue: 1/255, alpha: 1)
-//        self.idFeild.attributedPlaceholder = NSAttributedString(string: "Email", attributes: [NSAttributedString.Key.foregroundColor : UIColor.gray])
-//        self.idFeild.autocapitalizationType = .none
-//        self.idFeild.layer.cornerRadius = 10
-//        self.idFeild.withImage(direction: .Left, image: UIImage(systemName: "person")!, colorSeparator: .clear, colorBorder: .clear)
         
         self.view.addSubview(self.pwLabel)
         self.pwLabel.text = "비밀번호"
@@ -245,21 +252,11 @@ class LoginViewController: UIViewController {
         //에러 시 색상
         self.pwFeild.errorColor = .red
         //에러용 액션 추가
-//        self.pwFeild.addTarget(self, action: #selector(passwordFieldDidChange(_:)), for: .editingChanged)
+        self.pwFeild.addTarget(self, action: #selector(passwordFieldDidChange(_:)), for: .editingChanged)
         //키보드 return 클릭 시 반응 하도록 위임
         self.pwFeild.delegate = self
         
-//        self.pwFeild.delegate = self
-//        self.pwFeild.backgroundColor = UIColor(displayP3Red: 248/255, green: 237/255, blue: 227/255, alpha: 1)
-//        self.pwFeild.textColor = UIColor(displayP3Red: 1/255, green: 1/255, blue: 1/255, alpha: 1)
-//        self.pwFeild.attributedPlaceholder = NSAttributedString(string: "Password", attributes: [NSAttributedString.Key.foregroundColor : UIColor.gray])
-//        self.pwFeild.isSecureTextEntry = true
-//        self.pwFeild.autocapitalizationType = .none
-//        self.pwFeild.layer.cornerRadius = 10
-//        self.pwFeild.withImage(direction: .Left, image: UIImage(systemName: "key")!, colorSeparator: .clear, colorBorder: .clear)
         
-        
-
         
         self.view.addSubview(self.loginHeadlineView)
         self.loginHeadlineView.addSubview(leftlineView)
@@ -348,10 +345,6 @@ class LoginViewController: UIViewController {
             make.leading.equalToSuperview().offset(leadingTrailingSize)
             make.trailing.equalToSuperview().offset(-leadingTrailingSize)
         }
-        //        let loginHeadlineView = UIView()
-        //        let leftlineView = UIView()
-        //        let rightlineView = UIView()
-        //        let lineTextLabel = UILabel()
         
         self.loginHeadlineView.snp.makeConstraints { make in
             make.top.equalTo(self.loginButton.snp.bottom).offset(20)
@@ -563,30 +556,53 @@ extension LoginViewController: UITextFieldDelegate {
         return true
     }
     
-//    @objc func emailFieldDidChange(_ textField: UITextField) {
-//        if let text = textField.text {
-//            if let floatingLabelTextField = textField as? SkyFloatingLabelTextField {
-//                if (text.count < 3 || !text.contains("@")) {
-//                    floatingLabelTextField.errorMessage = " "
-//                } else {
-//                    floatingLabelTextField.errorMessage = ""
-//                }
-//
-//            }
-//        }
-//    }
-//
-//    @objc func passwordFieldDidChange(_ textField: UITextField) {
-//        if let text = textField.text {
-//            if let floatingLabelTextField = textField as? SkyFloatingLabelTextField {
-//                if (text.count < 6) {
-//                    floatingLabelTextField.errorMessage = " "
-//                } else {
-//                    floatingLabelTextField.errorMessage = ""
-//                }
-//
-//            }
-//        }
-//    }
+    func checkEnableLoginButton() {
+        if self.emailValidation && self.passwordValidation {
+            self.showErrorAlert(errorMsg: "이메일을 다시 확인해주세요.")
+            
+        } else {
+            self.showErrorAlert(errorMsg: "비밀번호는 8~20자리 영문자,숫자,특수문자 조합입니다.")
+        }
+    }
+    
+    @objc func emailFieldDidChange(_ textField: UITextField) {
+        let emailPattern = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        let regex = try? NSRegularExpression(pattern: emailPattern)
+        
+        if let text = textField.text {
+            if let floatingLabelTextField = textField as? SkyFloatingLabelTextField {
+                if let _ = regex?.firstMatch(in: text, options: [], range: NSRange(location: 0, length: text.count)) {
+                    floatingLabelTextField.errorMessage = ""
+                    
+                    self.emailValidation = true
+                } else {
+                    floatingLabelTextField.errorMessage = ""
+                    //floatingLabelTextField.errorMessage = " "
+                    
+                    self.emailValidation = false
+                }
+            }
+        }
+    }
+
+    @objc func passwordFieldDidChange(_ textField: UITextField) {
+        let passwordPattern = "^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[!@#$%^&*()_+=-]).{8,20}"
+        
+        let regex = try? NSRegularExpression(pattern: passwordPattern)
+        
+        if let text = textField.text {
+            if let floatingLabelTextField = textField as? SkyFloatingLabelTextField {
+                if let _ = regex?.firstMatch(in: text, options: [], range: NSRange(location: 0, length: text.count)) {
+                    floatingLabelTextField.errorMessage = ""
+                    self.passwordValidation = true
+                } else {
+                    floatingLabelTextField.errorMessage = ""
+                    //floatingLabelTextField.errorMessage = " "
+                    
+                    self.passwordValidation = false
+                }
+            }
+        }
+    }
 }
 
