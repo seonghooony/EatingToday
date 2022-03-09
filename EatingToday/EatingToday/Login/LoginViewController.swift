@@ -35,6 +35,8 @@ class LoginViewController: UIViewController {
     
     let loginButton = UIButton()
     
+    let findPasswordButton = UIButton()
+    
     let loginHeadlineView = UIView()
     let leftlineView = UIView()
     let rightlineView = UIView()
@@ -80,6 +82,12 @@ class LoginViewController: UIViewController {
                 self.present(mainVC, animated: true, completion: nil)
             }
         }
+    }
+    
+    @objc func findPwdBtnTapped() {
+        let pwdResetPopupViewController = PwdResetPopupViewController()
+        pwdResetPopupViewController.modalPresentationStyle = .overFullScreen
+        self.present(pwdResetPopupViewController, animated: true, completion: nil)
     }
      
     @objc func emailResisterClicked() {
@@ -257,6 +265,18 @@ class LoginViewController: UIViewController {
         self.pwFeild.delegate = self
         
         
+        self.view.addSubview(self.loginButton)
+        self.loginButton.backgroundColor = UIColor(displayP3Red: 249/255, green: 151/255, blue: 93/255, alpha: 1)
+        self.loginButton.setTitle("로그인", for: .normal)
+        self.loginButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
+        self.loginButton.layer.cornerRadius = 10
+        self.loginButton.addTarget(self, action: #selector(loginClicked), for: .touchUpInside)
+        
+        self.view.addSubview(self.findPasswordButton)
+        self.findPasswordButton.setTitle("비밀번호를 잊으셨나요?", for: .normal)
+        self.findPasswordButton.setTitleColor(UIColor(displayP3Red: 100/255, green: 100/255, blue: 100/255, alpha: 1), for: .normal)
+        self.findPasswordButton.titleLabel?.font = UIFont(name: "Helvetica", size: 14)!
+        self.findPasswordButton.addTarget(self, action: #selector(findPwdBtnTapped), for: .touchUpInside)
         
         self.view.addSubview(self.loginHeadlineView)
         self.loginHeadlineView.addSubview(leftlineView)
@@ -269,13 +289,6 @@ class LoginViewController: UIViewController {
         
         self.loginHeadlineView.addSubview(rightlineView)
         self.rightlineView.backgroundColor = .lightGray
-        
-        self.view.addSubview(self.loginButton)
-        self.loginButton.backgroundColor = UIColor(displayP3Red: 249/255, green: 151/255, blue: 93/255, alpha: 1)
-        self.loginButton.setTitle("로그인", for: .normal)
-        self.loginButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
-        self.loginButton.layer.cornerRadius = 10
-        self.loginButton.addTarget(self, action: #selector(loginClicked), for: .touchUpInside)
         
         self.view.addSubview(self.googleLoginButton)
         self.googleLoginButton.setImage(UIImage(named: "logo_google"), for: .normal)
@@ -346,8 +359,13 @@ class LoginViewController: UIViewController {
             make.trailing.equalToSuperview().offset(-leadingTrailingSize)
         }
         
+        self.findPasswordButton.snp.makeConstraints { make in
+            make.top.equalTo(self.loginButton.snp.bottom).offset(5)
+            make.trailing.equalToSuperview().offset(-leadingTrailingSize - 10)
+        }
+        
         self.loginHeadlineView.snp.makeConstraints { make in
-            make.top.equalTo(self.loginButton.snp.bottom).offset(20)
+            make.top.equalTo(self.loginButton.snp.bottom).offset(32)
             make.height.equalTo(50)
             make.leading.equalToSuperview().offset(leadingTrailingSize)
             make.trailing.equalToSuperview().offset(-leadingTrailingSize)

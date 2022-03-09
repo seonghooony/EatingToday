@@ -30,6 +30,7 @@
 		DB6F1B4927D466A900247B89 /* SelectedSearchResultDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1B4827D466A900247B89 /* SelectedSearchResultDocument.swift */; };
 		DB6F1B4B27D48B5900247B89 /* PopDetailImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1B4A27D48B5900247B89 /* PopDetailImageViewController.swift */; };
 		DB6F1B5227D6601300247B89 /* loadingImage.json in Resources */ = {isa = PBXBuildFile; fileRef = DB6F1B5127D6601300247B89 /* loadingImage.json */; };
+		DB6F1B5427D8953600247B89 /* PwdResetPopupViewConrolloer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1B5327D8953600247B89 /* PwdResetPopupViewConrolloer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -61,6 +62,7 @@
 		DB6F1B4827D466A900247B89 /* SelectedSearchResultDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedSearchResultDocument.swift; sourceTree = "<group>"; };
 		DB6F1B4A27D48B5900247B89 /* PopDetailImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopDetailImageViewController.swift; sourceTree = "<group>"; };
 		DB6F1B5127D6601300247B89 /* loadingImage.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loadingImage.json; sourceTree = "<group>"; };
+		DB6F1B5327D8953600247B89 /* PwdResetPopupViewConrolloer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PwdResetPopupViewConrolloer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -132,6 +134,7 @@
 				DB6F1AF927BBFA0800247B89 /* LoginViewController.swift */,
 				DB6F1B0127BE4A6000247B89 /* ResisterUserViewController.swift */,
 				DB6F1B0327BF829100247B89 /* UserInfo.swift */,
+				DB6F1B5327D8953600247B89 /* PwdResetPopupViewConrolloer.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -328,6 +331,7 @@
 				DB6F1AF827BBF98A00247B89 /* MainViewController.swift in Sources */,
 				DB6F1B0227BE4A6000247B89 /* ResisterUserViewController.swift in Sources */,
 				DB6F1B0727C34D7100247B89 /* EatDiaryViewController.swift in Sources */,
+				DB6F1B5427D8953600247B89 /* PwdResetPopupViewConrolloer.swift in Sources */,
 				DB6F1B4127CE20C900247B89 /* SearchResultOverview.swift in Sources */,
 				DB6F1B0927C34E1F00247B89 /* DiaryMapViewController.swift in Sources */,
 				DB6F1B2F27C48F0200247B89 /* EatTableViewCell.swift in Sources */,
