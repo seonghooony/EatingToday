@@ -20,6 +20,22 @@ class LoginViewController: UIViewController {
     
     fileprivate var currentNonce: String?
     
+    lazy var activityIndicator: UIActivityIndicatorView = {
+        // Create an indicator.
+        let activityIndicator = UIActivityIndicatorView()
+        activityIndicator.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
+        activityIndicator.center = self.view.center
+        activityIndicator.color = UIColor.darkGray
+        // Also show the indicator even when the animation is stopped.
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.style = UIActivityIndicatorView.Style.medium
+        // Start animation.
+        activityIndicator.stopAnimating()
+        
+        return activityIndicator
+        
+    }()
+
     let titleImage = UIImageView()
     
     let titleLabel = UILabel()
@@ -59,12 +75,14 @@ class LoginViewController: UIViewController {
     @objc func loginClicked() {
         
         if !self.emailValidation  {
-            self.showErrorAlert(errorMsg: "이메일을 다시 확인해주세요.")
+            self.showCustomPopup(title: "알림", message: "이메일을 다시 확인해주세요.")
+            
             
             return
             
         } else if !self.passwordValidation{
-            self.showErrorAlert(errorMsg: "비밀번호는 8~20자리 영문자,숫자,특수문자 조합입니다.")
+            self.showCustomPopup(title: "알림", message: "비밀번호는\n8~20자리 영문자,숫자,특수문자 조합입니다.")
+            
             
             return
         }
@@ -72,10 +90,27 @@ class LoginViewController: UIViewController {
         //firebase 이메일/비밀번호 로그인
         let email = idFeild.text ?? ""
         let password = pwFeild.text ?? ""
+        
+        //로딩바 생성
+        self.activityIndicator.startAnimating()
+
         Auth.auth().signIn(withEmail: email, password: password) { [weak self] _, error in
             guard let self = self else { return }
+            
+            //로딩바 멈춤
+            self.activityIndicator.stopAnimating()
+            
             if let error = error {
-                self.showErrorAlert(errorMsg: error.localizedDescription)
+                let code = (error as NSError).code
+                switch code {
+                case 17011: // 이미 가입한 계정일 경우
+                    self.showCustomPopup(title: "알림", message: "존재하지 않는 계정입니다.\n이메일을 다시 확인해주세요.")
+                case 17009:
+                    self.showCustomPopup(title: "알림", message: "비밀번호가 일치하지 않습니다.\n비밀번호를 다시 확인해주세요.")
+                default:
+                    self.showCustomPopup(title: "오류", message: error.localizedDescription)
+                }
+                
             } else {
                 let mainVC = MainViewController()
                 mainVC.modalPresentationStyle = .fullScreen
@@ -95,7 +130,13 @@ class LoginViewController: UIViewController {
         navigationController?.pushViewController(resisterUserVC, animated: true)
     }
     @objc func googleLoginClicked() {
-        guard let clientID = FirebaseApp.app()?.options.clientID else { return }
+        //로딩바 생성
+        self.activityIndicator.startAnimating()
+        
+        guard let clientID = FirebaseApp.app()?.options.clientID else {
+            self.activityIndicator.stopAnimating()
+            return
+        }
 
         // Create Google Sign In configuration object.
         let config = GIDConfiguration(clientID: clientID)
@@ -104,7 +145,8 @@ class LoginViewController: UIViewController {
         GIDSignIn.sharedInstance.signIn(with: config, presenting: self) { [unowned self] user, error in
             
             if let error = error {
-                self.showErrorAlert(errorMsg: error.localizedDescription)
+                self.activityIndicator.stopAnimating()
+                self.showCustomPopup(title: "오류", message: error.localizedDescription)
                 return
             }
 
@@ -112,6 +154,9 @@ class LoginViewController: UIViewController {
 
             let credential = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: authentication.accessToken)
             Auth.auth().signIn(with: credential) { [weak self] authResult, error in
+                
+                //로딩바 삭제
+                self?.activityIndicator.stopAnimating()
                 
                 guard let user = authResult?.user, error == nil else {
                     return
@@ -167,7 +212,10 @@ class LoginViewController: UIViewController {
     
     func viewConfigure() {
         //view.backgroundColor = UIColor(displayP3Red: 200/255, green: 92/255, blue: 92/255, alpha: 1)
+        
         view.backgroundColor = .white
+        self.view.addSubview(self.activityIndicator)
+
         
         self.view.addSubview(self.titleImage)
         self.titleImage.image = UIImage(named: "logo_lamen")
@@ -317,6 +365,12 @@ class LoginViewController: UIViewController {
     
     func constraintConfigure() {
         let leadingTrailingSize = 30
+        
+        self.activityIndicator.snp.makeConstraints{ make in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+        }
+        
         self.titleImage.snp.makeConstraints{ make in
             make.top.equalToSuperview().offset(90)
             make.width.height.equalTo(150)
@@ -361,7 +415,7 @@ class LoginViewController: UIViewController {
         
         self.findPasswordButton.snp.makeConstraints { make in
             make.top.equalTo(self.loginButton.snp.bottom).offset(5)
-            make.trailing.equalToSuperview().offset(-leadingTrailingSize - 10)
+            make.leading.equalToSuperview().offset(leadingTrailingSize + 10)
         }
         
         self.loginHeadlineView.snp.makeConstraints { make in
@@ -576,10 +630,12 @@ extension LoginViewController: UITextFieldDelegate {
     
     func checkEnableLoginButton() {
         if self.emailValidation && self.passwordValidation {
-            self.showErrorAlert(errorMsg: "이메일을 다시 확인해주세요.")
+            self.showCustomPopup(title: "알림", message: "올바른 이메일 주소가 아닙니다.\n이메일을 다시 확인해주세요.")
+
             
         } else {
-            self.showErrorAlert(errorMsg: "비밀번호는 8~20자리 영문자,숫자,특수문자 조합입니다.")
+            self.showCustomPopup(title: "알림", message: "비밀번호는 8~20자리 영문자,숫자,특수문자 조합입니다.")
+            
         }
     }
     

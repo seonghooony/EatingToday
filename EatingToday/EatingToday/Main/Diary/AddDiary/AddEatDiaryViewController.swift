@@ -486,7 +486,7 @@ extension AddEatDiaryViewController: UICollectionViewDataSource, UICollectionVie
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.row == 0 {
             if selectedImages.count >= 10 {
-                self.showAlert(msg: "이미지는 10개 이하로 선택 가능합니다.")
+                self.showCustomPopup(title: "알림", message: "이미지는 10개 이하로 선택 가능합니다.")
             } else {
                 self.tappedImageAddButton()
             }

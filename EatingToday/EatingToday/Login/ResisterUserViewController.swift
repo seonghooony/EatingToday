@@ -57,6 +57,22 @@ class ResisterUserViewController: UIViewController {
     
     let resisterButton = UIButton()
     
+    lazy var activityIndicator: UIActivityIndicatorView = {
+        // Create an indicator.
+        let activityIndicator = UIActivityIndicatorView()
+        activityIndicator.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
+        activityIndicator.center = self.view.center
+        activityIndicator.color = UIColor.darkGray
+        // Also show the indicator even when the animation is stopped.
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.style = UIActivityIndicatorView.Style.medium
+        // Start animation.
+        activityIndicator.stopAnimating()
+        
+        return activityIndicator
+        
+    }()
+    
     var activeTextField: UITextField?
     
     var emailValidation: Bool = false
@@ -117,6 +133,8 @@ class ResisterUserViewController: UIViewController {
     
     @objc func resisterClicked() {
         
+        self.activityIndicator.startAnimating()
+        
         //firebase 이메일/비밀번호 인증
         let email = emailField.text ?? ""
         let password = passwordField.text ?? ""
@@ -125,17 +143,21 @@ class ResisterUserViewController: UIViewController {
         //신규 사용자 생성
         Auth.auth().createUser(withEmail: email, password: password){ [weak self] authResult, error in
             guard let self = self else { return }
+            
+            self.activityIndicator.stopAnimating()
+            
             if let error = error {
                 let code = (error as NSError).code
                 switch code {
                 case 17007: // 이미 가입한 계정일 경우
-                    self.showErrorAlert(errorMsg: "이미 존재하는 계정입니다.")
+                    self.showCustomPopup(title: "알림", message: "이미 존재하는 계정입니다.\n이메일을 다시 확인해주세요.")
+
                 default:
-                    self.showErrorAlert(errorMsg: error.localizedDescription)
+                    self.showCustomPopup(title: "오류", message: error.localizedDescription)
                 }
             } else {
                 guard let user = authResult?.user, error == nil else {
-                    self.showErrorAlert(errorMsg: error!.localizedDescription)
+                    self.showCustomPopup(title: "오류", message: error!.localizedDescription)
                     return
                 }
                 
@@ -196,6 +218,8 @@ class ResisterUserViewController: UIViewController {
 //        view.backgroundColor = UIColor(displayP3Red: 248/255, green: 237/255, blue: 227/255, alpha: 1)
         view.backgroundColor = .white
         self.navigationController?.navigationBar.backgroundColor = .white
+        
+        self.scrollContainerView.addSubview(self.activityIndicator)
         
         self.navigationItem.title = "회원가입"
         self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black, .font: UIFont(name: "Helvetica Bold", size: 18)]
@@ -445,7 +469,10 @@ class ResisterUserViewController: UIViewController {
         let fieldHeight = 40
         let feildsMargin = 40
         
-
+        self.activityIndicator.snp.makeConstraints{ make in
+            make.centerX.equalTo(self.view.snp.centerX)
+            make.centerY.equalTo(self.view.snp.centerY)
+        }
         
         self.mainScrollView.snp.makeConstraints { make in
             make.top.bottom.leading.trailing.equalToSuperview()

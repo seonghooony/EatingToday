@@ -49,6 +49,23 @@ class PwdResetPopupViewController: UIViewController {
     let failContentLabel = UILabel()
     let failButton = UIButton()
     
+    lazy var activityIndicator: UIActivityIndicatorView = {
+        // Create an indicator.
+        let activityIndicator = UIActivityIndicatorView()
+        activityIndicator.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
+        activityIndicator.center = self.popupView.center
+        activityIndicator.color = UIColor.darkGray
+        // Also show the indicator even when the animation is stopped.
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.style = UIActivityIndicatorView.Style.medium
+        // Start animation.
+        activityIndicator.stopAnimating()
+        
+        return activityIndicator
+        
+    }()
+    
+    
     var emailValidation: Bool = false
     
     override func viewDidLoad() {
@@ -66,12 +83,16 @@ class PwdResetPopupViewController: UIViewController {
         
         view.endEditing(true)
         
+        self.activityIndicator.startAnimating()
+        
         let email = emailField.text
         //비밀번호를 리셋할 수 있는 이메일을 보내줌.
         if let email = email {
             Auth.auth().languageCode = "ko"
             Auth.auth().sendPasswordReset(withEmail: email) { error in
 //                debugPrint("이메일 리셋 에러 : \(error)")
+                
+                self.activityIndicator.stopAnimating()
                 
                 if let error = error {
                     let code = (error as NSError).code
@@ -84,7 +105,8 @@ class PwdResetPopupViewController: UIViewController {
                         self.emailDetailLabel.text = "가입되어 있지 않은 이메일입니다."
                         
                     default:
-                        self.emailDetailLabel.text = "에러"
+//                        self.emailDetailLabel.text = "에러"
+                        self.sendEmailView.isHidden = true
                         self.failView.isHidden = false
                     }
                     
@@ -103,11 +125,20 @@ class PwdResetPopupViewController: UIViewController {
     
     private func viewConfigure() {
         
+        self.popupView.addSubview(self.activityIndicator)
+        
         self.view.addSubview(self.popupView)
-        self.popupView.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5).cgColor
-        self.popupView.layer.shadowOffset = CGSize(width: 1, height: 4)
-        self.popupView.layer.shadowRadius = 15
-        self.popupView.layer.shadowOpacity = 1
+        let shadowSize: CGFloat = 5.0
+        self.popupView.layer.shadowPath = UIBezierPath(rect: CGRect(x: -shadowSize / 2, y: -shadowSize / 2, width: self.view.frame.size.width * 0.8 + shadowSize, height: 300 + shadowSize)).cgPath
+        self.popupView.layer.shadowColor = UIColor.black.cgColor
+        self.popupView.layer.shadowOffset = .zero
+        self.popupView.layer.shadowRadius = 8
+        self.popupView.layer.shadowOpacity = 0.5
+        self.popupView.layer.masksToBounds = false
+        self.popupView.layer.shouldRasterize = true
+        self.popupView.layer.rasterizationScale = UIScreen.main.scale
+        
+        
         self.popupView.layer.cornerRadius = 15
         self.popupView.backgroundColor = .white
         
@@ -205,6 +236,7 @@ class PwdResetPopupViewController: UIViewController {
         
         self.successView.addSubview(self.successImageView)
         self.successImageView.image = UIImage(named: "logo_check")
+        ///https://www.flaticon.com/premium-icon/cross_3416079?term=x&page=1&position=16&page=1&position=16&related_id=3416079&origin=search#
         
         self.successView.addSubview(self.successEmailLabel)
         self.successEmailLabel.textColor = .black
@@ -290,6 +322,11 @@ class PwdResetPopupViewController: UIViewController {
             make.width.equalToSuperview().multipliedBy(0.8)
 //            make.height.equalToSuperview().multipliedBy(0.3)
             make.height.equalTo(300)
+        }
+        
+        self.activityIndicator.snp.makeConstraints{ make in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
         }
         
         self.closeButton.snp.makeConstraints { make in
