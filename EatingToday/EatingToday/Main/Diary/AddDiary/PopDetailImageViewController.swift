@@ -62,7 +62,7 @@ class PopDetailImageViewController: UIViewController {
         self.containerScrollView.addSubview(detailImageView)
         
         self.containerView.addSubview(popCloseButton)
-        self.popCloseButton.setImage(UIImage(systemName: "xmark"), for: .normal)
+        self.popCloseButton.setImage(UIImage(named: "logo_close"), for: .normal)
         self.popCloseButton.tintColor = .black
         self.popCloseButton.addTarget(self, action: #selector(popCloseTapped), for: .touchUpInside)
     
@@ -95,7 +95,7 @@ class PopDetailImageViewController: UIViewController {
         self.popCloseButton.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(50)
             make.trailing.equalToSuperview().offset(-20)
-            make.width.height.equalTo(50)
+            make.width.height.equalTo(15)
         }
     }
 }

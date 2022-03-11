@@ -7,6 +7,7 @@
 import Foundation
 import UIKit
 import Alamofire
+import SkyFloatingLabelTextField
 
 protocol selectedStorePlaceDelegate: AnyObject {
     func showSelectedStorePlace(document: SelectedSearchResultDocument)
@@ -19,14 +20,45 @@ class SearchKakaoViewController: UIViewController {
     
     weak var resultDelegate: selectedStorePlaceDelegate?
     
+    let activeColor = UIColor(red: 50/255, green: 50/255, blue: 50/255, alpha: 1.0)
+    let inactiveColor = UIColor(red: 200/255, green: 200/255, blue: 200/255, alpha: 1.0)
+    let titleColor = UIColor(red: 0, green: 187/255, blue: 204/255, alpha: 1.0)
+    let customGray0 = UIColor(displayP3Red: 250/255, green: 250/255, blue: 253/255, alpha: 1)
+    let customGray1 = UIColor(displayP3Red: 242/255, green: 242/255, blue: 247/255, alpha: 1)
+    let customGray2 = UIColor(displayP3Red: 199/255, green: 199/255, blue: 204/255, alpha: 1)
+    let customGray3 = UIColor(displayP3Red: 130/255, green: 130/255, blue: 135/255, alpha: 1)
+    
     let closeButton = UIButton()
     
-    let headView = UIView()
+    let headView: UIView = {
+        let headView = UIView()
+        let shadowSize: CGFloat = 10.0
+        headView.layer.shadowPath = UIBezierPath(rect: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 220 + shadowSize)).cgPath
+        headView.backgroundColor = .white
+        headView.layer.cornerRadius = 1
+        headView.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5).cgColor
+        headView.layer.shadowOffset = CGSize(width: 1, height: 4)
+        headView.layer.shadowRadius = 15
+        headView.layer.shadowOpacity = 1
+        
+        headView.layer.masksToBounds = false
+//        headView.layer.shouldRasterize = true
+//        headView.layer.rasterizationScale = UIScreen.main.scale
+
+        
+
+        return headView
+    }()
     
     let searchHeadLabel = UILabel()
-    let searchTextField = PaddedTextField()
+    let searchsubLabel = UILabel()
+//    let searchTextField = PaddedTextField()
+    let searchTextField = SkyFloatingLabelTextFieldWithIcon(frame: CGRect(x: 0, y: 0, width: CGFloat(UIScreen.main.bounds.width) * 0.85, height: 45), iconType: .image)
     
     let mainView = UIView()
+    
+    let emptyView = UIView()
+    let emptyLabel = UILabel()
     
     private lazy var resultTableView: UITableView = {
         let tableView = UITableView(frame: .zero)
@@ -48,6 +80,8 @@ class SearchKakaoViewController: UIViewController {
         scrollViewEndEditing()
         //searchKakaoApiPlace()
     }
+    
+    
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         //빈 화면을 눌러줄때 마다 하단 키보드나 데이트피커가 사라짐
@@ -78,70 +112,138 @@ class SearchKakaoViewController: UIViewController {
     }
     
     func viewConfigure() {
-        self.view.backgroundColor = .white
+        self.view.backgroundColor = customGray0
         //self.view.addSubview(self.closeButton)
-        self.view.layer.cornerRadius = 15
+//        self.view.layer.cornerRadius = 15
         
         
         self.headView.addSubview(self.closeButton)
-        self.closeButton.setImage(UIImage(systemName: "xmark"), for: .normal)
+        self.closeButton.setImage(UIImage(named: "logo_close"), for: .normal)
         self.closeButton.tintColor = UIColor(displayP3Red: 1/255, green: 1/255, blue: 1/255, alpha: 1)
         self.closeButton.addTarget(self, action: #selector(close), for: .touchUpInside)
         
         self.view.addSubview(self.headView)
-        self.headView.backgroundColor = UIColor(displayP3Red: 246/255, green: 238/255, blue: 223/255, alpha: 1)
-        self.headView.layer.cornerRadius = 15
+        self.headView.backgroundColor = .white
+//        self.headView.layer.cornerRadius = 15
         
         
         self.headView.addSubview(self.searchHeadLabel)
         self.searchHeadLabel.text = "가게 이름 검색"
         self.searchHeadLabel.textAlignment = .center
+        self.searchHeadLabel.font = UIFont(name: "Helvetica Bold", size: 18)
+        self.searchHeadLabel.textColor = UIColor.black
+        
+        self.headView.addSubview(self.searchsubLabel)
+        self.searchsubLabel.text = "방문하셨던 가게 이름을 검색해 주세요."
+        self.searchsubLabel.textAlignment = .center
+        self.searchsubLabel.font = UIFont(name: "Helvetica Bold", size: 17)
+        self.searchsubLabel.textColor = UIColor.black
         
         self.headView.addSubview(self.searchTextField)
-        //self.searchTextField.placeholder = "가게 이름을 입력해주세요."
-        self.searchTextField.backgroundColor = .white
-        self.searchTextField.layer.cornerRadius = 22.5
-        self.searchTextField.layer.borderWidth = 1.5
-        self.searchTextField.layer.borderColor = UIColor.black.cgColor
-        self.searchTextField.attributedPlaceholder = NSAttributedString(string: "가게 이름을 입력해주세요.", attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
+        self.searchTextField.placeholder = "장소 또는 주소 입력"
+        self.searchTextField.title = ""
+        //클리어버튼 생성
         self.searchTextField.clearButtonMode = .whileEditing
+        //맞춤법 검사
+        self.searchTextField.autocorrectionType = .no
+        //첫글자 자동 대문자
+        self.searchTextField.autocapitalizationType = .none
+        //text키보드모드
+        self.searchTextField.keyboardType = .default
+        //text 비밀번호 가림
+        self.searchTextField.isSecureTextEntry = false
+        //커서 색상
+        self.searchTextField.tintColor = titleColor
+        //안쪽 텍스트 색상
+        self.searchTextField.textColor = .black
+        //안쪽 텍스트 폰트
+        self.searchTextField.font = UIFont(name: "Helvetica", size: 18)
+        //기본 라인 색상
+        self.searchTextField.lineColor = inactiveColor
+        //선택 라인 색상
+        self.searchTextField.selectedLineColor = activeColor
+        //선택 위쪽 타이틀 색상
+        self.searchTextField.selectedTitleColor = titleColor
+        //선택 위쪽 텍스트 폰트
+        self.searchTextField.titleFont = UIFont(name: "Helvetica", size: 0)!
+        //기본 아래 선 굵기
+        self.searchTextField.lineHeight = 1.5
+        //선택 시 아래 선 굵기
+        self.searchTextField.selectedLineHeight = 2.0
+        //에러 시 색상
+        self.searchTextField.errorColor = .red
+        //이미지 추가
+        self.searchTextField.iconType = .image
+        self.searchTextField.iconColor = inactiveColor
+        self.searchTextField.selectedIconColor = UIColor(displayP3Red: 249/255, green: 151/255, blue: 93/255, alpha: 1)
+        self.searchTextField.iconMarginBottom = 10.0
+        self.searchTextField.iconMarginLeft = 5.0
+        self.searchTextField.iconImage = UIImage(systemName: "magnifyingglass")
+        
+        
+        //실시간 검색
         self.searchTextField.addTarget(self, action: #selector(searchKeywords), for: .editingChanged)
-        //self.searchTextField.addLeftPadding()
-        //self.searchTextField.addRightImage(image: UIImage(systemName: "magnifyingglass")!)
+        //에러용 액션 추가
+//        self.searchTextField.addTarget(self, action: #selector(emailFieldDidChange(_:)), for: .editingChanged)
+        //키보드 return 클릭시 반응하도록 위임
+//        self.searchTextField.delegate = self
         
         
         self.view.addSubview(self.mainView)
-        self.mainView.backgroundColor = .white
+        self.mainView.backgroundColor = .clear
         
+        self.emptyView.isHidden = false
+        self.mainView.addSubview(self.emptyView)
+        self.emptyView.backgroundColor = .clear
+        
+        self.emptyView.addSubview(self.emptyLabel)
+        self.emptyLabel.text = "검색 결과가 없습니다."
+        self.emptyLabel.textAlignment = .center
+        self.emptyLabel.font = UIFont(name: "Helvetica Bold", size: 16)
+        self.emptyLabel.textColor = customGray3
+        
+        self.resultTableView.isHidden = true
         self.mainView.addSubview(resultTableView)
         self.resultTableView.backgroundColor = .clear
+        self.resultTableView.showsVerticalScrollIndicator = false
+        //드래그시 키보드 내리기
+        self.resultTableView.keyboardDismissMode = .onDrag
     }
     
     func constraintConfigure() {
         
+        let leadingTrailingSize = 40
+        
         self.headView.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.leading.trailing.equalToSuperview()
-            make.height.equalTo(140)
+            make.height.equalTo(250)
         }
         
         self.closeButton.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(20)
-            make.top.equalToSuperview().offset(20)
-            make.height.width.equalTo(30)
+            make.top.equalToSuperview().offset(55)
+            make.leading.equalToSuperview().offset(25)
+            make.height.width.equalTo(24)
             
+        }
+        self.closeButton.imageView?.snp.makeConstraints { make in
+            make.height.width.equalTo(15)
         }
         
         self.searchHeadLabel.snp.makeConstraints{ make in
-            make.top.equalToSuperview().offset(30)
+            make.top.equalToSuperview().offset(60)
             make.centerX.equalToSuperview()
             //make.leading.equalToSuperview().offset(10)
         }
+        self.searchsubLabel.snp.makeConstraints{ make in
+            make.top.equalTo(self.searchHeadLabel.snp.bottom).offset(50)
+            make.centerX.equalToSuperview()
+        }
         
         self.searchTextField.snp.makeConstraints{ make in
-            make.top.equalTo(searchHeadLabel.snp.bottom).offset(20)
-            make.leading.equalToSuperview().offset(20)
-            make.trailing.equalToSuperview().offset(-20)
+            make.top.equalTo(self.searchsubLabel.snp.bottom).offset(30)
+            make.leading.equalToSuperview().offset(leadingTrailingSize)
+            make.trailing.equalToSuperview().offset(-leadingTrailingSize)
             make.height.equalTo(45)
         }
         
@@ -149,12 +251,20 @@ class SearchKakaoViewController: UIViewController {
         self.mainView.snp.makeConstraints { make in
             make.top.equalTo(self.headView.snp.bottom)
             make.leading.trailing.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-50)
+            make.bottom.equalToSuperview().offset(-10)
+        }
+        
+        self.emptyView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        self.emptyLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalToSuperview().offset(30)
         }
         
         self.resultTableView.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(5)
-            make.bottom.equalToSuperview().offset(-5)
+            make.bottom.equalToSuperview().offset(0)
             make.leading.equalToSuperview().offset(20)
             make.trailing.equalToSuperview().offset(-20)
             
@@ -184,10 +294,15 @@ class SearchKakaoViewController: UIViewController {
                     let decoder = JSONDecoder()
                     let result = try decoder.decode(SearchResultOverview.self, from: data)
                     if !result.documents.isEmpty {
+                        self.emptyView.isHidden = true
+                        self.resultTableView.isHidden = false
                         debugPrint(result.documents[0].place_name)
                         self.resultList = result
                         
                         self.resultTableView.reloadData()
+                    } else {
+                        self.emptyView.isHidden = false
+                        self.resultTableView.isHidden = true
                     }
                     
                 }catch{

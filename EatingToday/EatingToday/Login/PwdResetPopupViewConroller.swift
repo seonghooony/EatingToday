@@ -143,7 +143,7 @@ class PwdResetPopupViewController: UIViewController {
         self.popupView.backgroundColor = .white
         
         self.popupView.addSubview(self.closeButton)
-        self.closeButton.setImage(UIImage(systemName: "xmark"), for: .normal)
+        self.closeButton.setImage(UIImage(named: "logo_close"), for: .normal)
         self.closeButton.tintColor = .darkGray
         self.closeButton.addTarget(self, action: #selector(popCloseTapped), for: .touchUpInside)
         
@@ -332,6 +332,7 @@ class PwdResetPopupViewController: UIViewController {
         self.closeButton.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(leadingTrailingSize - 2)
             make.trailing.equalToSuperview().offset(-leadingTrailingSize)
+            make.width.height.equalTo(15)
         }
         
         self.sendEmailView.snp.makeConstraints { make in

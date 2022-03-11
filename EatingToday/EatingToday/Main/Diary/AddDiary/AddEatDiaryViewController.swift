@@ -135,9 +135,7 @@ class AddEatDiaryViewController: UIViewController {
     @objc func moveSearchViewController() {
         print("클릭")
         let searchKakaoVC = SearchKakaoViewController()
-//        addDairyVC.modalPresentationStyle = UIModalPresentationStyle.fullScreen
-        
-//        navigationController?.pushViewController(searchKakaoVC, animated: true)
+        searchKakaoVC.modalPresentationStyle = .overFullScreen
         searchKakaoVC.resultDelegate = self
         self.present(searchKakaoVC, animated: true, completion: nil)
     }
@@ -159,7 +157,7 @@ class AddEatDiaryViewController: UIViewController {
     }
     @objc private func datePickerValueDidChanged(_ datePicker: UIDatePicker) {
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy 년 MM 월 dd 일 (EEEEE)"
+        formatter.dateFormat = "yyyy년 MM월 dd일 (EEEEE)"
         formatter.locale = Locale(identifier: "ko_KR")
         
         
@@ -246,7 +244,8 @@ class AddEatDiaryViewController: UIViewController {
         
         self.view.addSubview(self.headView)
         self.headView.addSubview(self.backButton)
-        self.backButton.setImage(UIImage(systemName: "xmark"), for: .normal)
+//        self.backButton.setImage(UIImage(systemName: "xmark"), for: .normal)
+        self.backButton.setImage(UIImage(named: "logo_backarrow"), for: .normal)
         self.backButton.tintColor = UIColor(displayP3Red: 1/255, green: 1/255, blue: 1/255, alpha: 1)
         self.backButton.addTarget(self, action: #selector(back), for: .touchUpInside)
         
@@ -307,13 +306,13 @@ class AddEatDiaryViewController: UIViewController {
         self.storeNameLabel.font = UIFont(name: "Helvetica Bold", size: 16)
         
         self.storeNameView.addSubview(self.storeSearchView)
-        self.storeSearchView.layer.cornerRadius = 3
+        self.storeSearchView.layer.cornerRadius = 7
         self.storeSearchView.layer.borderWidth = 1.5
         self.storeSearchView.layer.borderColor = customGray2.cgColor
         
         self.storeSearchView.addSubview(self.storeNameButton)
         self.storeNameButton.backgroundColor = .clear
-        self.storeNameButton.setTitle("방문하신 가게 명을 입력해주세요.", for: .normal)
+        self.storeNameButton.setTitle("방문하신 가게를 검색해주세요.", for: .normal)
         self.storeNameButton.titleLabel?.font = UIFont(name: "Helvetica", size: 17)
         self.storeNameButton.titleLabel?.textAlignment = .left
         self.storeNameButton.setTitleColor(customGray2, for: .normal)
@@ -348,19 +347,25 @@ class AddEatDiaryViewController: UIViewController {
         self.mainScrollView.addSubview(self.dateView)
         self.dateView.backgroundColor = .white
         
+        
         self.dateView.addSubview(self.dateLabel)
-        self.dateLabel.text = "먹은 날짜"
+        self.dateLabel.text = "식사 날짜"
         self.dateLabel.textAlignment = .center
         self.dateLabel.textColor = .black
         self.dateLabel.font = UIFont(name: "Helvetica Bold", size: 16)
         
         self.dateView.addSubview(self.dateField)
         self.dateField.backgroundColor = .clear
-        self.dateField.layer.cornerRadius = 22.5
+        //커서 없애기
+        self.dateField.tintColor = .clear
+        
+        self.dateField.textColor = .black
+        self.dateField.font = UIFont(name: "Helvetica", size: 17)
+        self.dateField.layer.cornerRadius = 7
         self.dateField.layer.borderWidth = 1.5
-        self.dateField.layer.borderColor = UIColor.black.cgColor
-        //self.dateField.placeholder = "식사하신 날짜를 선택해주세요."
-        self.dateField.attributedPlaceholder = NSAttributedString(string: "식사하신 날짜를 선택해주세요.", attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
+        self.dateField.layer.borderColor = customGray2.cgColor
+        //self.dateField.placeholder = "방문한 날짜를 선택해주세요."
+        self.dateField.attributedPlaceholder = NSAttributedString(string: "식사하신 날짜를 선택해주세요.", attributes: [NSAttributedString.Key.foregroundColor : customGray2])
         self.dateField.addLeftPadding()
         //self.dateField.
         self.configureDatePicker()
@@ -398,7 +403,7 @@ class AddEatDiaryViewController: UIViewController {
         self.backButton.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(leadingtrailingSize + 5)
             make.top.equalToSuperview().offset(60)
-            make.height.width.equalTo(30)
+//            make.height.width.equalTo(30)
             
         }
         
@@ -471,7 +476,7 @@ class AddEatDiaryViewController: UIViewController {
         }
         self.storeSearchImageView.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.trailing.equalToSuperview().offset(-leadingtrailingSize + 10)
+            make.trailing.equalToSuperview().offset(-leadingtrailingSize)
             make.width.height.equalTo(25)
         }
         
@@ -642,7 +647,7 @@ extension AddEatDiaryViewController: selectedStorePlaceDelegate {
         self.selectedPlace = document
         debugPrint(document)
         self.storeNameButton.setTitle(self.selectedPlace?.place_name, for: .normal)
-        self.storeNameButton.setTitleColor(darkblue, for: .normal)
+        self.storeNameButton.setTitleColor(.black, for: .normal)
         self.storeNameButton.backgroundColor = .white
         
     }
