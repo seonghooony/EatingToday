@@ -1,5 +1,5 @@
 //
-//  ResisterUserViewController.swift
+//  RegisterUserViewController.swift
 //  EatingToday
 //
 //  Created by SeongHoon Kim on 2022/02/17.
@@ -13,7 +13,7 @@ import FirebaseAuth
 import FirebaseFirestoreSwift
 import SkyFloatingLabelTextField
 
-class ResisterUserViewController: UIViewController {
+class RegisterUserViewController: UIViewController {
     
     let activeColor = UIColor(red: 50/255, green: 50/255, blue: 50/255, alpha: 1.0)
     let inactiveColor = UIColor(red: 200/255, green: 200/255, blue: 200/255, alpha: 1.0)
@@ -55,7 +55,7 @@ class ResisterUserViewController: UIViewController {
     let nicknameField = SkyFloatingLabelTextField(frame: CGRect(x: 0, y: 0, width: CGFloat(UIScreen.main.bounds.width) * 0.85, height: 40))
     let nicknameDetailLabel = UILabel()
     
-    let resisterButton = UIButton()
+    let registerButton = UIButton()
     
     lazy var activityIndicator: UIActivityIndicatorView = {
         // Create an indicator.
@@ -131,7 +131,7 @@ class ResisterUserViewController: UIViewController {
         self.navigationController?.popViewController(animated: true)
     }
     
-    @objc func resisterClicked() {
+    @objc func registerClicked() {
         
         self.activityIndicator.startAnimating()
         
@@ -454,14 +454,14 @@ class ResisterUserViewController: UIViewController {
         self.nicknameDetailLabel.textColor = successColor
         self.nicknameDetailLabel.font = UIFont(name: "Helvetica", size: 14)
         
-        self.scrollContainerView.addSubview(self.resisterButton)
-        self.resisterButton.isEnabled = false
-        self.resisterButton.backgroundColor = self.unableBackColor
-        self.resisterButton.setTitle("회원가입", for: .normal)
-        self.resisterButton.layer.cornerRadius = 10
-        self.resisterButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
-        self.resisterButton.setTitleColor(self.unableFontColor, for: .normal)
-        self.resisterButton.addTarget(self, action: #selector(resisterClicked), for: .touchUpInside)
+        self.scrollContainerView.addSubview(self.registerButton)
+        self.registerButton.isEnabled = false
+        self.registerButton.backgroundColor = self.unableBackColor
+        self.registerButton.setTitle("회원가입", for: .normal)
+        self.registerButton.layer.cornerRadius = 10
+        self.registerButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
+        self.registerButton.setTitleColor(self.unableFontColor, for: .normal)
+        self.registerButton.addTarget(self, action: #selector(registerClicked), for: .touchUpInside)
         
     }
     func constraintConfigure() {
@@ -565,7 +565,7 @@ class ResisterUserViewController: UIViewController {
             
         }
         
-        self.resisterButton.snp.makeConstraints{ make in
+        self.registerButton.snp.makeConstraints{ make in
             make.bottom.equalTo(self.nicknameDetailLabel.snp.top).offset(250)
             make.height.equalTo(60)
             make.leading.equalToSuperview().offset(leadingTrailingSize)
@@ -576,21 +576,21 @@ class ResisterUserViewController: UIViewController {
 }
 
 
-extension ResisterUserViewController: UITextFieldDelegate {
+extension RegisterUserViewController: UITextFieldDelegate {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)
     }
     
-    func checkEnableResisterButton() {
+    func checkEnableRegisterButton() {
         if self.emailValidation && self.passwordValidation && self.pwdConfirmValidation && self.nicknameValidation  {
-            self.resisterButton.isEnabled = true
-            self.resisterButton.backgroundColor = self.enableBackColor
-            self.resisterButton.setTitleColor(self.enableFontColor, for: .normal)
+            self.registerButton.isEnabled = true
+            self.registerButton.backgroundColor = self.enableBackColor
+            self.registerButton.setTitleColor(self.enableFontColor, for: .normal)
         } else {
-            self.resisterButton.isEnabled = false
-            self.resisterButton.backgroundColor = self.unableBackColor
-            self.resisterButton.setTitleColor(self.unableFontColor, for: .normal)
+            self.registerButton.isEnabled = false
+            self.registerButton.backgroundColor = self.unableBackColor
+            self.registerButton.setTitleColor(self.unableFontColor, for: .normal)
         }
     }
     
@@ -635,13 +635,11 @@ extension ResisterUserViewController: UITextFieldDelegate {
             }
         }
         
-        self.checkEnableResisterButton()
+        self.checkEnableRegisterButton()
     }
 
     @objc func passwordFieldDidChange(_ textField: UITextField) {
-        let passwordPattern = "^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[!@#$%^&*()_+=-]).{8,20}"
-        
-        let regex = try? NSRegularExpression(pattern: passwordPattern)
+
         
         self.pwdConfirmField.text = ""
         self.pwdConfirmField.errorMessage = ""
@@ -650,20 +648,39 @@ extension ResisterUserViewController: UITextFieldDelegate {
         
         if let text = textField.text {
             if let floatingLabelTextField = textField as? SkyFloatingLabelTextField {
-                if let _ = regex?.firstMatch(in: text, options: [], range: NSRange(location: 0, length: text.count)) {
+                if text.count >= 6 {
                     floatingLabelTextField.errorMessage = ""
                     self.pwdDetailLabel.text = "사용하실 수 있는 비밀번호입니다."
                     self.pwdDetailLabel.textColor = self.successColor
                     self.passwordValidation = true
                 } else {
                     floatingLabelTextField.errorMessage = " "
-                    self.pwdDetailLabel.text = "비밀번호는 8~20자리 영문자,숫자,특수문자 조합입니다."
+                    self.pwdDetailLabel.text = "비밀번호는 6자리 이상이여야 합니다."
                     self.pwdDetailLabel.textColor = self.failColor
                     self.passwordValidation = false
                 }
             }
         }
-        self.checkEnableResisterButton()
+//        let passwordPattern = "^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[!@#$%^&*()_+=-]).{8,20}"
+//
+//        let regex = try? NSRegularExpression(pattern: passwordPattern)
+        
+//        if let text = textField.text {
+//            if let floatingLabelTextField = textField as? SkyFloatingLabelTextField {
+//                if let _ = regex?.firstMatch(in: text, options: [], range: NSRange(location: 0, length: text.count)) {
+//                    floatingLabelTextField.errorMessage = ""
+//                    self.pwdDetailLabel.text = "사용하실 수 있는 비밀번호입니다."
+//                    self.pwdDetailLabel.textColor = self.successColor
+//                    self.passwordValidation = true
+//                } else {
+//                    floatingLabelTextField.errorMessage = " "
+//                    self.pwdDetailLabel.text = "비밀번호는 8~20자리 영문자,숫자,특수문자 조합입니다."
+//                    self.pwdDetailLabel.textColor = self.failColor
+//                    self.passwordValidation = false
+//                }
+//            }
+//        }
+        self.checkEnableRegisterButton()
     }
     
     @objc func pwdConfirmFieldDidChange(_ textField: UITextField) {
@@ -695,7 +712,7 @@ extension ResisterUserViewController: UITextFieldDelegate {
         }
         
         
-        self.checkEnableResisterButton()
+        self.checkEnableRegisterButton()
     }
     
     @objc func nicknameFieldDidChange(_ textField: UITextField) {
@@ -722,7 +739,7 @@ extension ResisterUserViewController: UITextFieldDelegate {
             }
         }
         
-        self.checkEnableResisterButton()
+        self.checkEnableRegisterButton()
     }
 }
 

@@ -15,7 +15,7 @@
 		DB6F1AF827BBF98A00247B89 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1AF727BBF98A00247B89 /* MainViewController.swift */; };
 		DB6F1AFA27BBFA0800247B89 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1AF927BBFA0800247B89 /* LoginViewController.swift */; };
 		DB6F1AFC27BCEA9600247B89 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DB6F1AFB27BCEA9600247B89 /* GoogleService-Info.plist */; };
-		DB6F1B0227BE4A6000247B89 /* ResisterUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1B0127BE4A6000247B89 /* ResisterUserViewController.swift */; };
+		DB6F1B0227BE4A6000247B89 /* RegisterUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1B0127BE4A6000247B89 /* RegisterUserViewController.swift */; };
 		DB6F1B0427BF829100247B89 /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1B0327BF829100247B89 /* UserInfo.swift */; };
 		DB6F1B0727C34D7100247B89 /* EatDiaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1B0627C34D7100247B89 /* EatDiaryViewController.swift */; };
 		DB6F1B0927C34E1F00247B89 /* DiaryMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1B0827C34E1F00247B89 /* DiaryMapViewController.swift */; };
@@ -47,7 +47,7 @@
 		DB6F1AF727BBF98A00247B89 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		DB6F1AF927BBFA0800247B89 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		DB6F1AFB27BCEA9600247B89 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		DB6F1B0127BE4A6000247B89 /* ResisterUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResisterUserViewController.swift; sourceTree = "<group>"; };
+		DB6F1B0127BE4A6000247B89 /* RegisterUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterUserViewController.swift; sourceTree = "<group>"; };
 		DB6F1B0327BF829100247B89 /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
 		DB6F1B0527C2135400247B89 /* EatingToday.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EatingToday.entitlements; sourceTree = "<group>"; };
 		DB6F1B0627C34D7100247B89 /* EatDiaryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EatDiaryViewController.swift; sourceTree = "<group>"; };
@@ -120,13 +120,13 @@
 				DB6F1AE327BBF93100247B89 /* AppDelegate.swift */,
 				DB6F1AE527BBF93100247B89 /* SceneDelegate.swift */,
 				DB6F1AEE27BBF93200247B89 /* LaunchScreen.storyboard */,
+				DB6F1B5527D9B6C300247B89 /* CustomPopAlertViewController.swift */,
 				DB6F1B2D27C4816200247B89 /* Main */,
 				DB6F1B2C27C4814100247B89 /* Login */,
 				DB6F1B0527C2135400247B89 /* EatingToday.entitlements */,
 				DB6F1AEC27BBF93200247B89 /* Assets.xcassets */,
 				DB6F1AF127BBF93200247B89 /* Info.plist */,
 				DB6F1AFB27BCEA9600247B89 /* GoogleService-Info.plist */,
-				DB6F1B5527D9B6C300247B89 /* CustomPopAlertViewController.swift */,
 			);
 			path = EatingToday;
 			sourceTree = "<group>";
@@ -135,7 +135,7 @@
 			isa = PBXGroup;
 			children = (
 				DB6F1AF927BBFA0800247B89 /* LoginViewController.swift */,
-				DB6F1B0127BE4A6000247B89 /* ResisterUserViewController.swift */,
+				DB6F1B0127BE4A6000247B89 /* RegisterUserViewController.swift */,
 				DB6F1B0327BF829100247B89 /* UserInfo.swift */,
 				DB6F1B5327D8953600247B89 /* PwdResetPopupViewConroller.swift */,
 			);
@@ -332,7 +332,7 @@
 				DB6F1B4727D22A0C00247B89 /* SearchResultTableViewCell.swift in Sources */,
 				DB6F1AE427BBF93100247B89 /* AppDelegate.swift in Sources */,
 				DB6F1AF827BBF98A00247B89 /* MainViewController.swift in Sources */,
-				DB6F1B0227BE4A6000247B89 /* ResisterUserViewController.swift in Sources */,
+				DB6F1B0227BE4A6000247B89 /* RegisterUserViewController.swift in Sources */,
 				DB6F1B0727C34D7100247B89 /* EatDiaryViewController.swift in Sources */,
 				DB6F1B5427D8953600247B89 /* PwdResetPopupViewConroller.swift in Sources */,
 				DB6F1B4127CE20C900247B89 /* SearchResultOverview.swift in Sources */,

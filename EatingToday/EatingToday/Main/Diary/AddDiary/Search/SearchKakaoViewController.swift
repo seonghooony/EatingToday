@@ -17,7 +17,7 @@ class SearchKakaoViewController: UIViewController {
     var resultList: SearchResultOverview?
     var SearchKeyword: String?
     
-    var resultDelegate: selectedStorePlaceDelegate?
+    weak var resultDelegate: selectedStorePlaceDelegate?
     
     let closeButton = UIButton()
     

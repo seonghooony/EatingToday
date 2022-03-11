@@ -14,12 +14,23 @@ import Photos
 
 class AddEatDiaryViewController: UIViewController {
     
+    let customGray1 = UIColor(displayP3Red: 242/255, green: 242/255, blue: 247/255, alpha: 1)
+    let customGray2 = UIColor(displayP3Red: 199/255, green: 199/255, blue: 204/255, alpha: 1)
+    let customGray3 = UIColor(displayP3Red: 130/255, green: 130/255, blue: 135/255, alpha: 1)
+    
+    let darkblue = UIColor(displayP3Red: 5/255, green: 19/255, blue: 103/255, alpha: 1)
+    
+    let enableFontColor = UIColor(displayP3Red: 249/255, green: 151/255, blue: 93/255, alpha: 1)
+    
     var selectedPlace: SelectedSearchResultDocument?
     
     let headView = UIView()
     let titleLabel = UILabel()
     let registerButton = UIButton()
     let backButton = UIButton()
+    
+    let scrollHeadView = UIView()
+    let scrollHeadLabel = UILabel()
     
     let mainView = UIView()
     let mainScrollView = UIScrollView()
@@ -28,7 +39,9 @@ class AddEatDiaryViewController: UIViewController {
     let storeNameView = UIView()
     let storeNameLabel = UILabel()
     //let storeNameField = UITextField()
-    let storeNameField = UIButton()
+    let storeSearchView = UIView()
+    let storeSearchImageView = UIImageView()
+    let storeNameButton = UIButton()
     
     let imageView = UIView()
     let imageLabel = UILabel()
@@ -102,18 +115,18 @@ class AddEatDiaryViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(true, animated: animated)
+        self.navigationController?.setNavigationBarHidden(true, animated: animated)
         self.tabBarController?.tabBar.isHidden = true
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        navigationController?.setNavigationBarHidden(false, animated: animated)
+        self.navigationController?.setNavigationBarHidden(false, animated: animated)
         self.tabBarController?.tabBar.isHidden = false
     }
     
     @objc func back() {
-        navigationController?.popViewController(animated: true)
+        self.navigationController?.popViewController(animated: true)
     }
     @objc func datepickerDoneTapped() {
         self.view.endEditing(true)
@@ -238,14 +251,15 @@ class AddEatDiaryViewController: UIViewController {
         self.backButton.addTarget(self, action: #selector(back), for: .touchUpInside)
         
         self.headView.addSubview(self.titleLabel)
-        self.titleLabel.text = "Eatingram"
+        self.titleLabel.text = "새 게시물"
         self.titleLabel.textAlignment = .center
-        self.titleLabel.font = UIFont(name: "Marker Felt", size: 25)
-        self.titleLabel.textColor = UIColor(displayP3Red: 243/255, green: 129/255, blue: 129/255, alpha: 1)
+        self.titleLabel.font = UIFont(name: "Helvetica Bold", size: 18)
+        self.titleLabel.textColor = UIColor.black
         
         self.headView.addSubview(self.registerButton)
         self.registerButton.setTitle("등록", for: .normal)
-        self.registerButton.setTitleColor(UIColor(displayP3Red: 1/255, green: 1/255, blue: 1/255, alpha: 1), for: .normal)
+        self.registerButton.setTitleColor(UIColor.black, for: .normal)
+        self.registerButton.titleLabel?.font = UIFont(name: "Helvetica Bold", size: 17)
         
         self.view.addSubview(self.mainView)
         self.mainView.addSubview(mainScrollView)
@@ -255,27 +269,62 @@ class AddEatDiaryViewController: UIViewController {
         self.mainScrollView.addSubview(scrollContainerView)
         self.scrollContainerView.backgroundColor = UIColor(displayP3Red: 230/255, green: 230/255, blue: 230/255, alpha: 1)
         
+        self.scrollContainerView.addSubview(self.scrollHeadView)
+        self.scrollHeadView.backgroundColor = .white
+        self.scrollHeadView.addSubview(self.scrollHeadLabel)
+        self.scrollHeadLabel.numberOfLines = 2
+        self.scrollHeadLabel.textAlignment = .left
+        let scrollHeadFont = UIFont(name: "Helvetica Bold", size: 21)
+        let scrollHeadParagraphStyle = NSMutableParagraphStyle()
+        scrollHeadParagraphStyle.lineSpacing = 10
+
+        let scrollHeadAtrributes1: [NSAttributedString.Key: Any] = [
+            .font: scrollHeadFont,
+            .foregroundColor: UIColor.black,
+            .paragraphStyle: scrollHeadParagraphStyle
+        ]
+        let scrollHeadAtrributes2: [NSAttributedString.Key: Any] = [
+            .font: scrollHeadFont,
+            .foregroundColor: enableFontColor,
+            .paragraphStyle: scrollHeadParagraphStyle
+        ]
+        let headLabelStr = "맛있게 드신 맛집을\n이팅그램의 기억 속에 남겨주세요."
+        let attributedStr = NSMutableAttributedString(string: headLabelStr, attributes: scrollHeadAtrributes1)
+        attributedStr.addAttributes(scrollHeadAtrributes2, range: (headLabelStr as NSString).range(of: "이팅그램"))
+        self.scrollHeadLabel.attributedText = attributedStr
+        
+        
         self.scrollContainerView.addSubview(self.storeNameView)
         self.storeNameView.backgroundColor = .white
         //self.storeNameView.layer.addBorder([.top, .bottom], color: UIColor.lightGray, width: 1.0)
         
         
+        
         self.storeNameView.addSubview(self.storeNameLabel)
         self.storeNameLabel.text = "가게 이름"
         self.storeNameLabel.textAlignment = .center
+        self.storeNameLabel.textColor = .black
+        self.storeNameLabel.font = UIFont(name: "Helvetica Bold", size: 16)
         
-        self.storeNameView.addSubview(self.storeNameField)
-        self.storeNameField.backgroundColor = .clear
-        self.storeNameField.layer.cornerRadius = 22.5
-        self.storeNameField.layer.borderWidth = 1.5
-        self.storeNameField.layer.borderColor = UIColor.black.cgColor
-        self.storeNameField.setTitle("방문하신 가게 명을 입력해주세요.", for: .normal)
-        self.storeNameField.titleLabel?.font = UIFont.systemFont(ofSize: 17)
-        self.storeNameField.titleLabel?.textAlignment = .left
-        self.storeNameField.setTitleColor(.lightGray, for: .normal)
-        //self.storeNameField.placeholder = "방문하신 가게 명을 입력해주세요."
-        //self.storeNameField.addLeftPadding()
-        self.storeNameField.addTarget(self, action: #selector(moveSearchViewController), for: .touchUpInside)
+        self.storeNameView.addSubview(self.storeSearchView)
+        self.storeSearchView.layer.cornerRadius = 3
+        self.storeSearchView.layer.borderWidth = 1.5
+        self.storeSearchView.layer.borderColor = customGray2.cgColor
+        
+        self.storeSearchView.addSubview(self.storeNameButton)
+        self.storeNameButton.backgroundColor = .clear
+        self.storeNameButton.setTitle("방문하신 가게 명을 입력해주세요.", for: .normal)
+        self.storeNameButton.titleLabel?.font = UIFont(name: "Helvetica", size: 17)
+        self.storeNameButton.titleLabel?.textAlignment = .left
+        self.storeNameButton.setTitleColor(customGray2, for: .normal)
+
+        self.storeNameButton.addTarget(self, action: #selector(moveSearchViewController), for: .touchUpInside)
+        
+        self.storeSearchView.addSubview(self.storeSearchImageView)
+        self.storeSearchImageView.image = UIImage(systemName: "magnifyingglass")
+        self.storeSearchImageView.tintColor = customGray2
+        
+        
         
         
         
@@ -285,6 +334,8 @@ class AddEatDiaryViewController: UIViewController {
         self.imageView.addSubview(self.imageLabel)
         self.imageLabel.text = "사진 등록"
         self.imageLabel.textAlignment = .center
+        self.imageLabel.textColor = .black
+        self.imageLabel.font = UIFont(name: "Helvetica Bold", size: 16)
         
         self.imageView.addSubview(self.imageUiView)
         self.imageUiView.backgroundColor = .clear
@@ -300,6 +351,8 @@ class AddEatDiaryViewController: UIViewController {
         self.dateView.addSubview(self.dateLabel)
         self.dateLabel.text = "먹은 날짜"
         self.dateLabel.textAlignment = .center
+        self.dateLabel.textColor = .black
+        self.dateLabel.font = UIFont(name: "Helvetica Bold", size: 16)
         
         self.dateView.addSubview(self.dateField)
         self.dateField.backgroundColor = .clear
@@ -334,6 +387,7 @@ class AddEatDiaryViewController: UIViewController {
     }
     
     func constraintConfigure() {
+        let leadingtrailingSize = 20
         self.headView.snp.makeConstraints{ make in
             make.top.equalToSuperview().offset(0)
             make.height.equalTo(100)
@@ -342,7 +396,7 @@ class AddEatDiaryViewController: UIViewController {
         }
         
         self.backButton.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(20)
+            make.leading.equalToSuperview().offset(leadingtrailingSize + 5)
             make.top.equalToSuperview().offset(60)
             make.height.width.equalTo(30)
             
@@ -355,7 +409,7 @@ class AddEatDiaryViewController: UIViewController {
         }
         
         self.registerButton.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().offset(-20)
+            make.trailing.equalToSuperview().offset(-leadingtrailingSize - 5)
             make.top.equalToSuperview().offset(50)
             make.height.equalTo(50)
             
@@ -377,9 +431,22 @@ class AddEatDiaryViewController: UIViewController {
             //make.height.equalTo(5000) //마지막 부분에 bottom 제약조건 안걸고 싶으면 고정 높이를 정해줘야함
             
         }
+        self.scrollHeadView.snp.makeConstraints{ make in
+            make.top.equalToSuperview().offset(0)
+            //equalSuperview로 할경우 수평으로 스크롤 되는 현상 발생, 스크롤뷰이므로 가로세로가 무한이기때문에 정해줘야함
+            make.leading.trailing.equalTo(self.view)
+            make.height.equalTo(100)
+        }
+        
+        self.scrollHeadLabel.snp.makeConstraints{ make in
+            make.top.bottom.equalToSuperview()
+            make.leading.equalToSuperview().offset(leadingtrailingSize)
+            make.trailing.equalToSuperview().offset(-leadingtrailingSize)
+            
+        }
         
         self.storeNameView.snp.makeConstraints{ make in
-            make.top.equalToSuperview().offset(0)
+            make.top.equalTo(self.scrollHeadView.snp.bottom).offset(0)
             //equalSuperview로 할경우 수평으로 스크롤 되는 현상 발생, 스크롤뷰이므로 가로세로가 무한이기때문에 정해줘야함
             make.leading.trailing.equalTo(self.view)
             make.height.equalTo(100)
@@ -387,19 +454,32 @@ class AddEatDiaryViewController: UIViewController {
 
         self.storeNameLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(10)
-            make.leading.equalToSuperview().offset(20)
+            make.leading.equalToSuperview().offset(leadingtrailingSize)
         }
         
-        self.storeNameField.snp.makeConstraints{ make in
+        self.storeSearchView.snp.makeConstraints { make in
             make.top.equalTo(storeNameLabel.snp.bottom).offset(10)
-            make.leading.equalToSuperview().offset(20)
-            make.trailing.equalToSuperview().offset(-20)
+            make.leading.equalToSuperview().offset(leadingtrailingSize)
+            make.trailing.equalToSuperview().offset(-leadingtrailingSize)
             make.height.equalTo(45)
         }
         
-        self.storeNameField.titleLabel?.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(20)
+        self.storeNameButton.snp.makeConstraints{ make in
+            make.centerY.equalToSuperview()
+            make.leading.equalToSuperview().offset(leadingtrailingSize)
+            make.trailing.equalToSuperview().offset(-leadingtrailingSize)
         }
+        self.storeSearchImageView.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.trailing.equalToSuperview().offset(-leadingtrailingSize + 10)
+            make.width.height.equalTo(25)
+        }
+        
+        
+        self.storeNameButton.titleLabel?.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(0)
+        }
+        
         
         self.imageView.snp.makeConstraints{ make in
             make.top.equalTo(self.storeNameView.snp.bottom).offset(0.5)
@@ -410,20 +490,20 @@ class AddEatDiaryViewController: UIViewController {
         
         self.imageLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(10)
-            make.leading.equalToSuperview().offset(20)
+            make.leading.equalToSuperview().offset(leadingtrailingSize)
         }
         
         self.imageUiView.snp.makeConstraints { make in
             make.top.equalTo(self.imageLabel.snp.bottom).offset(10)
-            make.leading.equalToSuperview().offset(10)
-            make.trailing.equalToSuperview().offset(-10)
+            make.leading.equalToSuperview().offset(leadingtrailingSize)
+            make.trailing.equalToSuperview().offset(-leadingtrailingSize)
             make.height.equalTo(100)
         }
         
         self.imageCollectionView.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview().offset(0)
-            make.leading.equalToSuperview().offset(10)
-            make.trailing.equalToSuperview().offset(-10)
+            make.leading.equalToSuperview().offset(0)
+            make.trailing.equalToSuperview().offset(0)
         }
         
         self.dateView.snp.makeConstraints { make in
@@ -435,13 +515,13 @@ class AddEatDiaryViewController: UIViewController {
         
         self.dateLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(10)
-            make.leading.equalToSuperview().offset(20)
+            make.leading.equalToSuperview().offset(leadingtrailingSize)
         }
         
         self.dateField.snp.makeConstraints { make in
             make.top.equalTo(self.dateLabel.snp.bottom).offset(10)
-            make.leading.equalToSuperview().offset(20)
-            make.trailing.equalToSuperview().offset(-20)
+            make.leading.equalToSuperview().offset(leadingtrailingSize)
+            make.trailing.equalToSuperview().offset(-leadingtrailingSize)
             make.height.equalTo(45)
         }
         
@@ -561,8 +641,9 @@ extension AddEatDiaryViewController: selectedStorePlaceDelegate {
     func showSelectedStorePlace(document: SelectedSearchResultDocument) {
         self.selectedPlace = document
         debugPrint(document)
-        self.storeNameField.setTitle(self.selectedPlace?.place_name, for: .normal)
-        self.storeNameField.setTitleColor(.black, for: .normal)
+        self.storeNameButton.setTitle(self.selectedPlace?.place_name, for: .normal)
+        self.storeNameButton.setTitleColor(darkblue, for: .normal)
+        self.storeNameButton.backgroundColor = .white
         
     }
 }

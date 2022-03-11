@@ -126,7 +126,7 @@ class LoginViewController: UIViewController {
     }
      
     @objc func emailResisterClicked() {
-        let resisterUserVC = ResisterUserViewController()
+        let resisterUserVC = RegisterUserViewController()
         navigationController?.pushViewController(resisterUserVC, animated: true)
     }
     @objc func googleLoginClicked() {
@@ -634,13 +634,15 @@ extension LoginViewController: UITextFieldDelegate {
 
             
         } else {
-            self.showCustomPopup(title: "알림", message: "비밀번호는 8~20자리 영문자,숫자,특수문자 조합입니다.")
+            self.showCustomPopup(title: "알림", message: "비밀번호는 6자리 이상이여야 합니다.")
+//            self.showCustomPopup(title: "알림", message: "비밀번호는 8~20자리 영문자,숫자,특수문자 조합입니다.")
             
         }
     }
     
     @objc func emailFieldDidChange(_ textField: UITextField) {
         let emailPattern = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        
         let regex = try? NSRegularExpression(pattern: emailPattern)
         
         if let text = textField.text {
@@ -660,19 +662,33 @@ extension LoginViewController: UITextFieldDelegate {
     }
 
     @objc func passwordFieldDidChange(_ textField: UITextField) {
-        let passwordPattern = "^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[!@#$%^&*()_+=-]).{8,20}"
-        
-        let regex = try? NSRegularExpression(pattern: passwordPattern)
+//      비밀번호 정규식
+        //영문+숫자+특수문자
+//        let passwordPattern = "^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[!@#$%^&*()_+=-]).{8,20}"
+
+//        let regex = try? NSRegularExpression(pattern: passwordPattern)
+//
+//        if let text = textField.text {
+//            if let floatingLabelTextField = textField as? SkyFloatingLabelTextField {
+//                if let _ = regex?.firstMatch(in: text, options: [], range: NSRange(location: 0, length: text.count)) {
+//                    floatingLabelTextField.errorMessage = ""
+//                    self.passwordValidation = true
+//                } else {
+//                    floatingLabelTextField.errorMessage = ""
+//                    //floatingLabelTextField.errorMessage = " "
+//
+//                    self.passwordValidation = false
+//                }
+//            }
+//        }
         
         if let text = textField.text {
             if let floatingLabelTextField = textField as? SkyFloatingLabelTextField {
-                if let _ = regex?.firstMatch(in: text, options: [], range: NSRange(location: 0, length: text.count)) {
+                if text.count >= 6 {
                     floatingLabelTextField.errorMessage = ""
                     self.passwordValidation = true
                 } else {
                     floatingLabelTextField.errorMessage = ""
-                    //floatingLabelTextField.errorMessage = " "
-                    
                     self.passwordValidation = false
                 }
             }

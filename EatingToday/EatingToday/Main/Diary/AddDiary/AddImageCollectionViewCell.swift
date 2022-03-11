@@ -13,7 +13,7 @@ protocol deleteIndexImageDelegate: AnyObject {
 
 class AddImageCollectionViewCell: UICollectionViewCell {
     
-    var deleteIndexImageDelegate: deleteIndexImageDelegate?
+    weak var deleteIndexImageDelegate: deleteIndexImageDelegate?
     
     var cellIndex: Int?
     
