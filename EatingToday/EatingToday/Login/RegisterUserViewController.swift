@@ -35,7 +35,7 @@ class RegisterUserViewController: UIViewController {
     let mainScrollView = UIScrollView()
     let scrollContainerView = UIView()
     
-    var keyHeight: CGFloat?
+    
     
     let titleLabel = UILabel()
 
@@ -74,6 +74,7 @@ class RegisterUserViewController: UIViewController {
         
     }()
     
+    var keyHeight: CGFloat?
     var activeTextField: UITextField?
     
     var emailValidation: Bool = false

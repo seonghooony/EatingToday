@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import BSImagePicker
 import Photos
-
+import Cosmos
 
 
 class AddEatDiaryViewController: UIViewController {
@@ -20,7 +20,18 @@ class AddEatDiaryViewController: UIViewController {
     
     let darkblue = UIColor(displayP3Red: 5/255, green: 19/255, blue: 103/255, alpha: 1)
     
+    let activeColor = UIColor(red: 50/255, green: 50/255, blue: 50/255, alpha: 1.0)
+    let inactiveColor = UIColor(red: 200/255, green: 200/255, blue: 200/255, alpha: 1.0)
+    let titleColor = UIColor(red: 0, green: 187/255, blue: 204/255, alpha: 1.0)
+    let successColor = UIColor(red: 0, green: 187/255, blue: 204/255, alpha: 1.0)
+    let failColor = UIColor.red
+    
+    let unableBackColor = UIColor(displayP3Red: 200/255, green: 200/255, blue: 200/255, alpha: 1)
+    let unableFontColor = UIColor(displayP3Red: 100/255, green: 100/255, blue: 100/255, alpha: 1)
+    
+    let enableBackColor = UIColor(displayP3Red: 1/255, green: 1/255, blue: 1/255, alpha: 1)
     let enableFontColor = UIColor(displayP3Red: 249/255, green: 151/255, blue: 93/255, alpha: 1)
+
     
     var selectedPlace: SelectedSearchResultDocument?
     
@@ -85,29 +96,32 @@ class AddEatDiaryViewController: UIViewController {
     let datepicker = UIDatePicker()
     var eatDate = Date()
     
-
+    let categoryView = UIView()
+    let categoryLabel = UILabel()
+    let categoryField = UITextField()
 
     let scoreView = UIView()
     let scoreLabel = UILabel()
     let scoreUiView = UIView()
-
-
-    let categoryView = UIView()
-    let categoryLabel = UILabel()
-    let categoryField = UITextField()
-    let category = String()
+    let starView = CosmosView()
 
     let storyView = UIView()
     let storyLabel = UILabel()
-    let storyField = UITextField()
+    let storycontentView = UIView()
+    let storyTextView = UITextView()
     
+    let addDiaryBtnView = UIView()
+    let addDiaryButton = UIButton()
     
+    var keyHeight: CGFloat?
+    var activeTextField: UITextView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         viewConfigure()
         constraintConfigure()
         scrollViewEndEditing()
+        notificationConfigure()
     }
     
     // 스크롤뷰에서 클릭시 endEditing 기능 먹도록 함
@@ -118,6 +132,37 @@ class AddEatDiaryViewController: UIViewController {
         singleTap.cancelsTouchesInView = false
         self.mainScrollView.addGestureRecognizer(singleTap)
     }
+    
+    func notificationConfigure() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc func keyboardWillShow(_ sender: Notification) {
+        let userInfo: NSDictionary = sender.userInfo! as NSDictionary
+        let keyboardFrame: NSValue = userInfo.value(forKey: UIResponder.keyboardFrameEndUserInfoKey) as! NSValue
+        let keyboardRectangle = keyboardFrame.cgRectValue
+        let keyboardHeight = keyboardRectangle.height
+        keyHeight = keyboardHeight
+
+        self.mainScrollView.contentInset.bottom += CGFloat(keyHeight!)
+        self.mainScrollView.scrollIndicatorInsets.bottom += CGFloat(keyHeight!)
+        self.mainScrollView.scrollRectToVisible(scrollContainerView.frame, animated: true)
+        
+        
+        if let activeHeight = self.activeTextField?.frame.origin.y {
+            self.mainScrollView.setContentOffset(CGPoint(x: 0, y: activeHeight - (keyboardHeight - 15)), animated: true)
+        }
+        
+    }
+    
+    @objc func keyboardWillHide(_ sender: Notification) {
+        
+        self.mainScrollView.contentInset.bottom -= CGFloat(keyHeight!) * 2
+        self.mainScrollView.scrollIndicatorInsets.bottom -= CGFloat(keyHeight!) * 2
+        self.mainScrollView.scrollRectToVisible(scrollContainerView.frame, animated: true)
+    }
+    
     @objc func endEdit() {
         self.view.endEditing(true)
     }
@@ -363,7 +408,7 @@ class AddEatDiaryViewController: UIViewController {
         
         self.imageView.addSubview(self.activityIndicator)
         
-        self.mainScrollView.addSubview(self.dateView)
+        self.scrollContainerView.addSubview(self.dateView)
         self.dateView.backgroundColor = .white
         
         
@@ -389,8 +434,21 @@ class AddEatDiaryViewController: UIViewController {
         //self.dateField.
         self.configureDatePicker()
         
+        
+        
+        self.scrollContainerView.addSubview(self.categoryView)
+        self.categoryView.backgroundColor = .white
+        
+        self.categoryView.addSubview(self.categoryLabel)
+        self.categoryLabel.text = "카테고리"
+        self.categoryLabel.textAlignment = .center
+        self.categoryLabel.textColor = .black
+        self.categoryLabel.font = UIFont(name: "Helvetica Bold", size: 16)
+//        self.categoryView.addSubview(self.categoryField)
+        
+        
     
-        self.mainScrollView.addSubview(self.scoreView)
+        self.scrollContainerView.addSubview(self.scoreView)
         self.scoreView.backgroundColor = .white
         
         self.scoreView.addSubview(self.scoreLabel)
@@ -400,20 +458,54 @@ class AddEatDiaryViewController: UIViewController {
         self.scoreLabel.font = UIFont(name: "Helvetica Bold", size: 16)
         
         self.scoreView.addSubview(self.scoreUiView)
-        self.scoreUiView.layer.cornerRadius = 7
-        self.scoreUiView.layer.borderWidth = 1.5
-        self.scoreUiView.layer.borderColor = customGray2.cgColor
+//        self.scoreUiView.layer.cornerRadius = 7
+//        self.scoreUiView.layer.borderWidth = 1.5
+//        self.scoreUiView.layer.borderColor = customGray2.cgColor
+        
+        self.scoreUiView.addSubview(self.starView)
+        self.starView.rating = 3.5
+        self.starView.text = "\(self.starView.rating)점"
+        self.starView.settings.fillMode = .half
+        self.starView.settings.starSize = 45
+        self.starView.settings.starMargin = 15
+        self.starView.settings.filledColor = enableFontColor
+        self.starView.settings.emptyColor = .white
+        self.starView.settings.filledBorderColor = enableFontColor
+        self.starView.settings.filledBorderWidth = 3
+        self.starView.settings.emptyBorderColor = enableFontColor
+        self.starView.settings.emptyBorderWidth = 3
+        self.starView.didTouchCosmos = { rating in
+            self.starView.text = "\(rating)점"
+        }
         
         
-//        
-//        self.mainView.addSubview(self.categoryView)
-//        self.categoryView.addSubview(self.categoryLabel)
-//        self.categoryView.addSubview(self.categoryField)
-//        
-//        self.mainScrollView.addSubview(self.storyView)
-//        self.storyView.addSubview(self.storyLabel)
-//        self.storyView.addSubview(self.storyField)
+        self.scrollContainerView.addSubview(self.storyView)
+        self.storyView.backgroundColor = .white
         
+        self.storyView.addSubview(self.storyLabel)
+        self.storyLabel.text = "나의 이야기"
+        self.storyLabel.textAlignment = .center
+        self.storyLabel.textColor = .black
+        self.storyLabel.font = UIFont(name: "Helvetica Bold", size: 16)
+        
+        self.storyView.addSubview(self.storycontentView)
+        self.storycontentView.layer.cornerRadius = 7
+        self.storycontentView.layer.borderWidth = 1.5
+        self.storycontentView.layer.borderColor = customGray2.cgColor
+        
+        self.storycontentView.addSubview(self.storyTextView)
+        
+        self.scrollContainerView.addSubview(self.addDiaryBtnView)
+        self.addDiaryBtnView.backgroundColor = .white
+        
+        self.addDiaryBtnView.addSubview(self.addDiaryButton)
+        self.addDiaryButton.isEnabled = false
+        self.addDiaryButton.backgroundColor = self.unableBackColor
+        self.addDiaryButton.setTitle("나의 이야기 등록", for: .normal)
+        self.addDiaryButton.layer.cornerRadius = 10
+        self.addDiaryButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
+        self.addDiaryButton.setTitleColor(self.unableFontColor, for: .normal)
+//        self.registerButton.addTarget(self, action: #selector(registerClicked), for: .touchUpInside)
         
         
     }
@@ -564,11 +656,23 @@ class AddEatDiaryViewController: UIViewController {
             make.height.equalTo(fieldHeight)
         }
         
-        self.scoreView.snp.makeConstraints { make in
+        self.categoryView.snp.makeConstraints { make in
             make.top.equalTo(self.dateView.snp.bottom).offset(0.5)
             make.leading.trailing.equalTo(self.view)
             make.height.equalTo(110)
-            make.bottom.equalToSuperview()//스크롤바가 고정높이가 아니라면 스크롤바의 마지막에 꼭 넣어줘야함.
+            
+        }
+        
+        self.categoryLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(10)
+            make.leading.equalToSuperview().offset(leadingtrailingSize)
+        }
+        
+        self.scoreView.snp.makeConstraints { make in
+            make.top.equalTo(self.categoryView.snp.bottom).offset(0.5)
+            make.leading.trailing.equalTo(self.view)
+            make.height.equalTo(110)
+            
         }
         
         self.scoreLabel.snp.makeConstraints { make in
@@ -582,6 +686,53 @@ class AddEatDiaryViewController: UIViewController {
             make.trailing.equalToSuperview().offset(-leadingtrailingSize)
             make.height.equalTo(fieldHeight)
         }
+        
+        self.starView.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.centerX.equalToSuperview()
+        }
+        
+        self.storyView.snp.makeConstraints { make in
+            make.top.equalTo(self.scoreView.snp.bottom).offset(0.5)
+            make.leading.trailing.equalTo(self.view)
+            make.height.equalTo(300)
+            
+        }
+        
+        self.storyLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(10)
+            make.leading.equalToSuperview().offset(leadingtrailingSize)
+        }
+        
+        self.storycontentView.snp.makeConstraints { make in
+            make.top.equalTo(self.storyLabel.snp.bottom).offset(10)
+            make.leading.equalToSuperview().offset(leadingtrailingSize)
+            make.trailing.equalToSuperview().offset(-leadingtrailingSize)
+            make.height.equalTo(200)
+        }
+        
+        self.storyTextView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(10)
+            make.bottom.equalToSuperview().offset(-10)
+            make.leading.equalToSuperview().offset(leadingtrailingSize)
+            make.trailing.equalToSuperview().offset(-leadingtrailingSize)
+        }
+        
+        self.addDiaryBtnView.snp.makeConstraints { make in
+            make.top.equalTo(self.storyView.snp.bottom).offset(0)
+            make.leading.trailing.equalTo(self.view)
+            make.height.equalTo(70)
+            make.bottom.equalToSuperview()//스크롤바가 고정높이가 아니라면 스크롤바의 마지막에 꼭 넣어줘야함.
+        }
+        
+        self.addDiaryButton.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.height.equalTo(60)
+            make.leading.equalToSuperview().offset(leadingtrailingSize)
+            make.trailing.equalToSuperview().offset(-leadingtrailingSize)
+            
+        }
+        
         
     }
 }

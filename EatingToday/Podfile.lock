@@ -225,6 +225,7 @@ PODS:
     - BoringSSL-GRPC/Interface (= 0.0.7)
   - BoringSSL-GRPC/Interface (0.0.7)
   - BSImagePicker (3.3.1)
+  - Cosmos (23.0.0)
   - Firebase/Auth (6.34.0):
     - Firebase/CoreOnly
     - FirebaseAuth (~> 6.9.2)
@@ -337,6 +338,7 @@ PODS:
 DEPENDENCIES:
   - Alamofire
   - BSImagePicker (~> 3.1)
+  - Cosmos (~> 23.0)
   - Firebase/Auth
   - Firebase/Database
   - Firebase/Firestore
@@ -355,6 +357,7 @@ SPEC REPOS:
     - AppAuth
     - BoringSSL-GRPC
     - BSImagePicker
+    - Cosmos
     - Firebase
     - FirebaseAuth
     - FirebaseCore
@@ -384,6 +387,7 @@ SPEC CHECKSUMS:
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
   BoringSSL-GRPC: 8edf627ee524575e2f8d19d56f068b448eea3879
   BSImagePicker: 0fe04b574d4d6b81093785d2af6c26227efc8428
+  Cosmos: b5c6a9a637e28a061b54c8f8b1d8529d7d4db73f
   Firebase: c23a36d9e4cdf7877dfcba8dd0c58add66358999
   FirebaseAuth: c92d49ada7948d1a23466e3db17bc4c2039dddc3
   FirebaseCore: d3a978a3cfa3240bf7e4ba7d137fdf5b22b628ec
@@ -407,6 +411,6 @@ SPEC CHECKSUMS:
   SkyFloatingLabelTextField: 5a338412114808e961fe2d14ea2c5452c8b6e4aa
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
 
-PODFILE CHECKSUM: cc0bc3b89fa7c63a544d9fc34fb46b5a1a143a49
+PODFILE CHECKSUM: da4332da141a4dac9580a408d8191d416e51e08e
 
 COCOAPODS: 1.11.2
