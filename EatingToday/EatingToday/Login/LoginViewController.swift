@@ -31,6 +31,7 @@ class LoginViewController: UIViewController {
         activityIndicator.style = UIActivityIndicatorView.Style.medium
         // Start animation.
         activityIndicator.stopAnimating()
+        self.view.isUserInteractionEnabled = true
         
         return activityIndicator
         
@@ -93,12 +94,15 @@ class LoginViewController: UIViewController {
         
         //로딩바 생성
         self.activityIndicator.startAnimating()
+        //터치 이벤트 막기
+        self.view.isUserInteractionEnabled = false
 
         Auth.auth().signIn(withEmail: email, password: password) { [weak self] _, error in
             guard let self = self else { return }
             
             //로딩바 멈춤
             self.activityIndicator.stopAnimating()
+            self.view.isUserInteractionEnabled = true
             
             if let error = error {
                 let code = (error as NSError).code
@@ -132,9 +136,12 @@ class LoginViewController: UIViewController {
     @objc func googleLoginClicked() {
         //로딩바 생성
         self.activityIndicator.startAnimating()
+        //터치 이벤트 막기
+        self.view.isUserInteractionEnabled = false
         
         guard let clientID = FirebaseApp.app()?.options.clientID else {
             self.activityIndicator.stopAnimating()
+            self.view.isUserInteractionEnabled = true
             return
         }
 
@@ -146,6 +153,7 @@ class LoginViewController: UIViewController {
             
             if let error = error {
                 self.activityIndicator.stopAnimating()
+                self.view.isUserInteractionEnabled = true
                 self.showCustomPopup(title: "오류", message: error.localizedDescription)
                 return
             }
@@ -157,6 +165,7 @@ class LoginViewController: UIViewController {
                 
                 //로딩바 삭제
                 self?.activityIndicator.stopAnimating()
+                self?.view.isUserInteractionEnabled = true
                 
                 guard let user = authResult?.user, error == nil else {
                     return

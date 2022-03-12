@@ -212,7 +212,7 @@ class SearchKakaoViewController: UIViewController {
     
     func constraintConfigure() {
         
-        let leadingTrailingSize = 40
+        let leadingTrailingSize = 30
         
         self.headView.snp.makeConstraints { make in
             make.top.equalToSuperview()

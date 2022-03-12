@@ -24,6 +24,23 @@ class AddEatDiaryViewController: UIViewController {
     
     var selectedPlace: SelectedSearchResultDocument?
     
+    lazy var activityIndicator: UIActivityIndicatorView = {
+        // Create an indicator.
+        let activityIndicator = UIActivityIndicatorView()
+        activityIndicator.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
+        activityIndicator.center = self.view.center
+        activityIndicator.color = UIColor.darkGray
+        // Also show the indicator even when the animation is stopped.
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.style = UIActivityIndicatorView.Style.medium
+        // Start animation.
+        activityIndicator.stopAnimating()
+        self.view.isUserInteractionEnabled = true
+        
+        return activityIndicator
+        
+    }()
+    
     let headView = UIView()
     let titleLabel = UILabel()
     let registerButton = UIButton()
@@ -40,8 +57,8 @@ class AddEatDiaryViewController: UIViewController {
     let storeNameLabel = UILabel()
     //let storeNameField = UITextField()
     let storeSearchView = UIView()
-    let storeSearchImageView = UIImageView()
     let storeNameButton = UIButton()
+    let storeSearchImageView = UIImageView()
     
     let imageView = UIView()
     let imageLabel = UILabel()
@@ -68,15 +85,12 @@ class AddEatDiaryViewController: UIViewController {
     let datepicker = UIDatePicker()
     var eatDate = Date()
     
-    let locationView = UIView()
-    let locationLabel = UILabel()
-    let locationField = UITextField()
-    let location = String()
+
 
     let scoreView = UIView()
     let scoreLabel = UILabel()
     let scoreUiView = UIView()
-    let score = String()
+
 
     let categoryView = UIView()
     let categoryLabel = UILabel()
@@ -166,6 +180,7 @@ class AddEatDiaryViewController: UIViewController {
     }
     
     func tappedImageAddButton() {
+        
         let imagePicker = ImagePickerController()
         
         imagePicker.settings.selection.max = 10 - selectedImages.count
@@ -268,6 +283,8 @@ class AddEatDiaryViewController: UIViewController {
         self.mainScrollView.addSubview(scrollContainerView)
         self.scrollContainerView.backgroundColor = UIColor(displayP3Red: 230/255, green: 230/255, blue: 230/255, alpha: 1)
         
+        
+        
         self.scrollContainerView.addSubview(self.scrollHeadView)
         self.scrollHeadView.backgroundColor = .white
         self.scrollHeadView.addSubview(self.scrollHeadLabel)
@@ -342,7 +359,9 @@ class AddEatDiaryViewController: UIViewController {
         self.imageCollectionView.delegate = self
         self.imageCollectionView.dataSource = self
         imageCollectionView.register(AddImageCollectionViewCell.self, forCellWithReuseIdentifier: "AddImageCollectionViewCell")
-        self.imageUiView.addSubview(imageCollectionView)
+        self.imageUiView.addSubview(self.imageCollectionView)
+        
+        self.imageView.addSubview(self.activityIndicator)
         
         self.mainScrollView.addSubview(self.dateView)
         self.dateView.backgroundColor = .white
@@ -370,14 +389,22 @@ class AddEatDiaryViewController: UIViewController {
         //self.dateField.
         self.configureDatePicker()
         
-//        
-//        self.mainView.addSubview(self.locationView)
-//        self.locationView.addSubview(self.locationLabel)
-//        self.locationView.addSubview(self.locationField)
-//        
-//        self.mainScrollView.addSubview(self.scoreView)
-//        self.scoreView.addSubview(self.scoreLabel)
-//        self.scoreView.addSubview(self.scoreUiView)
+    
+        self.mainScrollView.addSubview(self.scoreView)
+        self.scoreView.backgroundColor = .white
+        
+        self.scoreView.addSubview(self.scoreLabel)
+        self.scoreLabel.text = "맛 평가"
+        self.scoreLabel.textAlignment = .center
+        self.scoreLabel.textColor = .black
+        self.scoreLabel.font = UIFont(name: "Helvetica Bold", size: 16)
+        
+        self.scoreView.addSubview(self.scoreUiView)
+        self.scoreUiView.layer.cornerRadius = 7
+        self.scoreUiView.layer.borderWidth = 1.5
+        self.scoreUiView.layer.borderColor = customGray2.cgColor
+        
+        
 //        
 //        self.mainView.addSubview(self.categoryView)
 //        self.categoryView.addSubview(self.categoryLabel)
@@ -393,6 +420,8 @@ class AddEatDiaryViewController: UIViewController {
     
     func constraintConfigure() {
         let leadingtrailingSize = 20
+        let fieldHeight = 50
+        
         self.headView.snp.makeConstraints{ make in
             make.top.equalToSuperview().offset(0)
             make.height.equalTo(100)
@@ -433,9 +462,15 @@ class AddEatDiaryViewController: UIViewController {
         self.scrollContainerView.snp.makeConstraints { make in
             make.top.bottom.leading.trailing.equalTo(self.mainScrollView.contentLayoutGuide)
             make.width.equalTo(self.mainScrollView.frameLayoutGuide)
-            //make.height.equalTo(5000) //마지막 부분에 bottom 제약조건 안걸고 싶으면 고정 높이를 정해줘야함
+//            make.height.equalTo(5000) //마지막 부분에 bottom 제약조건 안걸고 싶으면 고정 높이를 정해줘야함
             
         }
+        
+        self.activityIndicator.snp.makeConstraints{ make in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+        }
+        
         self.scrollHeadView.snp.makeConstraints{ make in
             make.top.equalToSuperview().offset(0)
             //equalSuperview로 할경우 수평으로 스크롤 되는 현상 발생, 스크롤뷰이므로 가로세로가 무한이기때문에 정해줘야함
@@ -454,7 +489,7 @@ class AddEatDiaryViewController: UIViewController {
             make.top.equalTo(self.scrollHeadView.snp.bottom).offset(0)
             //equalSuperview로 할경우 수평으로 스크롤 되는 현상 발생, 스크롤뷰이므로 가로세로가 무한이기때문에 정해줘야함
             make.leading.trailing.equalTo(self.view)
-            make.height.equalTo(100)
+            make.height.equalTo(110)
         }
 
         self.storeNameLabel.snp.makeConstraints { make in
@@ -466,7 +501,7 @@ class AddEatDiaryViewController: UIViewController {
             make.top.equalTo(storeNameLabel.snp.bottom).offset(10)
             make.leading.equalToSuperview().offset(leadingtrailingSize)
             make.trailing.equalToSuperview().offset(-leadingtrailingSize)
-            make.height.equalTo(45)
+            make.height.equalTo(fieldHeight)
         }
         
         self.storeNameButton.snp.makeConstraints{ make in
@@ -514,8 +549,7 @@ class AddEatDiaryViewController: UIViewController {
         self.dateView.snp.makeConstraints { make in
             make.top.equalTo(self.imageView.snp.bottom).offset(0.5)
             make.leading.trailing.equalTo(self.view)
-            make.height.equalTo(100)
-            make.bottom.equalToSuperview()//스크롤바가 고정높이가 아니라면 스크롤바의 마지막에 꼭 넣어줘야함.
+            make.height.equalTo(110)
         }
         
         self.dateLabel.snp.makeConstraints { make in
@@ -527,7 +561,26 @@ class AddEatDiaryViewController: UIViewController {
             make.top.equalTo(self.dateLabel.snp.bottom).offset(10)
             make.leading.equalToSuperview().offset(leadingtrailingSize)
             make.trailing.equalToSuperview().offset(-leadingtrailingSize)
-            make.height.equalTo(45)
+            make.height.equalTo(fieldHeight)
+        }
+        
+        self.scoreView.snp.makeConstraints { make in
+            make.top.equalTo(self.dateView.snp.bottom).offset(0.5)
+            make.leading.trailing.equalTo(self.view)
+            make.height.equalTo(110)
+            make.bottom.equalToSuperview()//스크롤바가 고정높이가 아니라면 스크롤바의 마지막에 꼭 넣어줘야함.
+        }
+        
+        self.scoreLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(10)
+            make.leading.equalToSuperview().offset(leadingtrailingSize)
+        }
+        
+        self.scoreUiView.snp.makeConstraints { make in
+            make.top.equalTo(self.scoreLabel.snp.bottom).offset(10)
+            make.leading.equalToSuperview().offset(leadingtrailingSize)
+            make.trailing.equalToSuperview().offset(-leadingtrailingSize)
+            make.height.equalTo(fieldHeight)
         }
         
     }
@@ -559,7 +612,7 @@ extension AddEatDiaryViewController: UICollectionViewDataSource, UICollectionVie
         
         //삭제버튼 위임
         cell.deleteIndexImageDelegate = self
-        cell.imageView.layer.cornerRadius = 10
+        cell.imageView.layer.cornerRadius = 5
         cell.imageView.clipsToBounds = true
         
         return cell
@@ -636,7 +689,7 @@ extension AddEatDiaryViewController: UICollectionViewDataSource, UICollectionVie
     
     //셀간 최소간격
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 5
+        return 10
     }
 }
 

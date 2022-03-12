@@ -68,6 +68,7 @@ class RegisterUserViewController: UIViewController {
         activityIndicator.style = UIActivityIndicatorView.Style.medium
         // Start animation.
         activityIndicator.stopAnimating()
+        self.view.isUserInteractionEnabled = true
         
         return activityIndicator
         
@@ -134,6 +135,8 @@ class RegisterUserViewController: UIViewController {
     @objc func registerClicked() {
         
         self.activityIndicator.startAnimating()
+        //터치 이벤트 막기
+        self.view.isUserInteractionEnabled = false
         
         //firebase 이메일/비밀번호 인증
         let email = emailField.text ?? ""
@@ -145,6 +148,7 @@ class RegisterUserViewController: UIViewController {
             guard let self = self else { return }
             
             self.activityIndicator.stopAnimating()
+            self.view.isUserInteractionEnabled = true
             
             if let error = error {
                 let code = (error as NSError).code

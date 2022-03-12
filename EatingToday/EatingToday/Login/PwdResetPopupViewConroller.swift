@@ -60,6 +60,7 @@ class PwdResetPopupViewController: UIViewController {
         activityIndicator.style = UIActivityIndicatorView.Style.medium
         // Start animation.
         activityIndicator.stopAnimating()
+        self.view.isUserInteractionEnabled = true
         
         return activityIndicator
         
@@ -84,6 +85,8 @@ class PwdResetPopupViewController: UIViewController {
         view.endEditing(true)
         
         self.activityIndicator.startAnimating()
+        //터치 이벤트 막기
+        self.view.isUserInteractionEnabled = false
         
         let email = emailField.text
         //비밀번호를 리셋할 수 있는 이메일을 보내줌.
@@ -93,6 +96,7 @@ class PwdResetPopupViewController: UIViewController {
 //                debugPrint("이메일 리셋 에러 : \(error)")
                 
                 self.activityIndicator.stopAnimating()
+                self.view.isUserInteractionEnabled = true
                 
                 if let error = error {
                     let code = (error as NSError).code
@@ -332,7 +336,11 @@ class PwdResetPopupViewController: UIViewController {
         self.closeButton.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(leadingTrailingSize - 2)
             make.trailing.equalToSuperview().offset(-leadingTrailingSize)
-            make.width.height.equalTo(15)
+            make.width.height.equalTo(24)
+        }
+
+        self.closeButton.imageView?.snp.makeConstraints { make in
+            make.height.width.equalTo(15)
         }
         
         self.sendEmailView.snp.makeConstraints { make in

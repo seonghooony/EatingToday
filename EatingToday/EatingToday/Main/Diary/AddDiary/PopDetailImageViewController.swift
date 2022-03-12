@@ -93,9 +93,13 @@ class PopDetailImageViewController: UIViewController {
         }
         
         self.popCloseButton.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(50)
-            make.trailing.equalToSuperview().offset(-20)
-            make.width.height.equalTo(15)
+            make.top.equalToSuperview().offset(60)
+            make.trailing.equalToSuperview().offset(-30)
+            make.width.height.equalTo(24)
+        }
+        
+        self.popCloseButton.imageView?.snp.makeConstraints { make in
+            make.height.width.equalTo(15)
         }
     }
 }

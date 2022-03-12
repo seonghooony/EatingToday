@@ -39,10 +39,12 @@ class AddImageCollectionViewCell: UICollectionViewCell {
     func viewConfigure() {
         
         self.addSubview(imageView)
+        self.clipsToBounds = false
+        
         
         self.addSubview(deleteButton)
         self.deleteButton.setImage(UIImage(systemName: "xmark.app.fill"), for: .normal)
-        self.deleteButton.tintColor = .gray
+        self.deleteButton.tintColor = .red
         self.deleteButton.addTarget(self, action: #selector(deleteImageTapped), for: .touchUpInside)
         
         
@@ -56,8 +58,9 @@ class AddImageCollectionViewCell: UICollectionViewCell {
         }
 
         self.deleteButton.snp.makeConstraints { make in
-            make.top.trailing.equalToSuperview()
-            make.height.width.equalTo(20)
+            make.top.equalToSuperview().offset(-10)
+            make.trailing.equalToSuperview().offset(5)
+            make.height.width.equalTo(24)
         }
             
         
