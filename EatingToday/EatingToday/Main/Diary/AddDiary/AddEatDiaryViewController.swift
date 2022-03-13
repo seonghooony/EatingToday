@@ -109,12 +109,13 @@ class AddEatDiaryViewController: UIViewController {
     let storyLabel = UILabel()
     let storycontentView = UIView()
     let storyTextView = UITextView()
+    let textViewPlaceHolder = "드셨던 맛집에서의 이야기를 작성해주세요."
     
     let addDiaryBtnView = UIView()
     let addDiaryButton = UIButton()
     
     var currentKeyboardFrame: CGRect?
-    var activeTextView: UITextView?
+//    var activeTextView: UITextView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -143,17 +144,20 @@ class AddEatDiaryViewController: UIViewController {
                 let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {
                     return
             }
-            
+        
+        //스크롤 가능한 위치를 키보드 높이만큼 아래를 올려줌 (첫번째는 내용을 나타내는 부분을 올려주고, 두번째는 왼쪽 스크롤바 길이를 맞춰줌)
         self.mainScrollView.contentInset.bottom = keyboardFrame.size.height
         self.mainScrollView.scrollIndicatorInsets.bottom = keyboardFrame.size.height
         self.currentKeyboardFrame = keyboardFrame
-        debugPrint(currentKeyboardFrame)
-        debugPrint(self.mainScrollView.contentInset.bottom)
+//        debugPrint(currentKeyboardFrame)
+//        debugPrint(self.mainScrollView.contentInset.bottom)
 
         
     }
     
     @objc private func keyboardWillHide() {
+        
+        //원래 상태로 다시 되돌려 놓음. 기존 인셋이 0,0,0,0 이여서 제로로 해도 무방
         let contentInset = UIEdgeInsets.zero
         self.mainScrollView.contentInset = contentInset
         self.mainScrollView.scrollIndicatorInsets = contentInset
@@ -469,9 +473,9 @@ class AddEatDiaryViewController: UIViewController {
         self.starView.settings.filledColor = enableFontColor
         self.starView.settings.emptyColor = .white
         self.starView.settings.filledBorderColor = enableFontColor
-        self.starView.settings.filledBorderWidth = 3
+        self.starView.settings.filledBorderWidth = 1.5
         self.starView.settings.emptyBorderColor = enableFontColor
-        self.starView.settings.emptyBorderWidth = 3
+        self.starView.settings.emptyBorderWidth = 1.5
         self.starView.didTouchCosmos = { rating in
             self.starView.text = "\(rating)점"
         }
@@ -493,6 +497,9 @@ class AddEatDiaryViewController: UIViewController {
         
         self.storycontentView.addSubview(self.storyTextView)
         self.storyTextView.keyboardType = .default
+        self.storyTextView.text = textViewPlaceHolder
+        self.storyTextView.textColor = customGray2
+        self.storyTextView.font = UIFont(name: "Helvetica", size: 16)
         self.storyTextView.delegate = self
         
         self.scrollContainerView.addSubview(self.addDiaryBtnView)
@@ -869,18 +876,23 @@ extension AddEatDiaryViewController: deleteIndexImageDelegate {
 extension AddEatDiaryViewController: UITextViewDelegate {
     
     func textViewDidBeginEditing(_ textView: UITextView) {
-        self.activeTextView = textView
+//        self.activeTextView = textView
         //키보드가 있을경우
         if let keyboardHeight = currentKeyboardFrame?.size.height {
             //포커싱된 텍스트뷰가 이야기 텍스트뷰일경우
             if textView == self.storyTextView {
-//                print("들어갓음")
-//                print(self.mainScrollView.frame.size.height)
-//                print(self.mainScrollView.bounds.size.height)
-//                print(self.scrollContainerView.bounds.size.height)
-//                print(self.storyView.frame.origin.y)
-//                print(keyboardHeight)
-                self.mainScrollView.setContentOffset(CGPoint(x: 0, y: self.scrollContainerView.bounds.size.height - self.storyView.frame.origin.y + keyboardHeight - 50), animated: true)
+
+                //해당 텍스트 뷰 위치를 찾아 스크롤 포커싱 해줌
+                self.mainScrollView.setContentOffset(CGPoint(x: 0, y: self.scrollContainerView.bounds.size.height - self.storyView.frame.origin.y + keyboardHeight - self.addDiaryBtnView.bounds.size.height), animated: true)
+                
+                
+                //해당 텍스트 뷰의 placeholder를 임의로 만듬
+                if textView.text == self.textViewPlaceHolder && textView.textColor == customGray2 {
+                    textView.text = nil
+                    textView.textColor = .black
+                    textView.font = UIFont(name: "Helvetica", size: 16)
+                }
+                
             }
             
         }
@@ -888,7 +900,12 @@ extension AddEatDiaryViewController: UITextViewDelegate {
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
-        self.activeTextView = nil
+//        self.activeTextView = nil
+        if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            textView.text = textViewPlaceHolder
+            textView.textColor = customGray2
+            textView.font = UIFont(name: "Helvetica", size: 16)
+        }
     }
 }
 
