@@ -92,9 +92,16 @@ class AddEatDiaryViewController: UIViewController {
     
     let dateView = UIView()
     let dateLabel = UILabel()
+    
+    let dateFieldView = UIView()
+    let dateFieldButton = UIButton()
+    let dateFieldImageView = UIImageView()
+    let dateFormatter = DateFormatter()
+    var eatDate: Date?
+    
     let dateField = UITextField()
     let datepicker = UIDatePicker()
-    var eatDate = Date()
+    
     
     let categoryView = UIView()
     let categoryLabel = UILabel()
@@ -199,6 +206,16 @@ class AddEatDiaryViewController: UIViewController {
         searchKakaoVC.modalPresentationStyle = .overFullScreen
         searchKakaoVC.resultDelegate = self
         self.present(searchKakaoVC, animated: true, completion: nil)
+    }
+    
+    @objc func calendarButtonTapped() {
+        let popDateCalendarViewController = PopDateCalendarViewController()
+        popDateCalendarViewController.modalPresentationStyle = .overFullScreen
+        popDateCalendarViewController.setPickedDateDelegate = self
+        if let eatDate = self.eatDate {
+            popDateCalendarViewController.previousPickDate = eatDate
+        }
+        self.present(popDateCalendarViewController, animated: false, completion: nil)
     }
     
     private func configureDatePicker() {
@@ -420,21 +437,44 @@ class AddEatDiaryViewController: UIViewController {
         self.dateLabel.textColor = .black
         self.dateLabel.font = UIFont(name: "Helvetica Bold", size: 16)
         
-        self.dateView.addSubview(self.dateField)
-        self.dateField.backgroundColor = .clear
-        //커서 없애기
-        self.dateField.tintColor = .clear
         
-        self.dateField.textColor = .black
-        self.dateField.font = UIFont(name: "Helvetica", size: 17)
-        self.dateField.layer.cornerRadius = 7
-        self.dateField.layer.borderWidth = 1.5
-        self.dateField.layer.borderColor = customGray2.cgColor
-        //self.dateField.placeholder = "방문한 날짜를 선택해주세요."
-        self.dateField.attributedPlaceholder = NSAttributedString(string: "식사하신 날짜를 선택해주세요.", attributes: [NSAttributedString.Key.foregroundColor : customGray2])
-        self.dateField.addLeftPadding()
-        //self.dateField.
-        self.configureDatePicker()
+        self.dateView.addSubview(self.dateFieldView)
+        self.dateFieldView.layer.cornerRadius = 7
+        self.dateFieldView.layer.borderWidth = 1.5
+        self.dateFieldView.layer.borderColor = customGray2.cgColor
+        
+        self.dateFieldView.addSubview(self.dateFieldButton)
+        self.dateFieldButton.backgroundColor = .clear
+        self.dateFieldButton.setTitle("방문하신 날짜를 선택해주세요.", for: .normal)
+        self.dateFieldButton.titleLabel?.font = UIFont(name: "Helvetica", size: 17)
+        self.dateFieldButton.titleLabel?.textAlignment = .left
+        self.dateFieldButton.setTitleColor(customGray2, for: .normal)
+        self.dateFieldButton.addTarget(self, action: #selector(calendarButtonTapped), for: .touchUpInside)
+        
+        self.dateFieldView.addSubview(self.dateFieldImageView)
+        self.dateFieldImageView.image = UIImage(systemName: "calendar")
+        self.dateFieldImageView.tintColor = customGray2
+        
+        self.dateFormatter.dateFormat = "yyyy년 MM월 dd일"
+        
+        
+        
+        
+//        self.dateView.addSubview(self.dateField)
+//        self.dateField.backgroundColor = .clear
+//        //커서 없애기
+//        self.dateField.tintColor = .clear
+//
+//        self.dateField.textColor = .black
+//        self.dateField.font = UIFont(name: "Helvetica", size: 17)
+//        self.dateField.layer.cornerRadius = 7
+//        self.dateField.layer.borderWidth = 1.5
+//        self.dateField.layer.borderColor = customGray2.cgColor
+//        //self.dateField.placeholder = "방문한 날짜를 선택해주세요."
+//        self.dateField.attributedPlaceholder = NSAttributedString(string: "식사하신 날짜를 선택해주세요.", attributes: [NSAttributedString.Key.foregroundColor : customGray2])
+//        self.dateField.addLeftPadding()
+//        //self.dateField.
+//        self.configureDatePicker()
         
         
         
@@ -608,6 +648,12 @@ class AddEatDiaryViewController: UIViewController {
             make.leading.equalToSuperview().offset(leadingtrailingSize)
             make.trailing.equalToSuperview().offset(-leadingtrailingSize)
         }
+        
+        self.storeNameButton.titleLabel?.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(0)
+        }
+        
+        
         self.storeSearchImageView.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.trailing.equalToSuperview().offset(-leadingtrailingSize)
@@ -615,9 +661,6 @@ class AddEatDiaryViewController: UIViewController {
         }
         
         
-        self.storeNameButton.titleLabel?.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(0)
-        }
         
         
         self.imageView.snp.makeConstraints{ make in
@@ -656,12 +699,37 @@ class AddEatDiaryViewController: UIViewController {
             make.leading.equalToSuperview().offset(leadingtrailingSize)
         }
         
-        self.dateField.snp.makeConstraints { make in
-            make.top.equalTo(self.dateLabel.snp.bottom).offset(10)
+        self.dateFieldView.snp.makeConstraints { make in
+            make.top.equalTo(dateLabel.snp.bottom).offset(10)
             make.leading.equalToSuperview().offset(leadingtrailingSize)
             make.trailing.equalToSuperview().offset(-leadingtrailingSize)
             make.height.equalTo(fieldHeight)
         }
+        
+        self.dateFieldButton.snp.makeConstraints{ make in
+            make.centerY.equalToSuperview()
+            make.leading.equalToSuperview().offset(leadingtrailingSize)
+            make.trailing.equalToSuperview().offset(-leadingtrailingSize)
+        }
+        
+        self.dateFieldButton.titleLabel?.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(0)
+        }
+        
+        
+        self.dateFieldImageView.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.trailing.equalToSuperview().offset(-leadingtrailingSize)
+            make.width.height.equalTo(25)
+        }
+        
+        
+//        self.dateField.snp.makeConstraints { make in
+//            make.top.equalTo(self.dateLabel.snp.bottom).offset(10)
+//            make.leading.equalToSuperview().offset(leadingtrailingSize)
+//            make.trailing.equalToSuperview().offset(-leadingtrailingSize)
+//            make.height.equalTo(fieldHeight)
+//        }
         
         self.categoryView.snp.makeConstraints { make in
             make.top.equalTo(self.dateView.snp.bottom).offset(0.5)
@@ -872,6 +940,13 @@ extension AddEatDiaryViewController: deleteIndexImageDelegate {
     }
 }
 
+extension AddEatDiaryViewController: setPickedDateDelegate {
+    func setPickedDate(date: Date) {
+        self.eatDate = date
+        self.dateFieldButton.setTitle(dateFormatter.string(from: date), for: .normal)
+        self.dateFieldButton.setTitleColor(.black, for: .normal)
+    }
+}
 
 extension AddEatDiaryViewController: UITextViewDelegate {
     

@@ -74,8 +74,8 @@ class RegisterUserViewController: UIViewController {
         
     }()
     
-    var keyHeight: CGFloat?
-    var activeTextField: UITextField?
+    var currentKeyboardFrame: CGRect?
+
     
     var emailValidation: Bool = false
     var passwordValidation: Bool = false
@@ -92,40 +92,34 @@ class RegisterUserViewController: UIViewController {
     
     func notificationConfigure() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
-    @objc func keyboardWillShow(_ sender: Notification) {
-        let userInfo: NSDictionary = sender.userInfo! as NSDictionary
-        let keyboardFrame: NSValue = userInfo.value(forKey: UIResponder.keyboardFrameEndUserInfoKey) as! NSValue
-        let keyboardRectangle = keyboardFrame.cgRectValue
-        let keyboardHeight = keyboardRectangle.height
-        keyHeight = keyboardHeight
+    
+    @objc private func keyboardWillShow(_ sender: Notification) {
+        guard let userInfo = sender.userInfo,
+                let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {
+                    return
+            }
+        
+        //스크롤 가능한 위치를 키보드 높이만큼 아래를 올려줌 (첫번째는 내용을 나타내는 부분을 올려주고, 두번째는 왼쪽 스크롤바 길이를 맞춰줌)
+        self.mainScrollView.contentInset.bottom = keyboardFrame.size.height
+        self.mainScrollView.scrollIndicatorInsets.bottom = keyboardFrame.size.height
+        self.currentKeyboardFrame = keyboardFrame
+//        debugPrint(currentKeyboardFrame)
+//        debugPrint(self.mainScrollView.contentInset.bottom)
 
-        let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: CGFloat(keyHeight!), right: 0)
-        self.mainScrollView.contentInset = contentInsets
-        self.mainScrollView.scrollIndicatorInsets = contentInsets
-        self.mainScrollView.scrollRectToVisible(scrollContainerView.frame, animated: true)
-        
-        var aRect: CGRect = self.view.frame
-        aRect.size.height -= keyboardHeight
-        
-        if let activeHeight = self.activeTextField?.frame.origin.y {
-            self.mainScrollView.setContentOffset(CGPoint(x: 0, y: activeHeight - (keyboardHeight - 15)), animated: true)
-        }
         
     }
     
-    @objc func keyboardWillHide(_ sender: Notification) {
-        let userInfo: NSDictionary = sender.userInfo! as NSDictionary
-        let keyboardFrame: NSValue = userInfo.value(forKey: UIResponder.keyboardFrameEndUserInfoKey) as! NSValue
-        let keyboardRectangle = keyboardFrame.cgRectValue
-        let keyboardHeight = keyboardRectangle.height
-        keyHeight = keyboardHeight
+    @objc private func keyboardWillHide() {
         
-        let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: CGFloat(-keyHeight!), right: 0)
-        self.mainScrollView.contentInset = contentInsets
-        self.mainScrollView.scrollIndicatorInsets = contentInsets
+        //원래 상태로 다시 되돌려 놓음. 기존 인셋이 0,0,0,0 이여서 제로로 해도 무방
+        let contentInset = UIEdgeInsets.zero
+        self.mainScrollView.contentInset = contentInset
+        self.mainScrollView.scrollIndicatorInsets = contentInset
+        
+        self.currentKeyboardFrame = nil
     }
     
     
@@ -600,10 +594,17 @@ extension RegisterUserViewController: UITextFieldDelegate {
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        self.activeTextField = textField
+        if let keyboardHeight = currentKeyboardFrame?.size.height {
+            //포커싱된 텍스트뷰가 이야기 텍스트뷰일경우
+            if textField == self.nicknameField {
+
+                //해당 텍스트 뷰 위치를 찾아 스크롤 포커싱 해줌
+                self.mainScrollView.setContentOffset(CGPoint(x: 0, y: self.scrollContainerView.bounds.size.height - self.nicknameField.frame.origin.y + keyboardHeight - 20), animated: true)
+            }
+        }
     }
     func textFieldDidEndEditing(_ textField: UITextField) {
-        self.activeTextField = nil
+//        self.activeTextField = nil
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

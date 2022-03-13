@@ -32,6 +32,7 @@
 		DB6F1B5227D6601300247B89 /* loadingImage.json in Resources */ = {isa = PBXBuildFile; fileRef = DB6F1B5127D6601300247B89 /* loadingImage.json */; };
 		DB6F1B5427D8953600247B89 /* PwdResetPopupViewConroller.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1B5327D8953600247B89 /* PwdResetPopupViewConroller.swift */; };
 		DB6F1B5627D9B6C300247B89 /* CustomPopAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1B5527D9B6C300247B89 /* CustomPopAlertViewController.swift */; };
+		DB6F1B5A27DE518C00247B89 /* PopDateCalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1B5927DE518C00247B89 /* PopDateCalendarViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -65,6 +66,7 @@
 		DB6F1B5127D6601300247B89 /* loadingImage.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loadingImage.json; sourceTree = "<group>"; };
 		DB6F1B5327D8953600247B89 /* PwdResetPopupViewConroller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PwdResetPopupViewConroller.swift; sourceTree = "<group>"; };
 		DB6F1B5527D9B6C300247B89 /* CustomPopAlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPopAlertViewController.swift; sourceTree = "<group>"; };
+		DB6F1B5927DE518C00247B89 /* PopDateCalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopDateCalendarViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -192,9 +194,10 @@
 			isa = PBXGroup;
 			children = (
 				DB6F1B3827C5ECEA00247B89 /* AddEatDiaryViewController.swift */,
-				DB6F1B4A27D48B5900247B89 /* PopDetailImageViewController.swift */,
-				DB6F1B5127D6601300247B89 /* loadingImage.json */,
 				DB6F1B3A27CB542A00247B89 /* AddImageCollectionViewCell.swift */,
+				DB6F1B4A27D48B5900247B89 /* PopDetailImageViewController.swift */,
+				DB6F1B5927DE518C00247B89 /* PopDateCalendarViewController.swift */,
+				DB6F1B5127D6601300247B89 /* loadingImage.json */,
 				DB6F1B4327D1FBBF00247B89 /* Search */,
 			);
 			path = AddDiary;
@@ -329,6 +332,7 @@
 			files = (
 				DB6F1AFA27BBFA0800247B89 /* LoginViewController.swift in Sources */,
 				DB6F1B3727C55B0E00247B89 /* ImageCollectionViewCell.swift in Sources */,
+				DB6F1B5A27DE518C00247B89 /* PopDateCalendarViewController.swift in Sources */,
 				DB6F1B4727D22A0C00247B89 /* SearchResultTableViewCell.swift in Sources */,
 				DB6F1AE427BBF93100247B89 /* AppDelegate.swift in Sources */,
 				DB6F1AF827BBF98A00247B89 /* MainViewController.swift in Sources */,

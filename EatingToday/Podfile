@@ -19,4 +19,5 @@ target 'EatingToday' do
   pod 'Alamofire'
   pod 'SkyFloatingLabelTextField', '~> 3.0'
   pod 'Cosmos', '~> 23.0'
+  pod 'FSCalendar'
 end
