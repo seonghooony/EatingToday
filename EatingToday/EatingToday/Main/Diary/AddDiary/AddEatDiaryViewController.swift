@@ -113,8 +113,8 @@ class AddEatDiaryViewController: UIViewController {
     let addDiaryBtnView = UIView()
     let addDiaryButton = UIButton()
     
-    var keyHeight: CGFloat?
-    var activeTextField: UITextView?
+    var currentKeyboardFrame: CGRect?
+    var activeTextView: UITextView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -133,34 +133,32 @@ class AddEatDiaryViewController: UIViewController {
         self.mainScrollView.addGestureRecognizer(singleTap)
     }
     
-    func notificationConfigure() {
+    private func notificationConfigure() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
-    @objc func keyboardWillShow(_ sender: Notification) {
-        let userInfo: NSDictionary = sender.userInfo! as NSDictionary
-        let keyboardFrame: NSValue = userInfo.value(forKey: UIResponder.keyboardFrameEndUserInfoKey) as! NSValue
-        let keyboardRectangle = keyboardFrame.cgRectValue
-        let keyboardHeight = keyboardRectangle.height
-        keyHeight = keyboardHeight
+    @objc private func keyboardWillShow(_ sender: Notification) {
+        guard let userInfo = sender.userInfo,
+                let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {
+                    return
+            }
+            
+        self.mainScrollView.contentInset.bottom = keyboardFrame.size.height
+        self.mainScrollView.scrollIndicatorInsets.bottom = keyboardFrame.size.height
+        self.currentKeyboardFrame = keyboardFrame
+        debugPrint(currentKeyboardFrame)
+        debugPrint(self.mainScrollView.contentInset.bottom)
 
-        self.mainScrollView.contentInset.bottom += CGFloat(keyHeight!)
-        self.mainScrollView.scrollIndicatorInsets.bottom += CGFloat(keyHeight!)
-        self.mainScrollView.scrollRectToVisible(scrollContainerView.frame, animated: true)
-        
-        
-        if let activeHeight = self.activeTextField?.frame.origin.y {
-            self.mainScrollView.setContentOffset(CGPoint(x: 0, y: activeHeight - (keyboardHeight - 15)), animated: true)
-        }
         
     }
     
-    @objc func keyboardWillHide(_ sender: Notification) {
+    @objc private func keyboardWillHide() {
+        let contentInset = UIEdgeInsets.zero
+        self.mainScrollView.contentInset = contentInset
+        self.mainScrollView.scrollIndicatorInsets = contentInset
         
-        self.mainScrollView.contentInset.bottom -= CGFloat(keyHeight!) * 2
-        self.mainScrollView.scrollIndicatorInsets.bottom -= CGFloat(keyHeight!) * 2
-        self.mainScrollView.scrollRectToVisible(scrollContainerView.frame, animated: true)
+        self.currentKeyboardFrame = nil
     }
     
     @objc func endEdit() {
@@ -494,6 +492,8 @@ class AddEatDiaryViewController: UIViewController {
         self.storycontentView.layer.borderColor = customGray2.cgColor
         
         self.storycontentView.addSubview(self.storyTextView)
+        self.storyTextView.keyboardType = .default
+        self.storyTextView.delegate = self
         
         self.scrollContainerView.addSubview(self.addDiaryBtnView)
         self.addDiaryBtnView.backgroundColor = .white
@@ -866,6 +866,32 @@ extension AddEatDiaryViewController: deleteIndexImageDelegate {
 }
 
 
+extension AddEatDiaryViewController: UITextViewDelegate {
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        self.activeTextView = textView
+        //키보드가 있을경우
+        if let keyboardHeight = currentKeyboardFrame?.size.height {
+            //포커싱된 텍스트뷰가 이야기 텍스트뷰일경우
+            if textView == self.storyTextView {
+//                print("들어갓음")
+//                print(self.mainScrollView.frame.size.height)
+//                print(self.mainScrollView.bounds.size.height)
+//                print(self.scrollContainerView.bounds.size.height)
+//                print(self.storyView.frame.origin.y)
+//                print(keyboardHeight)
+                self.mainScrollView.setContentOffset(CGPoint(x: 0, y: self.scrollContainerView.bounds.size.height - self.storyView.frame.origin.y + keyboardHeight - 50), animated: true)
+            }
+            
+        }
+        
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        self.activeTextView = nil
+    }
+}
+
 extension UITextField {
     func addLeftPadding() {
         let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 20, height: self.frame.height))
@@ -873,4 +899,3 @@ extension UITextField {
         self.leftViewMode = ViewMode.always
     }
 }
-
