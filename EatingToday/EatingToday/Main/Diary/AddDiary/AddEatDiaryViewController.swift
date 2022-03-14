@@ -31,6 +31,8 @@ class AddEatDiaryViewController: UIViewController {
     
     let enableBackColor = UIColor(displayP3Red: 1/255, green: 1/255, blue: 1/255, alpha: 1)
     let enableFontColor = UIColor(displayP3Red: 249/255, green: 151/255, blue: 93/255, alpha: 1)
+    
+    let calendarSelectedColor = UIColor(cgColor: CGColor(red: 216/255, green: 33/255, blue: 72/255, alpha: 1.0))
 
     
     var selectedPlace: SelectedSearchResultDocument?
@@ -99,13 +101,11 @@ class AddEatDiaryViewController: UIViewController {
     let dateFormatter = DateFormatter()
     var eatDate: Date?
     
-    let dateField = UITextField()
-    let datepicker = UIDatePicker()
-    
-    
     let categoryView = UIView()
     let categoryLabel = UILabel()
-    let categoryField = UITextField()
+    let categoryFieldView = UIView()
+    let categoryFieldButton = UIButton()
+    let categoryFieldImageView = UIImageView()
 
     let scoreView = UIView()
     let scoreLabel = UILabel()
@@ -217,30 +217,13 @@ class AddEatDiaryViewController: UIViewController {
         }
         self.present(popDateCalendarViewController, animated: false, completion: nil)
     }
-    
-    private func configureDatePicker() {
-        let toolbar = UIToolbar()
-        toolbar.sizeToFit()
-        let leftButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
-        let doneButton = UIBarButtonItem(title: "완료", style: .done, target: nil, action: #selector(datepickerDoneTapped))
-        //toolbar.setItems(leftButton, doneButton], animated: true)
-        toolbar.items = [leftButton, doneButton]
+
+    @objc func categoryButtonTapped() {
+        let popCategoryViewController = PopCategoryViewController()
+        popCategoryViewController.modalPresentationStyle = .overFullScreen
+        popCategoryViewController.setSelectedCategoryDelegate = self
+        self.present(popCategoryViewController, animated: false, completion: nil)
         
-        self.datepicker.datePickerMode = .date
-        self.datepicker.locale = Locale(identifier: "ko_KR")
-        self.datepicker.preferredDatePickerStyle = .wheels
-        self.datepicker.addTarget(self, action: #selector(datePickerValueDidChanged(_:)), for: .valueChanged)
-        self.dateField.inputAccessoryView = toolbar
-        self.dateField.inputView = self.datepicker
-    }
-    @objc private func datePickerValueDidChanged(_ datePicker: UIDatePicker) {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy년 MM월 dd일 (EEEEE)"
-        formatter.locale = Locale(identifier: "ko_KR")
-        
-        
-        self.eatDate = datePicker.date
-        self.dateField.text = formatter.string(from: datePicker.date)
     }
     
     func tappedImageAddButton() {
@@ -323,7 +306,6 @@ class AddEatDiaryViewController: UIViewController {
         
         self.view.addSubview(self.headView)
         self.headView.addSubview(self.backButton)
-//        self.backButton.setImage(UIImage(systemName: "xmark"), for: .normal)
         self.backButton.setImage(UIImage(named: "logo_backarrow"), for: .normal)
         self.backButton.tintColor = UIColor(displayP3Red: 1/255, green: 1/255, blue: 1/255, alpha: 1)
         self.backButton.addTarget(self, action: #selector(back), for: .touchUpInside)
@@ -376,9 +358,6 @@ class AddEatDiaryViewController: UIViewController {
         
         self.scrollContainerView.addSubview(self.storeNameView)
         self.storeNameView.backgroundColor = .white
-        //self.storeNameView.layer.addBorder([.top, .bottom], color: UIColor.lightGray, width: 1.0)
-        
-        
         
         self.storeNameView.addSubview(self.storeNameLabel)
         self.storeNameLabel.text = "가게 이름"
@@ -458,26 +437,6 @@ class AddEatDiaryViewController: UIViewController {
         self.dateFormatter.dateFormat = "yyyy년 MM월 dd일"
         
         
-        
-        
-//        self.dateView.addSubview(self.dateField)
-//        self.dateField.backgroundColor = .clear
-//        //커서 없애기
-//        self.dateField.tintColor = .clear
-//
-//        self.dateField.textColor = .black
-//        self.dateField.font = UIFont(name: "Helvetica", size: 17)
-//        self.dateField.layer.cornerRadius = 7
-//        self.dateField.layer.borderWidth = 1.5
-//        self.dateField.layer.borderColor = customGray2.cgColor
-//        //self.dateField.placeholder = "방문한 날짜를 선택해주세요."
-//        self.dateField.attributedPlaceholder = NSAttributedString(string: "식사하신 날짜를 선택해주세요.", attributes: [NSAttributedString.Key.foregroundColor : customGray2])
-//        self.dateField.addLeftPadding()
-//        //self.dateField.
-//        self.configureDatePicker()
-        
-        
-        
         self.scrollContainerView.addSubview(self.categoryView)
         self.categoryView.backgroundColor = .white
         
@@ -486,10 +445,25 @@ class AddEatDiaryViewController: UIViewController {
         self.categoryLabel.textAlignment = .center
         self.categoryLabel.textColor = .black
         self.categoryLabel.font = UIFont(name: "Helvetica Bold", size: 16)
-//        self.categoryView.addSubview(self.categoryField)
         
+        self.categoryView.addSubview(self.categoryFieldView)
+        self.categoryFieldView.layer.cornerRadius = 7
+        self.categoryFieldView.layer.borderWidth = 1.5
+        self.categoryFieldView.layer.borderColor = customGray2.cgColor
         
+        self.categoryFieldView.addSubview(self.categoryFieldButton)
+        self.categoryFieldButton.backgroundColor = .clear
+        self.categoryFieldButton.setTitle("카테고리를 선택해주세요.", for: .normal)
+        self.categoryFieldButton.titleLabel?.font = UIFont(name: "Helvetica", size: 17)
+        self.categoryFieldButton.titleLabel?.textAlignment = .left
+        self.categoryFieldButton.setTitleColor(customGray2, for: .normal)
+        self.categoryFieldButton.addTarget(self, action: #selector(categoryButtonTapped), for: .touchUpInside)
+        
+        self.categoryFieldView.addSubview(self.categoryFieldImageView)
+        self.categoryFieldImageView.image = UIImage(named: "logo_category")?.withRenderingMode(.alwaysTemplate)
+        self.categoryFieldImageView.tintColor = customGray2
     
+        
         self.scrollContainerView.addSubview(self.scoreView)
         self.scoreView.backgroundColor = .white
         
@@ -500,9 +474,6 @@ class AddEatDiaryViewController: UIViewController {
         self.scoreLabel.font = UIFont(name: "Helvetica Bold", size: 16)
         
         self.scoreView.addSubview(self.scoreUiView)
-//        self.scoreUiView.layer.cornerRadius = 7
-//        self.scoreUiView.layer.borderWidth = 1.5
-//        self.scoreUiView.layer.borderColor = customGray2.cgColor
         
         self.scoreUiView.addSubview(self.starView)
         self.starView.rating = 3.5
@@ -513,9 +484,9 @@ class AddEatDiaryViewController: UIViewController {
         self.starView.settings.filledColor = enableFontColor
         self.starView.settings.emptyColor = .white
         self.starView.settings.filledBorderColor = enableFontColor
-        self.starView.settings.filledBorderWidth = 1.5
+        self.starView.settings.filledBorderWidth = 2
         self.starView.settings.emptyBorderColor = enableFontColor
-        self.starView.settings.emptyBorderWidth = 1.5
+        self.starView.settings.emptyBorderWidth = 2
         self.starView.didTouchCosmos = { rating in
             self.starView.text = "\(rating)점"
         }
@@ -700,7 +671,7 @@ class AddEatDiaryViewController: UIViewController {
         }
         
         self.dateFieldView.snp.makeConstraints { make in
-            make.top.equalTo(dateLabel.snp.bottom).offset(10)
+            make.top.equalTo(self.dateLabel.snp.bottom).offset(10)
             make.leading.equalToSuperview().offset(leadingtrailingSize)
             make.trailing.equalToSuperview().offset(-leadingtrailingSize)
             make.height.equalTo(fieldHeight)
@@ -724,13 +695,6 @@ class AddEatDiaryViewController: UIViewController {
         }
         
         
-//        self.dateField.snp.makeConstraints { make in
-//            make.top.equalTo(self.dateLabel.snp.bottom).offset(10)
-//            make.leading.equalToSuperview().offset(leadingtrailingSize)
-//            make.trailing.equalToSuperview().offset(-leadingtrailingSize)
-//            make.height.equalTo(fieldHeight)
-//        }
-        
         self.categoryView.snp.makeConstraints { make in
             make.top.equalTo(self.dateView.snp.bottom).offset(0.5)
             make.leading.trailing.equalTo(self.view)
@@ -742,6 +706,31 @@ class AddEatDiaryViewController: UIViewController {
             make.top.equalToSuperview().offset(10)
             make.leading.equalToSuperview().offset(leadingtrailingSize)
         }
+        
+        self.categoryFieldView.snp.makeConstraints { make in
+            make.top.equalTo(self.categoryLabel.snp.bottom).offset(10)
+            make.leading.equalToSuperview().offset(leadingtrailingSize)
+            make.trailing.equalToSuperview().offset(-leadingtrailingSize)
+            make.height.equalTo(fieldHeight)
+        }
+        
+        self.categoryFieldButton.snp.makeConstraints{ make in
+            make.centerY.equalToSuperview()
+            make.leading.equalToSuperview().offset(leadingtrailingSize)
+            make.trailing.equalToSuperview().offset(-leadingtrailingSize)
+        }
+        
+        self.categoryFieldButton.titleLabel?.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(0)
+        }
+        
+        
+        self.categoryFieldImageView.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.trailing.equalToSuperview().offset(-leadingtrailingSize)
+            make.width.height.equalTo(25)
+        }
+        
         
         self.scoreView.snp.makeConstraints { make in
             make.top.equalTo(self.categoryView.snp.bottom).offset(0.5)
@@ -921,32 +910,7 @@ extension AddEatDiaryViewController: UICollectionViewDataSource, UICollectionVie
 
 
 
-extension AddEatDiaryViewController: selectedStorePlaceDelegate {
-    func showSelectedStorePlace(document: SelectedSearchResultDocument) {
-        self.selectedPlace = document
-        debugPrint(document)
-        self.storeNameButton.setTitle(self.selectedPlace?.place_name, for: .normal)
-        self.storeNameButton.setTitleColor(.black, for: .normal)
-        self.storeNameButton.backgroundColor = .white
-        
-    }
-}
 
-extension AddEatDiaryViewController: deleteIndexImageDelegate {
-    func deleteIndexImage(index: Int) {
-        self.selectedAssets.remove(at: index)
-        self.selectedImages.remove(at: index)
-        self.imageCollectionView.reloadData()
-    }
-}
-
-extension AddEatDiaryViewController: setPickedDateDelegate {
-    func setPickedDate(date: Date) {
-        self.eatDate = date
-        self.dateFieldButton.setTitle(dateFormatter.string(from: date), for: .normal)
-        self.dateFieldButton.setTitleColor(.black, for: .normal)
-    }
-}
 
 extension AddEatDiaryViewController: UITextViewDelegate {
     
@@ -989,5 +953,43 @@ extension UITextField {
         let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 20, height: self.frame.height))
         self.leftView = paddingView
         self.leftViewMode = ViewMode.always
+    }
+}
+
+
+extension AddEatDiaryViewController: selectedStorePlaceDelegate {
+    func showSelectedStorePlace(document: SelectedSearchResultDocument) {
+        self.selectedPlace = document
+        debugPrint(document)
+        self.storeNameButton.setTitle(self.selectedPlace?.place_name, for: .normal)
+        self.storeNameButton.setTitleColor(.black, for: .normal)
+        self.storeNameButton.backgroundColor = .white
+        self.storeSearchImageView.tintColor = enableFontColor
+        
+    }
+}
+
+extension AddEatDiaryViewController: deleteIndexImageDelegate {
+    func deleteIndexImage(index: Int) {
+        self.selectedAssets.remove(at: index)
+        self.selectedImages.remove(at: index)
+        self.imageCollectionView.reloadData()
+    }
+}
+
+extension AddEatDiaryViewController: setPickedDateDelegate {
+    func setPickedDate(date: Date) {
+        self.eatDate = date
+        self.dateFieldButton.setTitle(dateFormatter.string(from: date), for: .normal)
+        self.dateFieldButton.setTitleColor(.black, for: .normal)
+        self.dateFieldImageView.tintColor = calendarSelectedColor
+    }
+}
+
+extension AddEatDiaryViewController: setSelectedCategoryDelegate {
+    func setSelectedCategory(categoryName: String) {
+        self.categoryFieldButton.setTitle(categoryName, for: .normal)
+        self.categoryFieldButton.setTitleColor(.black, for: .normal)
+        self.categoryFieldImageView.image = UIImage(named: "logo_category")?.withRenderingMode(.alwaysOriginal)
     }
 }

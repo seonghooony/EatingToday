@@ -33,6 +33,8 @@
 		DB6F1B5427D8953600247B89 /* PwdResetPopupViewConroller.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1B5327D8953600247B89 /* PwdResetPopupViewConroller.swift */; };
 		DB6F1B5627D9B6C300247B89 /* CustomPopAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1B5527D9B6C300247B89 /* CustomPopAlertViewController.swift */; };
 		DB6F1B5A27DE518C00247B89 /* PopDateCalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1B5927DE518C00247B89 /* PopDateCalendarViewController.swift */; };
+		DB6F1B5C27DF215000247B89 /* PopCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1B5B27DF215000247B89 /* PopCategoryViewController.swift */; };
+		DB6F1B5E27DF25C500247B89 /* CategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1B5D27DF25C500247B89 /* CategoryCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -67,6 +69,8 @@
 		DB6F1B5327D8953600247B89 /* PwdResetPopupViewConroller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PwdResetPopupViewConroller.swift; sourceTree = "<group>"; };
 		DB6F1B5527D9B6C300247B89 /* CustomPopAlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPopAlertViewController.swift; sourceTree = "<group>"; };
 		DB6F1B5927DE518C00247B89 /* PopDateCalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopDateCalendarViewController.swift; sourceTree = "<group>"; };
+		DB6F1B5B27DF215000247B89 /* PopCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopCategoryViewController.swift; sourceTree = "<group>"; };
+		DB6F1B5D27DF25C500247B89 /* CategoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -197,6 +201,8 @@
 				DB6F1B3A27CB542A00247B89 /* AddImageCollectionViewCell.swift */,
 				DB6F1B4A27D48B5900247B89 /* PopDetailImageViewController.swift */,
 				DB6F1B5927DE518C00247B89 /* PopDateCalendarViewController.swift */,
+				DB6F1B5B27DF215000247B89 /* PopCategoryViewController.swift */,
+				DB6F1B5D27DF25C500247B89 /* CategoryCollectionViewCell.swift */,
 				DB6F1B5127D6601300247B89 /* loadingImage.json */,
 				DB6F1B4327D1FBBF00247B89 /* Search */,
 			);
@@ -342,9 +348,11 @@
 				DB6F1B4127CE20C900247B89 /* SearchResultOverview.swift in Sources */,
 				DB6F1B0927C34E1F00247B89 /* DiaryMapViewController.swift in Sources */,
 				DB6F1B2F27C48F0200247B89 /* EatTableViewCell.swift in Sources */,
+				DB6F1B5C27DF215000247B89 /* PopCategoryViewController.swift in Sources */,
 				DB6F1B3B27CB542A00247B89 /* AddImageCollectionViewCell.swift in Sources */,
 				DB6F1B4B27D48B5900247B89 /* PopDetailImageViewController.swift in Sources */,
 				DB6F1B4927D466A900247B89 /* SelectedSearchResultDocument.swift in Sources */,
+				DB6F1B5E27DF25C500247B89 /* CategoryCollectionViewCell.swift in Sources */,
 				DB6F1B5627D9B6C300247B89 /* CustomPopAlertViewController.swift in Sources */,
 				DB6F1B2B27C3781800247B89 /* ProfileViewController.swift in Sources */,
 				DB6F1B3927C5ECEA00247B89 /* AddEatDiaryViewController.swift in Sources */,

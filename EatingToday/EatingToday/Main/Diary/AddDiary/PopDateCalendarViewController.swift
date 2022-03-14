@@ -70,7 +70,7 @@ class PopDateCalendarViewController: UIViewController {
         self.popupView.addSubview(self.titleLabel)
         self.titleLabel.textColor = .black
         self.titleLabel.text = "식사하신 날짜 선택"
-        self.titleLabel.font = UIFont(name: "Helvetica Bold", size: 16)
+        self.titleLabel.font = UIFont(name: "Helvetica Bold", size: 18)
         
         self.popupView.addSubview(self.mainView)
         
@@ -133,7 +133,7 @@ class PopDateCalendarViewController: UIViewController {
         self.titleLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(leadingTrailingSize - 2)
             make.leading.equalToSuperview().offset(leadingTrailingSize)
-            make.height.equalTo(30)
+            make.height.equalTo(20)
         }
         
         self.mainView.snp.makeConstraints { make in
@@ -158,16 +158,18 @@ extension PopDateCalendarViewController: FSCalendarDelegate, FSCalendarDataSourc
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         
-        print(dateFormatter.string(from: date) + "이 선택됨")
-        //pickDate = dateFormatter.string(from: date)
+        //print(dateFormatter.string(from: date) + "이 선택됨")
+        
         setPickedDateDelegate?.setPickedDate(date: date)
+        
+        self.dismiss(animated: false, completion: nil)
         
     }
     
     
     
     func calendar(_ calendar: FSCalendar, didDeselect date: Date, at monthPosition: FSCalendarMonthPosition) {
-        print(dateFormatter.string(from: date) + "이 해제됨")
+        //print(dateFormatter.string(from: date) + "이 해제됨")
     }
     
     
