@@ -118,6 +118,7 @@ class LoginViewController: UIViewController {
             } else {
                 let mainVC = MainViewController()
                 mainVC.modalPresentationStyle = .fullScreen
+                mainVC.modalTransitionStyle = .crossDissolve
                 self.present(mainVC, animated: true, completion: nil)
             }
         }
@@ -175,6 +176,7 @@ class LoginViewController: UIViewController {
                 
                 let mainVC = MainViewController()
                 mainVC.modalPresentationStyle = .fullScreen
+                mainVC.modalTransitionStyle = .crossDissolve
                 self?.present(mainVC, animated: true, completion: nil)
                 
             }
@@ -507,6 +509,7 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
                 
                 let mainVC = MainViewController()
                 mainVC.modalPresentationStyle = .fullScreen
+                mainVC.modalTransitionStyle = .crossDissolve
                 self.present(mainVC, animated: true, completion: nil)
             }
         }

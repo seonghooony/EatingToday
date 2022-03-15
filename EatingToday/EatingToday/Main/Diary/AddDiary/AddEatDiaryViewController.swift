@@ -11,6 +11,10 @@ import BSImagePicker
 import Photos
 import Cosmos
 import Lottie
+import Firebase
+import FirebaseFirestoreSwift
+import FirebaseFirestore
+import FirebaseCore
 
 class AddEatDiaryViewController: UIViewController {
     
@@ -37,22 +41,24 @@ class AddEatDiaryViewController: UIViewController {
     
     
     
-//    lazy var activityIndicator: UIActivityIndicatorView = {
-//        // Create an indicator.
-//        let activityIndicator = UIActivityIndicatorView()
-//        activityIndicator.frame = CGRect(x: 0, y: 0, width: 200, height: 200)
-//        activityIndicator.center = self.view.center
-//        activityIndicator.color = UIColor.red
-//        // Also show the indicator even when the animation is stopped.
-//        activityIndicator.hidesWhenStopped = true
-//        activityIndicator.style = UIActivityIndicatorView.Style.large
-//        // Start animation.
-//        activityIndicator.stopAnimating()
-//        self.view.isUserInteractionEnabled = true
-//
-//        return activityIndicator
-//
-//    }()
+    lazy var activityIndicator: UIActivityIndicatorView = {
+        // Create an indicator.
+        let activityIndicator = UIActivityIndicatorView()
+        activityIndicator.frame = CGRect(x: 0, y: 0, width: 200, height: 200)
+        activityIndicator.center = self.view.center
+        activityIndicator.color = UIColor.black
+        // Also show the indicator even when the animation is stopped.
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.style = UIActivityIndicatorView.Style.large
+        // Start animation.
+        activityIndicator.stopAnimating()
+        self.view.isUserInteractionEnabled = true
+
+        return activityIndicator
+
+    }()
+    
+    let db = Firestore.firestore()
     
     let customActivityIndicator = AnimationView(name: "loadingfood")
     
@@ -126,7 +132,6 @@ class AddEatDiaryViewController: UIViewController {
     var selectedImages = Array<UIImage>()
     var selectedAssets = Array<PHAsset>()
     var selectedOriginalImages = Array<UIImage>()
-    var imagesUrl = [String()]
     var eatDate: Date?
     var eatCategory: String?
     
@@ -235,6 +240,200 @@ class AddEatDiaryViewController: UIViewController {
         popCategoryViewController.modalPresentationStyle = .overFullScreen
         popCategoryViewController.setSelectedCategoryDelegate = self
         self.present(popCategoryViewController, animated: false, completion: nil)
+        
+    }
+    
+    @objc func registerClicked1() {
+        
+        self.activityIndicator.startAnimating()
+    
+        //터치 이벤트 막기
+        self.view.isUserInteractionEnabled = false
+        
+        if let uid = Auth.auth().currentUser?.uid {
+            
+            let df = DateFormatter()
+            df.locale = Locale(identifier: "ko_KR")
+            df.timeZone = TimeZone(abbreviation: "KST")
+            df.dateFormat = "yyyyMMddHHmmssSSS"
+            
+            let diaryUid = uid + "Diary" + df.string(from: Date())
+            print(diaryUid)
+            
+            let updateUserProfile = db.collection("users").document(uid)
+            
+            updateUserProfile.updateData([
+                "diary": FieldValue.arrayUnion([diaryUid])
+            ]) { error in
+                if let error = error {
+                    print("user 쪽 diary 추가 오류 : \(error.localizedDescription)")
+                } else {
+                    
+                    let batch = self.db.batch()
+                    let insertDiary = self.db.collection("diaries").document(diaryUid)
+                    let diaryInfo = RegisterDiaryInfo(
+                        place_info: self.selectedPlace,
+                        date: self.eatDate,
+                        category: self.eatCategory,
+                        score: self.starView.rating,
+                        story: self.storyTextView.text,
+                        images: nil)
+                    
+                    do {
+                        try batch.setData(from: diaryInfo, forDocument: insertDiary)
+                    }catch let error {
+                        print("ERROR writing userInfo to Firestore \(error.localizedDescription)")
+                    }
+                    batch.commit() { error in
+                        if let error = error {
+                            print("diary 쪽 document 추가 오류 : \(error.localizedDescription)")
+                        } else {
+                            // 이미지 넣기
+                            let imageUid = uid + "Image" + df.string(from: Date())
+                            
+                            var completeCount = 0
+                            for i in 0..<self.selectedOriginalImages.count {
+                                let storageRef = Storage.storage().reference(withPath: "\(uid)/\(imageUid)_\(i)")
+                                
+                                guard let imageData = self.selectedOriginalImages[i].jpegData(compressionQuality: 0.5) else { return }
+                                
+                                storageRef.putData(imageData, metadata: nil) { data, error in
+                                    if let error = error {
+                                        print("Error put image: \(error.localizedDescription)")
+                                        return
+                                    }
+                                    
+                                    storageRef.downloadURL { url, _ in
+                                        guard let imageURL = url?.absoluteString else { return }
+                                        let insertDiary = self.db.collection("diaries").document(diaryUid)
+                                        insertDiary.updateData([
+                                            "imageUrl": FieldValue.arrayUnion([imageURL])
+                                        ]) { error in
+                                            if let error = error {
+                                                print("put imageurl error : \(error.localizedDescription)")
+                                                return
+                                            }
+                                            
+                                            completeCount += 1
+                                            
+                                            if completeCount == self.selectedOriginalImages.count {
+                                                self.activityIndicator.stopAnimating()
+                                        
+                                                self.dismiss(animated: true)
+                                            }
+                                        }
+                                    }
+                                    
+                                }
+                                
+                            }
+                            
+                        }
+                    }
+                    
+                    
+                }
+            }
+            
+            
+            
+            
+        } else {
+            print("로그아웃 됨 다시로그인 해야함.")
+        }
+        
+
+        
+    }
+    
+    @objc func registerClicked() {
+        
+        self.activityIndicator.startAnimating()
+    
+        //터치 이벤트 막기
+        self.view.isUserInteractionEnabled = false
+        
+        if let uid = Auth.auth().currentUser?.uid {
+            
+            let df = DateFormatter()
+            df.locale = Locale(identifier: "ko_KR")
+            df.timeZone = TimeZone(abbreviation: "KST")
+            df.dateFormat = "yyyyMMddHHmmssSSS"
+            
+            let diaryUid = uid + "Diary" + df.string(from: Date())
+            let imageUid = uid + "Image" + df.string(from: Date())
+            print(diaryUid)
+            
+            let updateUserProfile = db.collection("users").document(uid)
+            let insertDiary = self.db.collection("diaries").document(diaryUid)
+
+            // 배치 세팅
+            let batch = self.db.batch()
+            
+            
+            
+            
+            //배치 끝
+            
+            var completeCount = 0
+            var imageUrlArray = Array<String>()
+            for i in 0..<self.selectedOriginalImages.count {
+                //저장소 폴더 이름 만들기
+                let storageRef = Storage.storage().reference(withPath: "\(uid)/\(diaryUid)/\(imageUid)_\(i)")
+                guard let imageData = self.selectedOriginalImages[i].jpegData(compressionQuality: 0.5) else { return }
+                
+                //저장소에 넣기
+                storageRef.putData(imageData, metadata: nil) { data, error in
+                    if let error = error {
+                        print("Error put image: \(error.localizedDescription)")
+                        return
+                    }
+                    //저장소에 저장된 이미지 url 추출
+                    storageRef.downloadURL { url, _ in
+                        guard let imageURL = url?.absoluteString else { return }
+                        imageUrlArray.append(imageURL)
+                            
+                        completeCount += 1
+                        
+                        if self.selectedOriginalImages.count == completeCount {
+                            
+                            let diaryInfo = RegisterDiaryInfo(
+                                place_info: self.selectedPlace,
+                                date: self.eatDate,
+                                category: self.eatCategory,
+                                score: self.starView.rating,
+                                story: self.storyTextView.text,
+                                images: imageUrlArray)
+                            
+                            do {
+                                batch.updateData([ "diary": FieldValue.arrayUnion([diaryUid]) ], forDocument: updateUserProfile)
+                                try batch.setData(from: diaryInfo, forDocument: insertDiary)
+                            }catch let error {
+                                print(error.localizedDescription)
+                            }
+                            batch.commit() { error in
+                                if let error = error {
+                                    print(error.localizedDescription)
+                                    return
+                                }
+                                
+                                self.activityIndicator.stopAnimating()
+                                self.navigationController?.popViewController(animated: true)
+                                
+                            }
+                        }
+
+                    }
+                    
+                }
+                
+            }
+            
+        } else {
+            print("로그아웃 됨 다시로그인 해야함.")
+        }
+        
+
         
     }
     
@@ -393,6 +592,7 @@ class AddEatDiaryViewController: UIViewController {
             self.addDiaryButton.backgroundColor = self.unableBackColor
             self.addDiaryButton.setTitleColor(self.unableFontColor, for: .normal)
             
+            self.registerButton.isEnabled = false
             self.registerButton.setTitleColor(.lightGray, for: .normal)
             
         } else {
@@ -401,7 +601,8 @@ class AddEatDiaryViewController: UIViewController {
             self.addDiaryButton.backgroundColor = self.enableBackColor
             self.addDiaryButton.setTitleColor(self.enableFontColor, for: .normal)
             
-            self.registerButton.setTitleColor(.lightGray, for: .normal)
+            self.registerButton.isEnabled = true
+            self.registerButton.setTitleColor(.black, for: .normal)
             
         }
         
@@ -426,6 +627,9 @@ class AddEatDiaryViewController: UIViewController {
         self.registerButton.setTitle("등록", for: .normal)
         self.registerButton.setTitleColor(.lightGray, for: .normal)
         self.registerButton.titleLabel?.font = UIFont(name: "Helvetica Bold", size: 17)
+        self.registerButton.addTarget(self, action: #selector(registerClicked), for: .touchUpInside)
+        self.registerButton.isEnabled = false
+        
         
         self.view.addSubview(self.mainView)
         self.mainView.addSubview(mainScrollView)
@@ -510,7 +714,7 @@ class AddEatDiaryViewController: UIViewController {
         imageCollectionView.register(AddImageCollectionViewCell.self, forCellWithReuseIdentifier: "AddImageCollectionViewCell")
         self.imageUiView.addSubview(self.imageCollectionView)
         
-//        self.imageView.addSubview(self.activityIndicator)
+
         self.imageUiView.addSubview(self.customActivityIndicator)
         self.customActivityIndicator.isHidden = true
         self.customActivityIndicator.stop()
@@ -636,9 +840,9 @@ class AddEatDiaryViewController: UIViewController {
         self.addDiaryButton.layer.cornerRadius = 10
         self.addDiaryButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
         self.addDiaryButton.setTitleColor(self.unableFontColor, for: .normal)
-//        self.registerButton.addTarget(self, action: #selector(registerClicked), for: .touchUpInside)
+        self.addDiaryButton.addTarget(self, action: #selector(registerClicked), for: .touchUpInside)
         
-        
+        self.scrollContainerView.addSubview(self.activityIndicator)
     }
     
     func constraintConfigure() {
@@ -689,10 +893,10 @@ class AddEatDiaryViewController: UIViewController {
             
         }
         
-//        self.activityIndicator.snp.makeConstraints{ make in
-//            make.centerX.equalToSuperview()
-//            make.centerY.equalToSuperview()
-//        }
+        self.activityIndicator.snp.makeConstraints{ make in
+            make.centerX.equalTo(self.view.snp.centerX)
+            make.centerY.equalTo(self.view.snp.centerY)
+        }
         
         self.customActivityIndicator.snp.makeConstraints{ make in
             make.centerX.equalToSuperview()

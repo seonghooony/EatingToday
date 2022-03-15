@@ -10,6 +10,7 @@
 		878E267656D78C2FC78EA471 /* Pods_EatingToday.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D41276C38A7BCDBEACC465C /* Pods_EatingToday.framework */; };
 		DB4BCA9D27E0725300320903 /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = DB4BCA9C27E0725300320903 /* loading.json */; };
 		DB4BCA9F27E074DB00320903 /* loadingfood.json in Resources */ = {isa = PBXBuildFile; fileRef = DB4BCA9E27E074DB00320903 /* loadingfood.json */; };
+		DB4BCAA127E0BE4E00320903 /* RegisterDiaryInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4BCAA027E0BE4E00320903 /* RegisterDiaryInfo.swift */; };
 		DB6F1AE427BBF93100247B89 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1AE327BBF93100247B89 /* AppDelegate.swift */; };
 		DB6F1AE627BBF93100247B89 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1AE527BBF93100247B89 /* SceneDelegate.swift */; };
 		DB6F1AED27BBF93200247B89 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DB6F1AEC27BBF93200247B89 /* Assets.xcassets */; };
@@ -45,6 +46,7 @@
 		7D41276C38A7BCDBEACC465C /* Pods_EatingToday.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EatingToday.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB4BCA9C27E0725300320903 /* loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading.json; sourceTree = "<group>"; };
 		DB4BCA9E27E074DB00320903 /* loadingfood.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loadingfood.json; sourceTree = "<group>"; };
+		DB4BCAA027E0BE4E00320903 /* RegisterDiaryInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterDiaryInfo.swift; sourceTree = "<group>"; };
 		DB6F1AE027BBF93100247B89 /* EatingToday.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EatingToday.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB6F1AE327BBF93100247B89 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DB6F1AE527BBF93100247B89 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -207,6 +209,7 @@
 				DB6F1B5927DE518C00247B89 /* PopDateCalendarViewController.swift */,
 				DB6F1B5B27DF215000247B89 /* PopCategoryViewController.swift */,
 				DB6F1B5D27DF25C500247B89 /* CategoryCollectionViewCell.swift */,
+				DB4BCAA027E0BE4E00320903 /* RegisterDiaryInfo.swift */,
 				DB4BCA9C27E0725300320903 /* loading.json */,
 				DB4BCA9E27E074DB00320903 /* loadingfood.json */,
 				DB6F1B5127D6601300247B89 /* loadingImage.json */,
@@ -364,6 +367,7 @@
 				DB6F1B5627D9B6C300247B89 /* CustomPopAlertViewController.swift in Sources */,
 				DB6F1B2B27C3781800247B89 /* ProfileViewController.swift in Sources */,
 				DB6F1B3927C5ECEA00247B89 /* AddEatDiaryViewController.swift in Sources */,
+				DB4BCAA127E0BE4E00320903 /* RegisterDiaryInfo.swift in Sources */,
 				DB6F1B0427BF829100247B89 /* UserInfo.swift in Sources */,
 				DB6F1B3F27CE042C00247B89 /* SearchKakaoViewController.swift in Sources */,
 				DB6F1AE627BBF93100247B89 /* SceneDelegate.swift in Sources */,
