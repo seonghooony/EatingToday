@@ -34,12 +34,12 @@ class PopCategoryViewController: UIViewController {
     }()
     
     var foodImages: [UIImage] = [
-        UIImage(named: "logo_lamen")!,  //0
-        UIImage(named: "logo_lamen")!,  //1
-        UIImage(named: "logo_lamen")!,  //2
-        UIImage(named: "logo_lamen")!,  //3
-        UIImage(named: "logo_lamen")!,  //4
-        UIImage(named: "logo_lamen")!,  //5
+        UIImage(named: "logo_koreanfood")!,  //0
+        UIImage(named: "logo_chinesefood")!,  //1
+        UIImage(named: "logo_japanesefood")!,  //2
+        UIImage(named: "logo_westernfood")!,  //3
+        UIImage(named: "logo_snackbarfood")!,  //4
+        UIImage(named: "logo_meatfood")!,  //5
         UIImage(named: "logo_lamen")!,  //6
         UIImage(named: "logo_lamen")!,  //7
         UIImage(named: "logo_lamen")!]  //8
@@ -49,7 +49,7 @@ class PopCategoryViewController: UIViewController {
                                     "일식",   //2
                                     "양식",   //3
                                     "분식",   //4
-                                    "양식",   //5
+                                    "구이",   //5
                                     "아시안",  //6
                                     "디저트",  //7
                                     "그외"]   //8

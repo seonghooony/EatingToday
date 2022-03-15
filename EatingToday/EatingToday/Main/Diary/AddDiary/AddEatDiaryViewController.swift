@@ -10,7 +10,7 @@ import SnapKit
 import BSImagePicker
 import Photos
 import Cosmos
-
+import Lottie
 
 class AddEatDiaryViewController: UIViewController {
     
@@ -35,24 +35,26 @@ class AddEatDiaryViewController: UIViewController {
     let calendarSelectedColor = UIColor(cgColor: CGColor(red: 216/255, green: 33/255, blue: 72/255, alpha: 1.0))
 
     
-    var selectedPlace: SelectedSearchResultDocument?
     
-    lazy var activityIndicator: UIActivityIndicatorView = {
-        // Create an indicator.
-        let activityIndicator = UIActivityIndicatorView()
-        activityIndicator.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
-        activityIndicator.center = self.view.center
-        activityIndicator.color = UIColor.darkGray
-        // Also show the indicator even when the animation is stopped.
-        activityIndicator.hidesWhenStopped = true
-        activityIndicator.style = UIActivityIndicatorView.Style.medium
-        // Start animation.
-        activityIndicator.stopAnimating()
-        self.view.isUserInteractionEnabled = true
-        
-        return activityIndicator
-        
-    }()
+    
+//    lazy var activityIndicator: UIActivityIndicatorView = {
+//        // Create an indicator.
+//        let activityIndicator = UIActivityIndicatorView()
+//        activityIndicator.frame = CGRect(x: 0, y: 0, width: 200, height: 200)
+//        activityIndicator.center = self.view.center
+//        activityIndicator.color = UIColor.red
+//        // Also show the indicator even when the animation is stopped.
+//        activityIndicator.hidesWhenStopped = true
+//        activityIndicator.style = UIActivityIndicatorView.Style.large
+//        // Start animation.
+//        activityIndicator.stopAnimating()
+//        self.view.isUserInteractionEnabled = true
+//
+//        return activityIndicator
+//
+//    }()
+    
+    let customActivityIndicator = AnimationView(name: "loadingfood")
     
     let headView = UIView()
     let titleLabel = UILabel()
@@ -87,11 +89,6 @@ class AddEatDiaryViewController: UIViewController {
         return collectionView
     }()
 
-    var imageAssets = Array<PHAsset>()
-    var selectedImages = Array<UIImage>()
-    var selectedAssets = Array<PHAsset>()
-    var imagesUrl = [String()]
-    
     let dateView = UIView()
     let dateLabel = UILabel()
     
@@ -99,7 +96,7 @@ class AddEatDiaryViewController: UIViewController {
     let dateFieldButton = UIButton()
     let dateFieldImageView = UIImageView()
     let dateFormatter = DateFormatter()
-    var eatDate: Date?
+    
     
     let categoryView = UIView()
     let categoryLabel = UILabel()
@@ -123,6 +120,21 @@ class AddEatDiaryViewController: UIViewController {
     
     var currentKeyboardFrame: CGRect?
 //    var activeTextView: UITextView?
+    
+    var selectedPlace: SelectedSearchResultDocument?
+    var imageAssets = Array<PHAsset>()
+    var selectedImages = Array<UIImage>()
+    var selectedAssets = Array<PHAsset>()
+    var selectedOriginalImages = Array<UIImage>()
+    var imagesUrl = [String()]
+    var eatDate: Date?
+    var eatCategory: String?
+    
+    var placeValidation = false
+    var imageValidation = false
+    var dateValidation = false
+    var cateValidation = false
+    var storyValidation = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -254,7 +266,9 @@ class AddEatDiaryViewController: UIViewController {
                 //self.delegate
                 print("선택 이미지 개수 : \(self.selectedImages.count)")
                 self.imageCollectionView.reloadData()
-
+                
+                self.getOriginalImages()
+                
                 
             }
         )
@@ -283,22 +297,114 @@ class AddEatDiaryViewController: UIViewController {
                 
                 self.selectedImages.append(newImage! as UIImage)
                 self.selectedAssets.append(imageAssets[i])
+                
             }
+
+            
         }
     }
     
-    func showAlert(msg: String) {
-        let alert = UIAlertController(
-            title: "알림",
-            message: """
-            \(msg)
-            """,
-            preferredStyle: .alert
-        )
-        let confirm = UIAlertAction(title: "확인", style: .default, handler: nil)
+    func getOriginalImages() {
         
-        alert.addAction(confirm)
-        self.present(alert, animated: true, completion: nil)
+        self.selectedOriginalImages.removeAll()
+        self.imageValidation = false
+        self.checkValidation()
+        
+        let imageManager = PHImageManager.default()
+        let option = PHImageRequestOptions()
+        option.isSynchronous = false
+        option.deliveryMode = .highQualityFormat
+        
+        option.progressHandler = { (progress, error, stop, info) in
+            print("progress: \(progress)")
+            if progress >= 1.0 {
+                
+            }
+        }
+        option.isNetworkAccessAllowed = true
+        //option.version = .original
+        var thumbnail = UIImage()
+        
+        for i in 0..<self.selectedAssets.count {
+            self.selectedOriginalImages.append(UIImage())
+        }
+        
+        //로딩바 생성
+//        self.activityIndicator.startAnimating()
+        self.customActivityIndicator.isHidden = false
+        self.customActivityIndicator.play()
+        //터치 이벤트 막기
+        self.imageView.isUserInteractionEnabled = false
+        
+        var completeCount = 0
+        
+        
+        for i in 0..<self.selectedAssets.count {
+            imageManager.requestImage(
+                for: self.selectedAssets[i],
+                   targetSize: PHImageManagerMaximumSize,
+                contentMode: .aspectFit,
+                options: option
+            ) { (result, info) in
+                print("이미지 생성중")
+                
+                if let result = result {
+                    print("이미지 생성완료")
+                    
+                    
+                    thumbnail = result
+                    let data = thumbnail.jpegData(compressionQuality: 1)
+                    let newImage = UIImage(data: data!)
+                    
+                    self.selectedOriginalImages[i] = newImage! as UIImage
+                    
+                    completeCount += 1
+                    print("\(i)개 완성 \(completeCount)")
+                    if self.selectedAssets.count == completeCount {
+//                        self.activityIndicator.stopAnimating()
+                        self.customActivityIndicator.isHidden = true
+                        self.customActivityIndicator.stop()
+                        self.imageView.isUserInteractionEnabled = true
+                        
+                        self.imageValidation = true
+                        self.checkValidation()
+                    }
+                }
+                
+            }
+            
+            
+        }
+        
+        
+        
+        
+    }
+    
+    private func checkValidation() {
+        
+        if self.placeValidation == false
+        || self.imageValidation == false
+        || self.dateValidation == false
+        || self.cateValidation == false
+        || self.storyValidation == false {
+            
+            self.addDiaryButton.isEnabled = false
+            self.addDiaryButton.backgroundColor = self.unableBackColor
+            self.addDiaryButton.setTitleColor(self.unableFontColor, for: .normal)
+            
+            self.registerButton.setTitleColor(.lightGray, for: .normal)
+            
+        } else {
+            
+            self.addDiaryButton.isEnabled = true
+            self.addDiaryButton.backgroundColor = self.enableBackColor
+            self.addDiaryButton.setTitleColor(self.enableFontColor, for: .normal)
+            
+            self.registerButton.setTitleColor(.lightGray, for: .normal)
+            
+        }
+        
     }
     
     func viewConfigure() {
@@ -318,7 +424,7 @@ class AddEatDiaryViewController: UIViewController {
         
         self.headView.addSubview(self.registerButton)
         self.registerButton.setTitle("등록", for: .normal)
-        self.registerButton.setTitleColor(UIColor.black, for: .normal)
+        self.registerButton.setTitleColor(.lightGray, for: .normal)
         self.registerButton.titleLabel?.font = UIFont(name: "Helvetica Bold", size: 17)
         
         self.view.addSubview(self.mainView)
@@ -404,7 +510,14 @@ class AddEatDiaryViewController: UIViewController {
         imageCollectionView.register(AddImageCollectionViewCell.self, forCellWithReuseIdentifier: "AddImageCollectionViewCell")
         self.imageUiView.addSubview(self.imageCollectionView)
         
-        self.imageView.addSubview(self.activityIndicator)
+//        self.imageView.addSubview(self.activityIndicator)
+        self.imageUiView.addSubview(self.customActivityIndicator)
+        self.customActivityIndicator.isHidden = true
+        self.customActivityIndicator.stop()
+        self.customActivityIndicator.loopMode = .loop
+        self.customActivityIndicator.alpha = 0.9
+
+        
         
         self.scrollContainerView.addSubview(self.dateView)
         self.dateView.backgroundColor = .white
@@ -576,9 +689,15 @@ class AddEatDiaryViewController: UIViewController {
             
         }
         
-        self.activityIndicator.snp.makeConstraints{ make in
+//        self.activityIndicator.snp.makeConstraints{ make in
+//            make.centerX.equalToSuperview()
+//            make.centerY.equalToSuperview()
+//        }
+        
+        self.customActivityIndicator.snp.makeConstraints{ make in
             make.centerX.equalToSuperview()
             make.centerY.equalToSuperview()
+            make.height.width.equalTo(50)
         }
         
         self.scrollHeadView.snp.makeConstraints{ make in
@@ -850,49 +969,51 @@ extension AddEatDiaryViewController: UICollectionViewDataSource, UICollectionVie
             print("클릭 인덱스 : \(indexPath.row)")
             popDetailImageViewController.detailImageView.image = nil
             popDetailImageViewController.modalPresentationStyle = .overFullScreen
+
+//            let imageManager = PHImageManager.default()
+//            let option = PHImageRequestOptions()
+//            option.isSynchronous = false
+//            option.deliveryMode = .highQualityFormat
+//
+//            option.progressHandler = { (progress, error, stop, info) in
+//                print("progress: \(progress)")
+//                if progress >= 1.0 {
+//
+//                }
+//            }
+//            option.isNetworkAccessAllowed = true
+//            //option.version = .original
+//            var thumbnail = UIImage()
+//
+//            imageManager.requestImage(
+//                for: self.selectedAssets[indexPath.row - 1],
+//                   targetSize: PHImageManagerMaximumSize,
+//                contentMode: .aspectFit,
+//                options: option
+//            ) { (result, info) in
+//                print("이미지 생성중")
+//
+//                if let result = result {
+//                    print("이미지 생성완료")
+//                    popDetailImageViewController.animationView.stop()
+//                    popDetailImageViewController.animationView.isHidden = true
+//
+//                    thumbnail = result
+//                    let data = thumbnail.jpegData(compressionQuality: 1)
+//                    let newImage = UIImage(data: data!)
+//                    popDetailImageViewController.detailImageView.contentMode = .scaleAspectFit
+//                    popDetailImageViewController.detailImageView.image = newImage
+//
+//
+//                }
+//
+//            }
+            popDetailImageViewController.animationView.stop()
+            popDetailImageViewController.animationView.isHidden = true
+            popDetailImageViewController.detailImageView.contentMode = .scaleAspectFit
+            popDetailImageViewController.detailImageView.image = self.selectedOriginalImages[indexPath.row - 1]
             
-            let imageManager = PHImageManager.default()
-            let option = PHImageRequestOptions()
-            option.isSynchronous = false
-            option.deliveryMode = .highQualityFormat
-            
-            option.progressHandler = { (progress, error, stop, info) in
-                print("progress: \(progress)")
-                if progress >= 1.0 {
-                    
-                }
-            }
-            option.isNetworkAccessAllowed = true
-            //option.version = .original
-            var thumbnail = UIImage()
-            
-            imageManager.requestImage(
-                for: self.selectedAssets[indexPath.row - 1],
-                   targetSize: PHImageManagerMaximumSize,
-                contentMode: .aspectFit,
-                options: option
-            ) { (result, info) in
-                print("이미지 생성중")
-                
-                if let result = result {
-                    print("이미지 생성완료")
-                    popDetailImageViewController.animationView.stop()
-                    popDetailImageViewController.animationView.isHidden = true
-                    
-                    thumbnail = result
-                    let data = thumbnail.jpegData(compressionQuality: 1)
-                    let newImage = UIImage(data: data!)
-                    popDetailImageViewController.detailImageView.contentMode = .scaleAspectFit
-                    popDetailImageViewController.detailImageView.image = newImage
-                    
-                    
-                }
-                
-            }
-            
-            
-            
-            self.present(popDetailImageViewController, animated: false, completion: nil)
+            self.present(popDetailImageViewController, animated: true, completion: nil)
         }
         
     }
@@ -930,11 +1051,19 @@ extension AddEatDiaryViewController: UITextViewDelegate {
                     textView.text = nil
                     textView.textColor = .black
                     textView.font = UIFont(name: "Helvetica", size: 16)
+                    
                 }
-                
             }
-            
         }
+    }
+    
+    func textViewDidChange(_ textView: UITextView) {
+        if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            self.storyValidation = false
+        } else {
+            self.storyValidation = true
+        }
+        self.checkValidation()
         
     }
     
@@ -944,6 +1073,7 @@ extension AddEatDiaryViewController: UITextViewDelegate {
             textView.text = textViewPlaceHolder
             textView.textColor = customGray2
             textView.font = UIFont(name: "Helvetica", size: 16)
+            
         }
     }
 }
@@ -965,6 +1095,8 @@ extension AddEatDiaryViewController: selectedStorePlaceDelegate {
         self.storeNameButton.setTitleColor(.black, for: .normal)
         self.storeNameButton.backgroundColor = .white
         self.storeSearchImageView.tintColor = enableFontColor
+        self.placeValidation = true
+        self.checkValidation()
         
     }
 }
@@ -973,7 +1105,16 @@ extension AddEatDiaryViewController: deleteIndexImageDelegate {
     func deleteIndexImage(index: Int) {
         self.selectedAssets.remove(at: index)
         self.selectedImages.remove(at: index)
+        self.selectedOriginalImages.remove(at: index)
+        
+        print("\(self.selectedAssets.count)개 \(self.selectedImages.count)개 \(self.selectedOriginalImages.count)개")
         self.imageCollectionView.reloadData()
+        
+        if self.selectedAssets.count == 0 {
+            self.imageValidation = false
+            self.checkValidation()
+        }
+        
     }
 }
 
@@ -983,6 +1124,8 @@ extension AddEatDiaryViewController: setPickedDateDelegate {
         self.dateFieldButton.setTitle(dateFormatter.string(from: date), for: .normal)
         self.dateFieldButton.setTitleColor(.black, for: .normal)
         self.dateFieldImageView.tintColor = calendarSelectedColor
+        self.dateValidation = true
+        self.checkValidation()
     }
 }
 
@@ -991,5 +1134,8 @@ extension AddEatDiaryViewController: setSelectedCategoryDelegate {
         self.categoryFieldButton.setTitle(categoryName, for: .normal)
         self.categoryFieldButton.setTitleColor(.black, for: .normal)
         self.categoryFieldImageView.image = UIImage(named: "logo_category")?.withRenderingMode(.alwaysOriginal)
+        self.eatCategory = categoryName
+        self.cateValidation = true
+        self.checkValidation()
     }
 }

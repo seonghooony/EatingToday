@@ -30,7 +30,7 @@ class CategoryCollectionViewCell: UICollectionViewCell {
         
         self.cellView.addSubview(self.categoryLabel)
         self.categoryLabel.textAlignment = .center
-        self.categoryLabel.textColor = .black
+        self.categoryLabel.textColor = .darkGray
         self.categoryLabel.text = "라면"
         self.categoryLabel.font = UIFont(name: "Helvetica Bold", size: 16)
 
