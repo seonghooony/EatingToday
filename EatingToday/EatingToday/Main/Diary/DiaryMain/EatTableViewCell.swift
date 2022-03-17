@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Cosmos
 
 class EatTableViewCell: UITableViewCell {
     
@@ -14,7 +15,9 @@ class EatTableViewCell: UITableViewCell {
     private var indexOfCellBeforeDragging = 0
     
     let headView = UIView()
+    let titleStackView = UIView()
     let titleLabel = UILabel()
+    let locationLabel = UILabel()
     let settingButton = UIButton()
     
     let imageContentView = UIView()
@@ -45,6 +48,12 @@ class EatTableViewCell: UITableViewCell {
     }
     
     let infoContentView = UIView()
+    let infoTitleLabel = UILabel()
+    let scoreLabel = CosmosView()
+    
+    let categoryLabel = UILabel()
+    let dateLabel = UILabel()
+    let storyLabel = UILabel()
     
     
     
@@ -64,8 +73,19 @@ class EatTableViewCell: UITableViewCell {
         self.addSubview(headView)
         headView.backgroundColor = .yellow
         
-        self.headView.addSubview(titleLabel)
+        self.headView.addSubview(self.titleStackView)
+        
+        self.titleStackView.addSubview(titleLabel)
         self.titleLabel.text = "가게이름"
+        self.titleLabel.textAlignment = .center
+        self.titleLabel.textColor = .black
+        self.titleLabel.font = UIFont(name: "Helvetica Bold", size: 16)
+        
+        self.titleStackView.addSubview(self.locationLabel)
+        self.locationLabel.text = "장소 주소"
+        self.locationLabel.textAlignment = .center
+        self.locationLabel.textColor = .darkGray
+        self.locationLabel.font = UIFont(name: "Helvetica", size: 13)
         
         self.headView.addSubview(settingButton)
         self.settingButton.setImage(UIImage(systemName: "pencil"), for: .normal)
@@ -88,24 +108,77 @@ class EatTableViewCell: UITableViewCell {
         pageControl.numberOfPages = images.count
         pageControl.pageIndicatorTintColor = .darkGray
         self.imageContentView.addSubview(pageControl)
+        
+        self.addSubview(self.infoContentView)
+        
+        self.infoContentView.addSubview(self.infoTitleLabel)
+        self.infoTitleLabel.text = "정보"
+        self.infoTitleLabel.textAlignment = .center
+        self.infoTitleLabel.textColor = .black
+        self.infoTitleLabel.font = UIFont(name: "Helvetica Bold", size: 16)
+        
+        self.infoContentView.addSubview(self.scoreLabel)
+        self.scoreLabel.settings.fillMode = .half
+        self.scoreLabel.settings.starSize = 20
+        self.scoreLabel.settings.starMargin = 5
+        self.scoreLabel.settings.filledColor = .orange
+        self.scoreLabel.settings.emptyColor = .white
+        self.scoreLabel.settings.filledBorderColor = .orange
+        self.scoreLabel.settings.filledBorderWidth = 0.5
+        self.scoreLabel.settings.emptyBorderColor = .orange
+        self.scoreLabel.settings.emptyBorderWidth = 0.5
+        self.scoreLabel.isUserInteractionEnabled = false
+        
+//        self.infoContentView.addSubview(self.categoryLabel)
+//        self.categoryLabel.text = "카테고리"
+//        self.categoryLabel.textAlignment = .center
+//        self.categoryLabel.textColor = .black
+//        self.categoryLabel.font = UIFont(name: "Helvetica", size: 15)
+        
+        self.infoContentView.addSubview(self.dateLabel)
+        self.dateLabel.text = "날짜"
+        self.dateLabel.textAlignment = .center
+        self.dateLabel.textColor = .lightGray
+        self.dateLabel.font = UIFont(name: "Helvetica", size: 15)
+        
+        self.infoContentView.addSubview(self.storyLabel)
+        self.storyLabel.text = "이야기"
+        self.storyLabel.textAlignment = .center
+        self.storyLabel.textColor = .black
+        self.storyLabel.font = UIFont(name: "Helvetica", size: 15)
 
         
         
     }
     
     func constraintConfigure() {
+        
+        let leadingtrailingSize = 20
+        
         self.headView.snp.makeConstraints{ make in
             make.top.equalToSuperview().offset(0)
-            make.height.equalTo(40)
+            make.height.equalTo(50)
             make.leading.equalToSuperview().offset(0)
             make.trailing.equalToSuperview().offset(0)
         }
+        self.titleStackView.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.height.equalTo(40)
+            make.leading.equalToSuperview()
+            make.width.equalTo(250)
+        }
         
         self.titleLabel.snp.makeConstraints{ make in
-            make.centerY.equalTo(self.headView.snp.centerY)
+            make.bottom.equalTo(self.titleStackView.snp.centerY)
 
             make.leading.equalToSuperview().offset(20)
 //            make.trailing.equalToSuperview().offset(0)
+        }
+        
+        self.locationLabel.snp.makeConstraints { make in
+            make.top.equalTo(self.titleStackView.snp.centerY).offset(1)
+
+            make.leading.equalToSuperview().offset(20)
         }
 
         self.settingButton.snp.makeConstraints{ make in
@@ -129,6 +202,44 @@ class EatTableViewCell: UITableViewCell {
             make.top.equalTo(self.imageContentView.snp.bottom).offset(-25)
             make.centerX.equalTo(self)
         }
+        
+        self.infoContentView.snp.makeConstraints { make in
+            make.top.equalTo(self.imageContentView.snp.bottom)
+            make.leading.trailing.bottom.equalToSuperview()
+        
+        }
+        
+//        self.infoTitleLabel.snp.makeConstraints { make in
+
+//            make.leading.equalToSuperview().offset(leadingtrailingSize)
+//        }
+        
+        self.scoreLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(10)
+//            make.top.equalTo(self.infoTitleLabel.snp.bottom).offset(10)
+            make.leading.equalToSuperview().offset(leadingtrailingSize)
+        }
+        
+        
+        
+//        self.categoryLabel.snp.makeConstraints { make in
+//            make.top.equalTo(self.scoreLabel.snp.bottom).offset(10)
+//            make.leading.equalToSuperview().offset(leadingtrailingSize)
+//        }
+        
+
+        self.storyLabel.snp.makeConstraints { make in
+            make.top.equalTo(self.scoreLabel.snp.bottom).offset(10)
+            make.leading.equalToSuperview().offset(leadingtrailingSize)
+        }
+        
+        self.dateLabel.snp.makeConstraints { make in
+            make.top.equalTo(self.storyLabel.snp.bottom)
+            make.trailing.equalToSuperview().offset(-leadingtrailingSize)
+        }
+        
+        
+        
         
     }
     

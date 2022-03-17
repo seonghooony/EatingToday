@@ -23,6 +23,8 @@ class PopDateCalendarViewController: UIViewController {
     
     weak var setPickedDateDelegate: setPickedDateDelegate?
     
+    let outsideUnderButton = UIButton()
+    
     let popupView = UIView()
     let titleLabel = UILabel()
     
@@ -49,6 +51,11 @@ class PopDateCalendarViewController: UIViewController {
     }
     
     private func viewConfigure() {
+        
+        self.view.addSubview(self.outsideUnderButton)
+        self.outsideUnderButton.backgroundColor = .clear
+        self.outsideUnderButton.setTitle(nil, for: .normal)
+        self.outsideUnderButton.addTarget(self, action: #selector(popCloseTapped), for: .touchUpInside)
         
         self.view.addSubview(self.popupView)
         let shadowSize: CGFloat = 5.0
@@ -100,18 +107,16 @@ class PopDateCalendarViewController: UIViewController {
         if let preDate = previousPickDate {
             self.calendarView.select(preDate, scrollToDate: true)
         }
-        
-        
-        
-        
-        
-        
-        
+
         
     }
     
     private func constraintConfigure() {
         let leadingTrailingSize = 20
+        
+        self.outsideUnderButton.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         
         self.popupView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()

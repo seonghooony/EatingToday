@@ -11,6 +11,8 @@
 		DB4BCA9D27E0725300320903 /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = DB4BCA9C27E0725300320903 /* loading.json */; };
 		DB4BCA9F27E074DB00320903 /* loadingfood.json in Resources */ = {isa = PBXBuildFile; fileRef = DB4BCA9E27E074DB00320903 /* loadingfood.json */; };
 		DB4BCAA127E0BE4E00320903 /* RegisterDiaryInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4BCAA027E0BE4E00320903 /* RegisterDiaryInfo.swift */; };
+		DB4BCAA327E3124400320903 /* UserDiaryInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4BCAA227E3124400320903 /* UserDiaryInfo.swift */; };
+		DB4BCAA527E317C700320903 /* DiaryInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4BCAA427E317C700320903 /* DiaryInfo.swift */; };
 		DB6F1AE427BBF93100247B89 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1AE327BBF93100247B89 /* AppDelegate.swift */; };
 		DB6F1AE627BBF93100247B89 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1AE527BBF93100247B89 /* SceneDelegate.swift */; };
 		DB6F1AED27BBF93200247B89 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DB6F1AEC27BBF93200247B89 /* Assets.xcassets */; };
@@ -47,6 +49,8 @@
 		DB4BCA9C27E0725300320903 /* loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading.json; sourceTree = "<group>"; };
 		DB4BCA9E27E074DB00320903 /* loadingfood.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loadingfood.json; sourceTree = "<group>"; };
 		DB4BCAA027E0BE4E00320903 /* RegisterDiaryInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterDiaryInfo.swift; sourceTree = "<group>"; };
+		DB4BCAA227E3124400320903 /* UserDiaryInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDiaryInfo.swift; sourceTree = "<group>"; };
+		DB4BCAA427E317C700320903 /* DiaryInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaryInfo.swift; sourceTree = "<group>"; };
 		DB6F1AE027BBF93100247B89 /* EatingToday.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EatingToday.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB6F1AE327BBF93100247B89 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DB6F1AE527BBF93100247B89 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -196,6 +200,8 @@
 				DB6F1B0627C34D7100247B89 /* EatDiaryViewController.swift */,
 				DB6F1B2E27C48F0200247B89 /* EatTableViewCell.swift */,
 				DB6F1B3627C55B0E00247B89 /* ImageCollectionViewCell.swift */,
+				DB4BCAA227E3124400320903 /* UserDiaryInfo.swift */,
+				DB4BCAA427E317C700320903 /* DiaryInfo.swift */,
 			);
 			path = DiaryMain;
 			sourceTree = "<group>";
@@ -354,9 +360,11 @@
 				DB6F1AE427BBF93100247B89 /* AppDelegate.swift in Sources */,
 				DB6F1AF827BBF98A00247B89 /* MainViewController.swift in Sources */,
 				DB6F1B0227BE4A6000247B89 /* RegisterUserViewController.swift in Sources */,
+				DB4BCAA327E3124400320903 /* UserDiaryInfo.swift in Sources */,
 				DB6F1B0727C34D7100247B89 /* EatDiaryViewController.swift in Sources */,
 				DB6F1B5427D8953600247B89 /* PwdResetPopupViewConroller.swift in Sources */,
 				DB6F1B4127CE20C900247B89 /* SearchResultOverview.swift in Sources */,
+				DB4BCAA527E317C700320903 /* DiaryInfo.swift in Sources */,
 				DB6F1B0927C34E1F00247B89 /* DiaryMapViewController.swift in Sources */,
 				DB6F1B2F27C48F0200247B89 /* EatTableViewCell.swift in Sources */,
 				DB6F1B5C27DF215000247B89 /* PopCategoryViewController.swift in Sources */,

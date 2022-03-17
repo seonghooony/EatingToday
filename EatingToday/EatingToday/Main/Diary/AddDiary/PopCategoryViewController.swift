@@ -16,6 +16,8 @@ class PopCategoryViewController: UIViewController {
     
     weak var setSelectedCategoryDelegate: setSelectedCategoryDelegate?
     
+    let outsideUnderButton = UIButton()
+    
     let popupView = UIView()
     let titleLabel = UILabel()
     
@@ -67,6 +69,11 @@ class PopCategoryViewController: UIViewController {
     
     private func viewConfigure() {
         
+        self.view.addSubview(self.outsideUnderButton)
+        self.outsideUnderButton.backgroundColor = .clear
+        self.outsideUnderButton.setTitle(nil, for: .normal)
+        self.outsideUnderButton.addTarget(self, action: #selector(popCloseTapped), for: .touchUpInside)
+        
         self.view.addSubview(self.popupView)
         let shadowSize: CGFloat = 5.0
         self.popupView.layer.shadowPath = UIBezierPath(rect: CGRect(x: -shadowSize / 2, y: -shadowSize / 2, width: self.view.frame.size.width * 0.9 + shadowSize, height: self.view.frame.size.width * 0.9 + 80 + shadowSize)).cgPath
@@ -101,6 +108,10 @@ class PopCategoryViewController: UIViewController {
     
     private func constraintConfigure() {
         let leadingTrailingSize = 20
+        
+        self.outsideUnderButton.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         
         self.popupView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()

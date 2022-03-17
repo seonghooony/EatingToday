@@ -133,6 +133,7 @@ class AddEatDiaryViewController: UIViewController {
     var selectedAssets = Array<PHAsset>()
     var selectedOriginalImages = Array<UIImage>()
     var eatDate: Date?
+    var eatDateString: String?
     var eatCategory: String?
     
     var placeValidation = false
@@ -273,7 +274,7 @@ class AddEatDiaryViewController: UIViewController {
                     let insertDiary = self.db.collection("diaries").document(diaryUid)
                     let diaryInfo = RegisterDiaryInfo(
                         place_info: self.selectedPlace,
-                        date: self.eatDate,
+                        date: self.eatDateString,
                         category: self.eatCategory,
                         score: self.starView.rating,
                         story: self.storyTextView.text,
@@ -373,61 +374,89 @@ class AddEatDiaryViewController: UIViewController {
             
             
             
-            //배치 끝
-            
-            var completeCount = 0
-            var imageUrlArray = Array<String>()
-            for i in 0..<self.selectedOriginalImages.count {
-                //저장소 폴더 이름 만들기
-                let storageRef = Storage.storage().reference(withPath: "\(uid)/\(diaryUid)/\(imageUid)_\(i)")
-                guard let imageData = self.selectedOriginalImages[i].jpegData(compressionQuality: 0.5) else { return }
-                
-                //저장소에 넣기
-                storageRef.putData(imageData, metadata: nil) { data, error in
-                    if let error = error {
-                        print("Error put image: \(error.localizedDescription)")
-                        return
-                    }
-                    //저장소에 저장된 이미지 url 추출
-                    storageRef.downloadURL { url, _ in
-                        guard let imageURL = url?.absoluteString else { return }
-                        imageUrlArray.append(imageURL)
-                            
-                        completeCount += 1
-                        
-                        if self.selectedOriginalImages.count == completeCount {
-                            
-                            let diaryInfo = RegisterDiaryInfo(
-                                place_info: self.selectedPlace,
-                                date: self.eatDate,
-                                category: self.eatCategory,
-                                score: self.starView.rating,
-                                story: self.storyTextView.text,
-                                images: imageUrlArray)
-                            
-                            do {
-                                batch.updateData([ "diary": FieldValue.arrayUnion([diaryUid]) ], forDocument: updateUserProfile)
-                                try batch.setData(from: diaryInfo, forDocument: insertDiary)
-                            }catch let error {
-                                print(error.localizedDescription)
-                            }
-                            batch.commit() { error in
-                                if let error = error {
-                                    print(error.localizedDescription)
-                                    return
-                                }
-                                
-                                self.activityIndicator.stopAnimating()
-                                self.navigationController?.popViewController(animated: true)
-                                
-                            }
+            //이미지가 있는 경우
+        
+            if self.selectedOriginalImages.count != 0 {
+                var completeCount = 0
+                var imageUrlArray = Array<String>()
+                for i in 0..<self.selectedOriginalImages.count {
+                    //저장소 폴더 이름 만들기
+                    let storageRef = Storage.storage().reference(withPath: "\(uid)/\(diaryUid)/\(imageUid)_\(i)")
+                    guard let imageData = self.selectedOriginalImages[i].jpegData(compressionQuality: 0.5) else { return }
+                    
+                    //저장소에 넣기
+                    storageRef.putData(imageData, metadata: nil) { data, error in
+                        if let error = error {
+                            print("Error put image: \(error.localizedDescription)")
+                            return
                         }
+                        //저장소에 저장된 이미지 url 추출
+                        storageRef.downloadURL { url, _ in
+                            guard let imageURL = url?.absoluteString else { return }
+                            imageUrlArray.append(imageURL)
+                                
+                            completeCount += 1
+                            
+                            if self.selectedOriginalImages.count == completeCount {
+                                
+                                let diaryInfo = RegisterDiaryInfo(
+                                    place_info: self.selectedPlace,
+                                    date: self.eatDateString,
+                                    category: self.eatCategory,
+                                    score: self.starView.rating,
+                                    story: self.storyTextView.text,
+                                    images: imageUrlArray)
+                                
+                                do {
+                                    batch.updateData([ "diary": FieldValue.arrayUnion([diaryUid]) ], forDocument: updateUserProfile)
+                                    try batch.setData(from: diaryInfo, forDocument: insertDiary)
+                                }catch let error {
+                                    print(error.localizedDescription)
+                                }
+                                batch.commit() { error in
+                                    if let error = error {
+                                        print(error.localizedDescription)
+                                        return
+                                    }
+                                    
+                                    self.activityIndicator.stopAnimating()
+                                    self.navigationController?.popViewController(animated: true)
+                                    
+                                }
+                            }
 
+                        }
+                        
                     }
                     
                 }
+            } else {
+                let diaryInfo = RegisterDiaryInfo(
+                    place_info: self.selectedPlace,
+                    date: self.eatDateString,
+                    category: self.eatCategory,
+                    score: self.starView.rating,
+                    story: self.storyTextView.text,
+                    images: nil)
                 
+                do {
+                    batch.updateData([ "diary": FieldValue.arrayUnion([diaryUid]) ], forDocument: updateUserProfile)
+                    try batch.setData(from: diaryInfo, forDocument: insertDiary)
+                }catch let error {
+                    print(error.localizedDescription)
+                }
+                batch.commit() { error in
+                    if let error = error {
+                        print(error.localizedDescription)
+                        return
+                    }
+                    
+                    self.activityIndicator.stopAnimating()
+                    self.navigationController?.popViewController(animated: true)
+                    
+                }
             }
+            
             
         } else {
             print("로그아웃 됨 다시로그인 해야함.")
@@ -583,10 +612,11 @@ class AddEatDiaryViewController: UIViewController {
     private func checkValidation() {
         
         if self.placeValidation == false
-        || self.imageValidation == false
+//        || self.imageValidation == false
         || self.dateValidation == false
         || self.cateValidation == false
-        || self.storyValidation == false {
+        || self.storyValidation == false
+        {
             
             self.addDiaryButton.isEnabled = false
             self.addDiaryButton.backgroundColor = self.unableBackColor
@@ -1325,6 +1355,11 @@ extension AddEatDiaryViewController: deleteIndexImageDelegate {
 extension AddEatDiaryViewController: setPickedDateDelegate {
     func setPickedDate(date: Date) {
         self.eatDate = date
+        
+        let calendarDF = DateFormatter()
+        calendarDF.dateFormat = "yyyy-MM-dd"
+        self.eatDateString = calendarDF.string(from: date)
+        
         self.dateFieldButton.setTitle(dateFormatter.string(from: date), for: .normal)
         self.dateFieldButton.setTitleColor(.black, for: .normal)
         self.dateFieldImageView.tintColor = calendarSelectedColor
