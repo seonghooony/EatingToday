@@ -8,10 +8,12 @@
 import UIKit
 import SnapKit
 import Cosmos
+import Firebase
+import FirebaseStorage
 
 class EatTableViewCell: UITableViewCell {
     
-    var images = [UIImage(systemName: "pencil"), UIImage(systemName: "house"),UIImage(systemName: "person"),UIImage(systemName: "pencil")]
+    var images = [UIImage]()
     private var indexOfCellBeforeDragging = 0
     
     let headView = UIView()
@@ -28,14 +30,14 @@ class EatTableViewCell: UITableViewCell {
         //flowLayout.sectionInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         let collectionView = UICollectionView(frame: .init(x: 0, y: 0, width: 100, height: 100), collectionViewLayout: flowLayout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.backgroundColor = UIColor.red
+        collectionView.backgroundColor = UIColor.lightGray
         
         return collectionView
     }()
     
     let pageControl: UIPageControl = {
         let pageControl = UIPageControl()
-        pageControl.addTarget(self, action: #selector(pageValueDidChanged), for: .valueChanged)
+        pageControl.addTarget(EatTableViewCell.self, action: #selector(pageValueDidChanged), for: .valueChanged)
         return pageControl
     }()
     @objc func pageValueDidChanged() {
@@ -61,6 +63,7 @@ class EatTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.viewConfigure()
         self.constraintConfigure()
+//        self.setImages()
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:)has not been implemented")
@@ -69,45 +72,47 @@ class EatTableViewCell: UITableViewCell {
 
 
     
+    
     func viewConfigure() {
         self.addSubview(headView)
-        headView.backgroundColor = .yellow
+        headView.backgroundColor = .white
         
         self.headView.addSubview(self.titleStackView)
         
         self.titleStackView.addSubview(titleLabel)
         self.titleLabel.text = "가게이름"
         self.titleLabel.textAlignment = .center
-        self.titleLabel.textColor = .black
+        self.titleLabel.textColor = .darkGray
         self.titleLabel.font = UIFont(name: "Helvetica Bold", size: 16)
         
         self.titleStackView.addSubview(self.locationLabel)
         self.locationLabel.text = "장소 주소"
         self.locationLabel.textAlignment = .center
-        self.locationLabel.textColor = .darkGray
+        self.locationLabel.textColor = .lightGray
         self.locationLabel.font = UIFont(name: "Helvetica", size: 13)
         
         self.headView.addSubview(settingButton)
-        self.settingButton.setImage(UIImage(systemName: "pencil"), for: .normal)
+        self.settingButton.setImage(UIImage(named: "logo_menu"), for: .normal)
         
-        self.addSubview(imageContentView)
-        self.imageContentView.backgroundColor = .gray
-        
-        
-        
-        imageCollectionView.dataSource = self
-        imageCollectionView.delegate = self
-        imageCollectionView.isScrollEnabled = true
-        imageCollectionView.showsVerticalScrollIndicator = false
-        imageCollectionView.showsHorizontalScrollIndicator = false
-        imageCollectionView.register(ImageCollectionViewCell.self, forCellWithReuseIdentifier: "ImageCollectionViewCell")
-        contentView.isUserInteractionEnabled = false
+//        if self.imageUrls != nil {
+            self.addSubview(imageContentView)
+            self.imageContentView.backgroundColor = .gray
+
+        self.imageCollectionView.dataSource = self
+        self.imageCollectionView.delegate = self
+        self.imageCollectionView.isScrollEnabled = true
+        self.imageCollectionView.showsVerticalScrollIndicator = false
+        self.imageCollectionView.showsHorizontalScrollIndicator = false
+        self.imageCollectionView.register(ImageCollectionViewCell.self, forCellWithReuseIdentifier: "ImageCollectionViewCell")
+            contentView.isUserInteractionEnabled = false
         self.imageContentView.addSubview(imageCollectionView)
-        
-        pageControl.hidesForSinglePage = true
-        pageControl.numberOfPages = images.count
-        pageControl.pageIndicatorTintColor = .darkGray
+            
+        self.pageControl.hidesForSinglePage = true
+//        self.pageControl.numberOfPages = images.count
+        self.pageControl.pageIndicatorTintColor = .darkGray
         self.imageContentView.addSubview(pageControl)
+//        }
+        
         
         self.addSubview(self.infoContentView)
         
@@ -183,11 +188,12 @@ class EatTableViewCell: UITableViewCell {
 
         self.settingButton.snp.makeConstraints{ make in
             make.centerY.equalTo(self.headView.snp.centerY)
-
+            make.width.height.equalTo(24)
 //            make.leading.equalToSuperview().offset(20)
             make.trailing.equalToSuperview().offset(-20)
         }
         
+//        if self.imageUrls != nil {
         self.imageContentView.snp.makeConstraints { make in
             make.top.equalTo(self.headView.snp.bottom).offset(0)
             make.height.equalTo(self.frame.size.width)
@@ -208,24 +214,20 @@ class EatTableViewCell: UITableViewCell {
             make.leading.trailing.bottom.equalToSuperview()
         
         }
-        
-//        self.infoTitleLabel.snp.makeConstraints { make in
-
-//            make.leading.equalToSuperview().offset(leadingtrailingSize)
+//        } else {
+//            self.infoContentView.snp.makeConstraints { make in
+//                make.top.equalTo(self.headView.snp.bottom)
+//                make.leading.trailing.bottom.equalToSuperview()
+//
+//            }
 //        }
+
         
         self.scoreLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(10)
 //            make.top.equalTo(self.infoTitleLabel.snp.bottom).offset(10)
             make.leading.equalToSuperview().offset(leadingtrailingSize)
         }
-        
-        
-        
-//        self.categoryLabel.snp.makeConstraints { make in
-//            make.top.equalTo(self.scoreLabel.snp.bottom).offset(10)
-//            make.leading.equalToSuperview().offset(leadingtrailingSize)
-//        }
         
 
         self.storyLabel.snp.makeConstraints { make in
@@ -248,7 +250,7 @@ class EatTableViewCell: UITableViewCell {
 
 extension EatTableViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return images.count
+        return images.count ?? 0
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageCollectionViewCell", for: indexPath) as? ImageCollectionViewCell else { return UICollectionViewCell() }
