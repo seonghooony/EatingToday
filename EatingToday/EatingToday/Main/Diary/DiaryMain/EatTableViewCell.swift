@@ -10,11 +10,12 @@ import SnapKit
 import Cosmos
 import Firebase
 import FirebaseStorage
+import CryptoKit
 
 class EatTableViewCell: UITableViewCell {
     
     var images = [UIImage]()
-    private var indexOfCellBeforeDragging = 0
+    var indexOfCellBeforeDragging = 0
     
     let headView = UIView()
     let titleStackView = UIView()
@@ -37,9 +38,9 @@ class EatTableViewCell: UITableViewCell {
     
     let pageControl: UIPageControl = {
         let pageControl = UIPageControl()
-        pageControl.addTarget(EatTableViewCell.self, action: #selector(pageValueDidChanged), for: .valueChanged)
         return pageControl
     }()
+    
     @objc func pageValueDidChanged() {
         let indexPath = NSIndexPath(row: pageControl.currentPage, section: 0)
         let animated: Bool = {
@@ -111,6 +112,7 @@ class EatTableViewCell: UITableViewCell {
 //        self.pageControl.numberOfPages = images.count
         self.pageControl.pageIndicatorTintColor = .darkGray
         self.imageContentView.addSubview(pageControl)
+        pageControl.addTarget(self, action: #selector(pageValueDidChanged), for: .valueChanged)
 //        }
         
         
@@ -306,8 +308,15 @@ extension EatTableViewCell: UICollectionViewDelegate {
             )
         } else {
             // Pop back (against velocity)
-            let indexPath = IndexPath(row: indexOfMajorCell, section: 0)
-            imageCollectionView.scrollToItem(at: indexPath, at: .left, animated: true)
+            if indexOfMajorCell > collectionViewItemCount - 1 {
+                let indexPath = IndexPath(row: collectionViewItemCount - 1, section: 0)
+                imageCollectionView.scrollToItem(at: indexPath, at: .left, animated: true)
+            } else {
+                let indexPath = IndexPath(row: indexOfMajorCell, section: 0)
+                imageCollectionView.scrollToItem(at: indexPath, at: .left, animated: true)
+            }
+            
+            
             
         }
     }

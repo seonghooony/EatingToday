@@ -388,7 +388,7 @@ class AddEatDiaryViewController: UIViewController {
                 for i in 0..<self.selectedOriginalImages.count {
                     //저장소 폴더 이름 만들기
                     let storageRef = Storage.storage().reference(withPath: "\(uid)/\(diaryUid)/\(imageUid)_\(i)")
-                    guard let imageData = self.selectedOriginalImages[i].jpegData(compressionQuality: 0.25) else { return }
+                    guard let imageData = self.selectedOriginalImages[i].jpegData(compressionQuality: 0.1) else { return }
                     
                     //저장소에 넣기
                     storageRef.putData(imageData, metadata: nil) { data, error in
@@ -622,7 +622,7 @@ class AddEatDiaryViewController: UIViewController {
     private func checkValidation() {
         
         if self.placeValidation == false
-//        || self.imageValidation == false
+        || self.imageValidation == false
         || self.dateValidation == false
         || self.cateValidation == false
         || self.storyValidation == false

@@ -25,7 +25,7 @@ class EatDiaryViewController: UIViewController {
         activityIndicator.color = UIColor.black
         // Also show the indicator even when the animation is stopped.
         activityIndicator.hidesWhenStopped = true
-        activityIndicator.style = UIActivityIndicatorView.Style.medium
+        activityIndicator.style = UIActivityIndicatorView.Style.large
         // Start animation.
         activityIndicator.stopAnimating()
         self.view.isUserInteractionEnabled = true
@@ -55,7 +55,7 @@ class EatDiaryViewController: UIViewController {
     var isFirstSetting = true
     
     var currentPage: Int = 1
-    let pagingSize = 3
+    let pagingSize = 5
     var userDiaries = Array<String>()
     var diaryInfos = Array<DiaryInfo>()
     var diaryImageArrays = Array<Array<UIImage>>()
@@ -105,10 +105,6 @@ class EatDiaryViewController: UIViewController {
         //터치 이벤트 막기
         self.mainView.isUserInteractionEnabled = false
         
-        self.currentPage = 1
-        self.userDiaries.removeAll()
-        self.diaryInfos.removeAll()
-        
         
         if let uid = Auth.auth().currentUser?.uid {
             let userDiariesList = db.collection("users").document(uid)
@@ -130,10 +126,16 @@ class EatDiaryViewController: UIViewController {
                             //print(self.userDiaries)
                            
                             self.getDiaryInfo(list: self.userDiaries, currentPage: self.currentPage) { startIndex, endIndex, diaryInfos in
-                                self.downloadImages(startIndex: startIndex, endIndex: endIndex) { result in
+                                self.downloadImages(startIndex: startIndex, endIndex: endIndex) {result in
                                     if result == "success" {
+                                        //print("이미지데이터 로드 완료")
+                                        self.activityIndicator.stopAnimating()
+                                        //터치 이벤트 막기
+                                        self.mainView.isUserInteractionEnabled = true
+                                        
                                         DispatchQueue.main.async {
                                             self.boardTableView.reloadData()
+                                            print("첫 화면 리로드 완료")
                                         }
                                     }
                                 }
@@ -142,6 +144,7 @@ class EatDiaryViewController: UIViewController {
                             DispatchQueue.main.async {
                                 self.boardTableView.reloadData()
                                 self.activityIndicator.stopAnimating()
+                                self.mainView.isUserInteractionEnabled = true
                             }
                         }
                         
@@ -210,16 +213,13 @@ class EatDiaryViewController: UIViewController {
                         
                         if (endIndex - startIndex) == completeCount {
                             completion(startIndex, endIndex, self.diaryInfos)
-                            DispatchQueue.main.async {
-                                self.boardTableView.reloadData()
-                                self.activityIndicator.stopAnimating()
-                                //터치 이벤트 막기
-                                self.mainView.isUserInteractionEnabled = true
-                            }
+//                            DispatchQueue.main.async {
+//                                self.boardTableView.reloadData()
+//                            }
                             
                         }
                         
-                        print("다시만듬")
+                        //print("다시만듬")
                         
                     }
                 }
@@ -233,28 +233,40 @@ class EatDiaryViewController: UIViewController {
     }
     
     func downloadImages(startIndex: Int, endIndex: Int, completion: @escaping (String) -> Void) {
-        for _ in startIndex..<endIndex {
-            self.diaryImageArrays.append(Array<UIImage>())
-        }
-        
         for i in startIndex..<endIndex {
+            self.diaryImageArrays.append(Array<UIImage>())
             if let urls = self.diaryInfos[i].images {
-                print("\(i)번째 url들 :\(urls)")
                 var imageDataList = Array<UIImage>()
                 
                 for _ in 0..<urls.count {
                     imageDataList.append(UIImage())
                 }
-                
+                self.diaryImageArrays[i] = imageDataList
+            }
+        }
+        
+//        var downloadAllCount = 0
+//        for i in startIndex..<endIndex {
+//            if let count = self.diaryInfos[i].images?.count {
+//                downloadAllCount += count
+//            }
+//        }
+        
+        
+        
+        for i in startIndex..<endIndex {
+            if let urls = self.diaryInfos[i].images {
+                //print("\(i)번째 url들 :\(urls)")
+
                 var completeDownCount = 0
                 for j in 0..<urls.count {
                     self.downloadImage(urlString: urls[j]) { image in
                         if let image = image {
-                            imageDataList[j] = image
+//                            imageDataList[j] = image
+                            self.diaryImageArrays[i][j] = image
                             completeDownCount += 1
                             
                             if completeDownCount == urls.count {
-                                self.diaryImageArrays[i] = imageDataList
                                 completion("success")
                             }
                         }
@@ -361,11 +373,13 @@ class EatDiaryViewController: UIViewController {
 
 extension EatDiaryViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        print("셀 개수 : \(self.diaryInfos.count)")
         return self.diaryInfos.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         print("Rows: \(indexPath.row)")
+        print("sections: \(indexPath.section)")
         let cell = tableView.dequeueReusableCell(withIdentifier: "EatTableViewCell", for: indexPath) as? EatTableViewCell
         cell?.selectionStyle = .none
         
@@ -379,28 +393,69 @@ extension EatDiaryViewController: UITableViewDataSource {
         cell?.dateLabel.text = cellDiaryInfo.date
         cell?.storyLabel.text = cellDiaryInfo.story
         
-        cell?.images = self.diaryImageArrays[indexPath.row]
-        cell?.pageControl.numberOfPages = self.diaryImageArrays[indexPath.row].count
+        print("self.diaryImageArrays.count > indexPath.row : \(self.diaryImageArrays.count) > \(indexPath.row)")
+        if self.diaryImageArrays.count > indexPath.row {
+            cell?.images = self.diaryImageArrays[indexPath.row]
+            cell?.pageControl.numberOfPages = self.diaryImageArrays[indexPath.row].count
+            
+        }
         cell?.imageCollectionView.reloadData()
         
-        print("\(indexPath.row)번째 셀 이미지들")
-        print(self.diaryImageArrays[indexPath.row])
+        
+        //print("\(indexPath.row)번째 셀 이미지들")
+        //print(self.diaryImageArrays[indexPath.row])
         
         
         return cell ?? UITableViewCell()
     }
     
+    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        print("사라질 셀 : \(indexPath.row)")
+    }
+
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        //print("보여질 셀: \(indexPath.row)")
+        print("보여질 셀: \(indexPath.row)")
         
         if (indexPath.row + 1)/pagingSize == currentPage {
             self.currentPage += 1
+            print("self.currentPage : \(self.currentPage)")
             self.getDiaryInfo(list: self.userDiaries, currentPage: self.currentPage) { startIndex, endIndex, diaryInfos in
-                self.downloadImages(startIndex: startIndex, endIndex: endIndex) { result in
+                    
+//                var insertIndexPaths = [IndexPath]()
+//                print("만들어질 인덱스 : \(startIndex)~\(endIndex)")
+//                print("diaryInfos개수 \(diaryInfos?.count)")
+//                for index in startIndex..<endIndex {
+//
+//                    let indexPath = IndexPath(row: index, section: Int(0))
+//                    insertIndexPaths.append(indexPath)
+//                }
+
+                DispatchQueue.global().sync {
+
+                    self.boardTableView.reloadData()
+                }
+                
+
+                
+                self.downloadImages(startIndex: startIndex, endIndex: endIndex) {result in
                     if result == "success" {
-                        DispatchQueue.main.async {
+                        print("이미지데이터 로드 완료")
+                        self.activityIndicator.stopAnimating()
+                        //터치 이벤트 막기
+                        self.mainView.isUserInteractionEnabled = true
+                        
+//                        var reloadIndexPaths = [IndexPath]()
+//                        for index in startIndex..<endIndex {
+//                            let indexPath = IndexPath(row: index, section: Int(0))
+//                            reloadIndexPaths.append(indexPath)
+//                        }
+                        DispatchQueue.global().sync {
+
                             self.boardTableView.reloadData()
                         }
+//                        DispatchQueue.main.async {
+//                            self.boardTableView.reloadData()
+//                        }
                     }
                 }
             }
@@ -423,7 +478,11 @@ extension EatDiaryViewController: UITableViewDelegate {
 
 extension EatDiaryViewController: refreshDiaryDelegate {
     func refreshDiary() {
-//        self.boardTableView.reloadData()
+        self.currentPage = 1
+        self.userDiaries.removeAll()
+        self.diaryInfos.removeAll()
+        self.diaryImageArrays.removeAll()
+        self.boardTableView.reloadData()
         self.getUserDiaryList()
 
     }
