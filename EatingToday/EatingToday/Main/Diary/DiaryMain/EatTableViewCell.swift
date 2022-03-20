@@ -14,6 +14,18 @@ import CryptoKit
 
 class EatTableViewCell: UITableViewCell {
     
+    var diaryId: String?
+    var writeDate: String?
+    
+    let dateFormatter: DateFormatter = {
+        let df = DateFormatter()
+        df.locale = Locale(identifier: "ko_KR")
+        df.timeZone = TimeZone(abbreviation: "KST")
+        df.dateFormat = "yyyyMMddHHmmssSSS"
+        
+        return df
+    }()
+    
     var images = [UIImage]()
     var indexOfCellBeforeDragging = 0
     
@@ -57,7 +69,7 @@ class EatTableViewCell: UITableViewCell {
     let categoryLabel = UILabel()
     let dateLabel = UILabel()
     let storyLabel = UILabel()
-    
+    let writeDateLabel = UILabel()
     
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -146,14 +158,20 @@ class EatTableViewCell: UITableViewCell {
         self.dateLabel.text = "날짜"
         self.dateLabel.textAlignment = .center
         self.dateLabel.textColor = .lightGray
-        self.dateLabel.font = UIFont(name: "Helvetica", size: 15)
+        self.dateLabel.font = UIFont(name: "Helvetica", size: 13)
         
         self.infoContentView.addSubview(self.storyLabel)
         self.storyLabel.text = "이야기"
         self.storyLabel.textAlignment = .center
         self.storyLabel.textColor = .black
+        self.storyLabel.numberOfLines = 0
         self.storyLabel.font = UIFont(name: "Helvetica", size: 15)
-
+        
+        self.infoContentView.addSubview(self.writeDateLabel)
+        self.writeDateLabel.text = "작성날짜"
+        self.writeDateLabel.textAlignment = .center
+        self.writeDateLabel.textColor = .lightGray
+        self.writeDateLabel.font = UIFont(name: "Helvetica", size: 12)
         
         
     }
@@ -214,7 +232,7 @@ class EatTableViewCell: UITableViewCell {
         self.infoContentView.snp.makeConstraints { make in
             make.top.equalTo(self.imageContentView.snp.bottom)
             make.leading.trailing.bottom.equalToSuperview()
-        
+            
         }
 //        } else {
 //            self.infoContentView.snp.makeConstraints { make in
@@ -231,19 +249,27 @@ class EatTableViewCell: UITableViewCell {
             make.leading.equalToSuperview().offset(leadingtrailingSize)
         }
         
-
-        self.storyLabel.snp.makeConstraints { make in
-            make.top.equalTo(self.scoreLabel.snp.bottom).offset(10)
-            make.leading.equalToSuperview().offset(leadingtrailingSize)
-        }
-        
         self.dateLabel.snp.makeConstraints { make in
-            make.top.equalTo(self.storyLabel.snp.bottom)
+            make.top.equalToSuperview().offset(13)
+            
             make.trailing.equalToSuperview().offset(-leadingtrailingSize)
         }
+
+        self.storyLabel.snp.makeConstraints { make in
+            make.top.equalTo(self.scoreLabel.snp.bottom).offset(20)
+            make.leading.equalToSuperview().offset(leadingtrailingSize)
+//            make.bottom.equalToSuperview().offset(-leadingtrailingSize)
+        }
+        
+        self.writeDateLabel.snp.makeConstraints { make in
+            make.top.equalTo(self.storyLabel.snp.bottom).offset(20)
+            make.leading.equalToSuperview().offset(leadingtrailingSize)
+            make.bottom.equalToSuperview().offset(-leadingtrailingSize)
+        }
         
         
         
+
         
     }
     
@@ -256,7 +282,7 @@ extension EatTableViewCell: UICollectionViewDataSource {
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageCollectionViewCell", for: indexPath) as? ImageCollectionViewCell else { return UICollectionViewCell() }
-        cell.backgroundColor = UIColor.brown
+        cell.backgroundColor = UIColor.white
         cell.imageView.image = images[indexPath.row]
         return cell
     }

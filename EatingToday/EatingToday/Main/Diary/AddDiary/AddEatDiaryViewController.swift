@@ -367,8 +367,10 @@ class AddEatDiaryViewController: UIViewController {
             df.timeZone = TimeZone(abbreviation: "KST")
             df.dateFormat = "yyyyMMddHHmmssSSS"
             
-            let diaryUid = uid + "Diary" + df.string(from: Date())
-            let imageUid = uid + "Image" + df.string(from: Date())
+            let nowDate = df.string(from: Date())
+            
+            let diaryUid = uid + "Diary" + nowDate
+            let imageUid = uid + "Image" + nowDate
             print(diaryUid)
             
             let updateUserProfile = db.collection("users").document(uid)
@@ -410,8 +412,11 @@ class AddEatDiaryViewController: UIViewController {
                                     date: self.eatDateString,
                                     category: self.eatCategory,
                                     score: self.starView.rating,
-                                    story: self.storyTextView.text,
-                                    images: imageUrlArray)
+                                    story: self.storyTextView.text.trimmingCharacters(in: .whitespacesAndNewlines),
+                                    images: imageUrlArray,
+                                    diaryId: diaryUid,
+                                    writeDate: nowDate,
+                                    writerId: uid)
                                 
                                 do {
                                     batch.updateData([ "diary": FieldValue.arrayUnion([diaryUid]) ], forDocument: updateUserProfile)
@@ -440,13 +445,17 @@ class AddEatDiaryViewController: UIViewController {
                     
                 }
             } else {
+                
                 let diaryInfo = RegisterDiaryInfo(
                     place_info: self.selectedPlace,
                     date: self.eatDateString,
                     category: self.eatCategory,
                     score: self.starView.rating,
-                    story: self.storyTextView.text,
-                    images: nil)
+                    story: self.storyTextView.text.trimmingCharacters(in: .whitespacesAndNewlines),
+                    images: nil,
+                    diaryId: diaryUid,
+                    writeDate: nowDate,
+                    writerId: uid)
                 
                 do {
                     batch.updateData([ "diary": FieldValue.arrayUnion([diaryUid]) ], forDocument: updateUserProfile)
@@ -1313,6 +1322,7 @@ extension AddEatDiaryViewController: UITextViewDelegate {
     
     func textViewDidEndEditing(_ textView: UITextView) {
 //        self.activeTextView = nil
+        print(textView.text)
         if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             textView.text = textViewPlaceHolder
             textView.textColor = customGray2

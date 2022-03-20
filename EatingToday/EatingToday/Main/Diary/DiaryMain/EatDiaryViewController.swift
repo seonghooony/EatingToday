@@ -175,7 +175,7 @@ class EatDiaryViewController: UIViewController {
             //print("뺀값 : \(endIndex - startIndex)")
             
             for _ in startIndex..<endIndex {
-                self.diaryInfos.append(DiaryInfo(place_info: nil, date: nil, category: nil, score: nil, story: nil, images: nil))
+                self.diaryInfos.append(DiaryInfo(place_info: nil, date: nil, category: nil, score: nil, story: nil, images: nil, diaryId: nil, writeDate: nil, writerId: nil))
             }
             
             var completeCount = 0
@@ -296,6 +296,37 @@ class EatDiaryViewController: UIViewController {
         }
     }
     
+    func getTimeInterval(date: Date?) -> String {
+        let calendar = Calendar.current
+        
+        let offsetComps = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date!, to: Date())
+        var intervalStr = "시간없음"
+        
+        if case let (year?, month?, day?, hour?, minute?, second?) = (offsetComps.year, offsetComps.month, offsetComps.day, offsetComps.hour, offsetComps.minute, offsetComps.second) {
+            print( "\(year)  \(month)  \(day)  \(hour)  \(minute)  \(second)")
+            if year > 0 {
+                intervalStr = "\(year)년 전"
+                
+            } else if month > 0 {
+                intervalStr = "\(month)개월 전"
+                
+            } else if day > 0 {
+                intervalStr = "\(day)일 전"
+                
+            } else if hour > 0 {
+                intervalStr = "\(hour)시간 전"
+                
+            } else if minute > 0 {
+                intervalStr = "\(minute)분 전"
+                
+            } else if second > 0 {
+                intervalStr = "\(second)초 전"
+            }
+        }
+        
+        return intervalStr
+    }
+    
     func viewConfigure() {
         
         self.view.addSubview(self.headView)
@@ -390,7 +421,18 @@ extension EatDiaryViewController: UITableViewDataSource {
         cell?.scoreLabel.text = "\(cellDiaryInfo.score ?? 0.0)점"
         cell?.locationLabel.text = cellDiaryInfo.place_info?.address_name
         cell?.categoryLabel.text = cellDiaryInfo.category
-        cell?.dateLabel.text = cellDiaryInfo.date
+        if let cellDate = cellDiaryInfo.date {
+            cell?.dateLabel.text = "식사 일자: \(cellDate)"
+        }
+        
+        if let writeDateString = cellDiaryInfo.writeDate {
+            let writeDate = cell?.dateFormatter.date(from: writeDateString)
+            let intervalStr = self.getTimeInterval(date: writeDate)
+            print(intervalStr)
+            cell?.writeDateLabel.text = intervalStr
+        }
+        
+        
         cell?.storyLabel.text = cellDiaryInfo.story
         
         print("self.diaryImageArrays.count > indexPath.row : \(self.diaryImageArrays.count) > \(indexPath.row)")
@@ -400,6 +442,11 @@ extension EatDiaryViewController: UITableViewDataSource {
             
         }
         cell?.imageCollectionView.reloadData()
+        
+        
+//        cell?.infoContentView.sizeToFit()
+        
+        
         
         
         //print("\(indexPath.row)번째 셀 이미지들")
@@ -468,9 +515,14 @@ extension EatDiaryViewController: UITableViewDataSource {
 }
 
 extension EatDiaryViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        return UITableView.automaticDimension
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return 500
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
+//        return 500
     }
     
 }

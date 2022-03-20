@@ -15,4 +15,7 @@ struct RegisterDiaryInfo: Codable {
     let score: Double?
     let story: String?
     let images: Array<String>?
+    let diaryId: String?
+    let writeDate: String?
+    let writerId: String?
 }

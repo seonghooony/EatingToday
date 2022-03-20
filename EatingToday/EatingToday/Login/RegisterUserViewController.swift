@@ -315,7 +315,8 @@ class RegisterUserViewController: UIViewController {
         self.passwordLabel.font = UIFont(name: "Helvetica Bold", size: 15)
         
         self.scrollContainerView.addSubview(self.passwordField)
-        self.passwordField.placeholder = "8~20자리 영문자,숫자,특수문자 조합"
+//        self.passwordField.placeholder = "8~20자리 영문자,숫자,특수문자 조합"
+        self.passwordField.placeholder = "6자리 이상의 비밀번호"
         self.passwordField.title = ""
         //클리어버튼 생성
         self.passwordField.clearButtonMode = .whileEditing
@@ -363,7 +364,8 @@ class RegisterUserViewController: UIViewController {
         self.pwdConfirmLabel.font = UIFont(name: "Helvetica Bold", size: 15)
         
         self.scrollContainerView.addSubview(self.pwdConfirmField)
-        self.pwdConfirmField.placeholder = "8~20자리 영문자,숫자,특수문자 조합"
+//        self.pwdConfirmField.placeholder = "8~20자리 영문자,숫자,특수문자 조합"
+        self.passwordField.placeholder = "6자리 이상의 비밀번호"
         self.pwdConfirmField.title = ""
         //클리어버튼 생성
         self.pwdConfirmField.clearButtonMode = .whileEditing
