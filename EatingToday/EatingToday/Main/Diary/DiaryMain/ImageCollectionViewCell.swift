@@ -22,6 +22,8 @@ class ImageCollectionViewCell: UICollectionViewCell {
     }
     func viewConfigure() {
         self.addSubview(imageView)
+        self.imageView.contentMode = .scaleAspectFill
+        self.imageView.clipsToBounds = true
     }
     
     func constraintConfigure() {

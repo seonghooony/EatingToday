@@ -374,10 +374,14 @@ class EatDiaryViewController: UIViewController {
         }
         
         self.diaryAddButton.snp.makeConstraints{ make in
-            make.top.equalToSuperview().offset(50)
-            make.height.equalTo(50)
+            make.top.equalToSuperview().offset(64)
+            make.width.height.equalTo(24)
             //make.leading.equalToSuperview().offset(20)
             make.trailing.equalToSuperview().offset(-20)
+        }
+        
+        self.diaryAddButton.imageView?.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
         
         self.mainView.snp.makeConstraints{ make in
@@ -422,7 +426,7 @@ extension EatDiaryViewController: UITableViewDataSource {
         cell?.locationLabel.text = cellDiaryInfo.place_info?.address_name
         cell?.categoryLabel.text = cellDiaryInfo.category
         if let cellDate = cellDiaryInfo.date {
-            cell?.dateLabel.text = "식사 일자: \(cellDate)"
+            cell?.dateLabel.text = "\(cellDate) 방문"
         }
         
         if let writeDateString = cellDiaryInfo.writeDate {

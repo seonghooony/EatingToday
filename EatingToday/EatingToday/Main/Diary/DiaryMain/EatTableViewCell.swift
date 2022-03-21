@@ -43,7 +43,7 @@ class EatTableViewCell: UITableViewCell {
         //flowLayout.sectionInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         let collectionView = UICollectionView(frame: .init(x: 0, y: 0, width: 100, height: 100), collectionViewLayout: flowLayout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.backgroundColor = UIColor.lightGray
+        collectionView.backgroundColor = UIColor.white
         
         return collectionView
     }()
@@ -95,8 +95,8 @@ class EatTableViewCell: UITableViewCell {
         self.titleStackView.addSubview(titleLabel)
         self.titleLabel.text = "가게이름"
         self.titleLabel.textAlignment = .center
-        self.titleLabel.textColor = .darkGray
-        self.titleLabel.font = UIFont(name: "Helvetica Bold", size: 16)
+        self.titleLabel.textColor = .black
+        self.titleLabel.font = UIFont(name: "Helvetica Bold", size: 17)
         
         self.titleStackView.addSubview(self.locationLabel)
         self.locationLabel.text = "장소 주소"
@@ -194,14 +194,14 @@ class EatTableViewCell: UITableViewCell {
         }
         
         self.titleLabel.snp.makeConstraints{ make in
-            make.bottom.equalTo(self.titleStackView.snp.centerY)
+            make.bottom.equalTo(self.titleStackView.snp.centerY).offset(2)
 
             make.leading.equalToSuperview().offset(20)
 //            make.trailing.equalToSuperview().offset(0)
         }
         
         self.locationLabel.snp.makeConstraints { make in
-            make.top.equalTo(self.titleStackView.snp.centerY).offset(1)
+            make.top.equalTo(self.titleStackView.snp.centerY).offset(3)
 
             make.leading.equalToSuperview().offset(20)
         }
@@ -216,7 +216,8 @@ class EatTableViewCell: UITableViewCell {
 //        if self.imageUrls != nil {
         self.imageContentView.snp.makeConstraints { make in
             make.top.equalTo(self.headView.snp.bottom).offset(0)
-            make.height.equalTo(self.frame.size.width)
+//            make.height.equalTo(self.frame.size.width)
+            make.height.equalTo(UIScreen.main.bounds.size.height-400)
             make.leading.equalToSuperview().offset(0)
             make.trailing.equalToSuperview().offset(0)
         }
@@ -250,7 +251,7 @@ class EatTableViewCell: UITableViewCell {
         }
         
         self.dateLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(13)
+            make.top.equalToSuperview().offset(12)
             
             make.trailing.equalToSuperview().offset(-leadingtrailingSize)
         }
@@ -306,7 +307,7 @@ extension EatTableViewCell: UICollectionViewDelegate {
         targetContentOffset.pointee = scrollView.contentOffset
 
         // Calculate conditions
-        let pageWidth = self.bounds.width// The width your page should have (plus a possible margin)
+        let pageWidth = UIScreen.main.bounds.size.width// The width your page should have (plus a possible margin)
         let collectionViewItemCount = images.count// The number of items in this section
         let proportionalOffset = imageCollectionView.contentOffset.x / pageWidth
         let indexOfMajorCell = Int(round(proportionalOffset))
@@ -361,7 +362,9 @@ extension EatTableViewCell: UICollectionViewDelegate {
 
 extension EatTableViewCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: self.bounds.width, height: self.bounds.width)
+//        return CGSize(width: self.bounds.width, height: self.bounds.width)
+        return CGSize(width: self.bounds.width, height: UIScreen.main.bounds.size.height-400)
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
