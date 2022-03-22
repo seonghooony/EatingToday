@@ -165,6 +165,8 @@ class AddEatDiaryViewController: UIViewController {
         self.mainScrollView.addGestureRecognizer(singleTap)
     }
     
+    
+    
     private func notificationConfigure() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
@@ -658,6 +660,8 @@ class AddEatDiaryViewController: UIViewController {
     }
     
     func viewConfigure() {
+        //네비게이션 뒤로가기 가능하도록 설정
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = nil
         self.view.backgroundColor = .white
         
         self.view.addSubview(self.headView)
@@ -1304,6 +1308,7 @@ extension AddEatDiaryViewController: UITextViewDelegate {
                     textView.text = nil
                     textView.textColor = .black
                     textView.font = UIFont(name: "Helvetica", size: 16)
+                    self.storycontentView.layer.borderColor = UIColor.black.cgColor
                     
                 }
             }
@@ -1327,6 +1332,7 @@ extension AddEatDiaryViewController: UITextViewDelegate {
             textView.text = textViewPlaceHolder
             textView.textColor = customGray2
             textView.font = UIFont(name: "Helvetica", size: 16)
+            self.storycontentView.layer.borderColor = customGray2.cgColor
             
         }
     }
@@ -1349,6 +1355,7 @@ extension AddEatDiaryViewController: selectedStorePlaceDelegate {
         self.storeNameButton.setTitleColor(.black, for: .normal)
         self.storeNameButton.backgroundColor = .white
         self.storeSearchImageView.tintColor = enableFontColor
+        self.storeSearchView.layer.borderColor = UIColor.black.cgColor
         self.placeValidation = true
         self.checkValidation()
         
@@ -1383,6 +1390,7 @@ extension AddEatDiaryViewController: setPickedDateDelegate {
         self.dateFieldButton.setTitle(dateFormatter.string(from: date), for: .normal)
         self.dateFieldButton.setTitleColor(.black, for: .normal)
         self.dateFieldImageView.tintColor = calendarSelectedColor
+        self.dateFieldView.layer.borderColor = UIColor.black.cgColor
         self.dateValidation = true
         self.checkValidation()
     }
@@ -1393,6 +1401,7 @@ extension AddEatDiaryViewController: setSelectedCategoryDelegate {
         self.categoryFieldButton.setTitle(categoryName, for: .normal)
         self.categoryFieldButton.setTitleColor(.black, for: .normal)
         self.categoryFieldImageView.image = UIImage(named: "logo_category")?.withRenderingMode(.alwaysOriginal)
+        self.categoryFieldView.layer.borderColor = UIColor.black.cgColor
         self.eatCategory = categoryName
         self.cateValidation = true
         self.checkValidation()

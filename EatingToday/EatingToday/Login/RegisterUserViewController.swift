@@ -215,6 +215,8 @@ class RegisterUserViewController: UIViewController {
     
     func viewConfigure() {
 //        view.backgroundColor = UIColor(displayP3Red: 248/255, green: 237/255, blue: 227/255, alpha: 1)
+        //네비게이션 뒤로가기 가능하도록 설정
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = nil
         view.backgroundColor = .white
         self.navigationController?.navigationBar.backgroundColor = .white
         

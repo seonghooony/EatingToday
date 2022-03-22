@@ -94,6 +94,7 @@ class EatDiaryViewController: UIViewController {
 //        addDairyVC.modalPresentationStyle = UIModalPresentationStyle.fullScreen
 //        self.present(addDairyVC, animated: true, completion: nil)
         addDairyVC.refreshDiaryDelegate = self
+
         
         navigationController?.pushViewController(addDairyVC, animated: true)
     }
