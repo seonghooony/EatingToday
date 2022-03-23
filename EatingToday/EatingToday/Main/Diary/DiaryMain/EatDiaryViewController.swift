@@ -126,30 +126,38 @@ class EatDiaryViewController: UIViewController {
                         let jsonData = try JSONSerialization.data(withJSONObject: documentData, options: [])
                         let userDiaryInfo = try JSONDecoder().decode(UserDiaryInfo.self, from: jsonData)
                         if let diaryList = userDiaryInfo.diary {
-                            self.userDiaries = diaryList.sorted(by: >)
-                            //print(self.userDiaries)
-                           
-                            self.getDiaryInfo(list: self.userDiaries, currentPage: self.currentPage) { startIndex, endIndex, diaryInfos in
-                                self.downloadImages(startIndex: startIndex, endIndex: endIndex) {result in
-                                    if result == "success" {
-                                        //print("이미지데이터 로드 완료")
-                                        self.activityIndicator.stopAnimating()
-                                        //터치 이벤트 막기
-                                        self.mainView.isUserInteractionEnabled = true
-                                        
-                                        DispatchQueue.main.async {
-                                            self.boardTableView.reloadData()
-                                            print("첫 화면 리로드 완료")
+                            if diaryList.count > 0 {
+                                self.userDiaries = diaryList.sorted(by: >)
+                                //print(self.userDiaries)
+                               
+                                self.getDiaryInfo(list: self.userDiaries, currentPage: self.currentPage) { startIndex, endIndex, diaryInfos in
+                                    self.downloadImages(startIndex: startIndex, endIndex: endIndex) {result in
+                                        if result == "success" {
+                                            //print("이미지데이터 로드 완료")
+                                            self.activityIndicator.stopAnimating()
+                                            //터치 이벤트 막기
+                                            self.mainView.isUserInteractionEnabled = true
+                                            
+                                            DispatchQueue.main.async {
+                                                self.boardTableView.reloadData()
+                                                print("첫 화면 리로드 완료")
+                                            }
                                         }
                                     }
                                 }
-                            }
-                        } else {
-                            DispatchQueue.main.async {
+                            } else {
+                                print("유저 내 다이어리 개수 0개임")
                                 self.boardTableView.reloadData()
                                 self.activityIndicator.stopAnimating()
                                 self.mainView.isUserInteractionEnabled = true
                             }
+                            
+                        } else {
+                            print("유저 내 다이어리 없음")
+                            self.boardTableView.reloadData()
+                            self.activityIndicator.stopAnimating()
+                            self.mainView.isUserInteractionEnabled = true
+                            
                         }
                         
                         
@@ -157,6 +165,11 @@ class EatDiaryViewController: UIViewController {
                         print("ERROR JSON Parsing \(error)")
                         
                     }
+                } else {
+                    print("유저 정보 없음")
+                    self.boardTableView.reloadData()
+                    self.activityIndicator.stopAnimating()
+                    self.mainView.isUserInteractionEnabled = true
                 }
 
             }

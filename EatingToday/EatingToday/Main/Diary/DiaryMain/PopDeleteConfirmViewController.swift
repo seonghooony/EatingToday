@@ -7,18 +7,39 @@
 
 import UIKit
 import SnapKit
-
+import Firebase
+import FirebaseFirestoreSwift
+import FirebaseFirestore
+import FirebaseCore
 
 class PopDeleteConfirmViewController: UIViewController {
     
     var diaryId: String?
     
+    let db = Firestore.firestore()
     
     let unableBackColor = UIColor(displayP3Red: 200/255, green: 200/255, blue: 200/255, alpha: 1)
     let unableFontColor = UIColor(displayP3Red: 100/255, green: 100/255, blue: 100/255, alpha: 1)
     
     let enableBackColor = UIColor(displayP3Red: 1/255, green: 1/255, blue: 1/255, alpha: 1)
     let enableFontColor = UIColor(displayP3Red: 249/255, green: 151/255, blue: 93/255, alpha: 1)
+    
+    lazy var activityIndicator: UIActivityIndicatorView = {
+        // Create an indicator.
+        let activityIndicator = UIActivityIndicatorView()
+        activityIndicator.frame = CGRect(x: 0, y: 0, width: 200, height: 200)
+        activityIndicator.center = self.view.center
+        activityIndicator.color = UIColor.black
+        // Also show the indicator even when the animation is stopped.
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.style = UIActivityIndicatorView.Style.large
+        // Start animation.
+        activityIndicator.stopAnimating()
+        self.view.isUserInteractionEnabled = true
+
+        return activityIndicator
+
+    }()
     
     private lazy var popupView: UIView = {
         let popView = UIView()
@@ -70,12 +91,61 @@ class PopDeleteConfirmViewController: UIViewController {
     }
     
     @objc private func deleteDiaryButtonTapped() {
-        NotificationCenter.default.post(
-            name: NSNotification.Name("refreshDiary"),
-            object: nil,
-            userInfo: nil
-        )
-        self.dismiss(animated: false)
+        
+        if let uid = Auth.auth().currentUser?.uid {
+            if let diaryId = diaryId {
+                
+                self.activityIndicator.startAnimating()
+                //터치 이벤트 막기
+                self.view.isUserInteractionEnabled = false
+                
+                
+                let updateUserProfile = db.collection("users").document(uid)
+                let deleteDiary = self.db.collection("diaries").document(diaryId)
+//                let storageRef = Storage.storage().reference().child("\(uid)/\(diaryId)/")
+                // 배치 세팅
+                let batch = self.db.batch()
+                
+                batch.updateData([ "diary": FieldValue.arrayRemove([diaryId]) ], forDocument: updateUserProfile)
+                batch.deleteDocument(deleteDiary)
+                batch.commit() { error in
+                    if let error = error {
+                        print(error.localizedDescription)
+                        return
+                    }
+                    
+                    self.activityIndicator.stopAnimating()
+                    
+                    NotificationCenter.default.post(
+                        name: NSNotification.Name("refreshDiary"),
+                        object: nil,
+                        userInfo: nil
+                    )
+                    self.dismiss(animated: false)
+                    
+                    //기능 안돌아감 폴더 삭제안됨 파일구조로만 삭제가능
+//                storageRef.delete() { storageError in
+//                    if let storageError = storageError {
+//                        print(storageError.localizedDescription)
+//                        return
+//                    }
+//                }
+  
+                }
+                
+            }
+            
+            
+        } else {
+            print("로그인 에러")
+        }
+        
+        
+        
+        
+        
+        
+        
     }
     
     private func viewConfigure() {
