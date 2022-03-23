@@ -20,4 +20,6 @@ target 'EatingToday' do
   pod 'SkyFloatingLabelTextField', '~> 3.0'
   pod 'Cosmos', '~> 23.0'
   pod 'FSCalendar'
+  pod 'MaterialComponents/BottomSheet'
+  pod 'PanModal'
 end

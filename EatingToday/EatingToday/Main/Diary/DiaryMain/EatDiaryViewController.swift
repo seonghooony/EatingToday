@@ -12,6 +12,10 @@ import FirebaseFirestoreSwift
 import FirebaseFirestore
 import FirebaseCore
 import CryptoKit
+import Alamofire
+//import PanModal
+import MaterialComponents
+
 
 class EatDiaryViewController: UIViewController {
     
@@ -63,13 +67,6 @@ class EatDiaryViewController: UIViewController {
     var dataSource: [AnyObject] = []
     lazy var cache: NSCache<AnyObject, AnyObject> = NSCache()
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.view.backgroundColor = .white
-        self.viewConfigure()
-        self.constraintConfigure()
-        
-    }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: animated)
@@ -77,15 +74,21 @@ class EatDiaryViewController: UIViewController {
             self.getUserDiaryList()
             self.isFirstSetting = false
         }
-        
-        
-
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.setNavigationBarHidden(false, animated: animated)
     }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.view.backgroundColor = .white
+        self.viewConfigure()
+        self.constraintConfigure()
+        self.notificationCenterConfigure()
+    }
+    
     
     
     @objc func addDairyButtonTapped() {
@@ -148,10 +151,6 @@ class EatDiaryViewController: UIViewController {
                                 self.mainView.isUserInteractionEnabled = true
                             }
                         }
-                        
-                        
-                        
-                        
                         
                         
                     } catch let error {
@@ -246,15 +245,6 @@ class EatDiaryViewController: UIViewController {
             }
         }
         
-//        var downloadAllCount = 0
-//        for i in startIndex..<endIndex {
-//            if let count = self.diaryInfos[i].images?.count {
-//                downloadAllCount += count
-//            }
-//        }
-        
-        
-        
         for i in startIndex..<endIndex {
             if let urls = self.diaryInfos[i].images {
                 //print("\(i)번째 url들 :\(urls)")
@@ -328,6 +318,25 @@ class EatDiaryViewController: UIViewController {
         return intervalStr
     }
     
+    func notificationCenterConfigure() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(refreshDiaryNotification(_:)),
+            name: NSNotification.Name("refreshDiary"),
+            object: nil
+        )
+    }
+    @objc func refreshDiaryNotification(_ notification: Notification) {
+        
+        self.currentPage = 1
+        self.userDiaries.removeAll()
+        self.diaryInfos.removeAll()
+        self.diaryImageArrays.removeAll()
+        self.boardTableView.reloadData()
+        self.getUserDiaryList()
+        
+    }
+    
     func viewConfigure() {
         
         self.view.addSubview(self.headView)
@@ -351,11 +360,7 @@ class EatDiaryViewController: UIViewController {
         self.mainView.addSubview(self.activityIndicator)
         self.activityIndicator.stopAnimating()
     
-       
-        
-        
-        
-        
+
         
     }
     
@@ -446,6 +451,11 @@ extension EatDiaryViewController: UITableViewDataSource {
             cell?.pageControl.numberOfPages = self.diaryImageArrays[indexPath.row].count
             
         }
+        
+        cell?.diaryId = cellDiaryInfo.diaryId
+        
+        cell?.popSetBottomSheetDelegate = self
+        
         cell?.imageCollectionView.reloadData()
         
         
@@ -544,3 +554,24 @@ extension EatDiaryViewController: refreshDiaryDelegate {
 
     }
 }
+
+
+extension EatDiaryViewController: popSetBottomSheetDelegate {
+    func popSetBottomSheet(diaryid: String?) {
+        
+        print("다이어리 아이디 : \(diaryid)")
+        
+        let bottomSheetVC = BottomSheetCellSettingViewController()
+        bottomSheetVC.diaryId = diaryid
+        
+        
+        let bottomSheet: MDCBottomSheetController = MDCBottomSheetController(contentViewController: bottomSheetVC)
+        bottomSheet.mdc_bottomSheetPresentationController?.preferredSheetHeight = 121
+        
+        self.present(bottomSheet, animated: true)
+        
+
+    }
+}
+
+

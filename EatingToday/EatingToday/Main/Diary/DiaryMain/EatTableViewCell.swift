@@ -12,10 +12,19 @@ import Firebase
 import FirebaseStorage
 import CryptoKit
 
+protocol popSetBottomSheetDelegate: AnyObject {
+    
+    func popSetBottomSheet(diaryid: String?)
+    
+    
+}
+
 class EatTableViewCell: UITableViewCell {
     
     var diaryId: String?
     var writeDate: String?
+    
+    weak var popSetBottomSheetDelegate: popSetBottomSheetDelegate?
     
     let dateFormatter: DateFormatter = {
         let df = DateFormatter()
@@ -62,6 +71,13 @@ class EatTableViewCell: UITableViewCell {
         imageCollectionView.scrollToItem(at: indexPath as IndexPath, at: .left, animated: animated)
     }
     
+    @objc func popSettingCellView() {
+        print(self.diaryId)
+        if let id = self.diaryId {
+            popSetBottomSheetDelegate?.popSetBottomSheet(diaryid: id)
+        }
+    }
+    
     let infoContentView = UIView()
     let infoTitleLabel = UILabel()
     let scoreLabel = CosmosView()
@@ -106,6 +122,7 @@ class EatTableViewCell: UITableViewCell {
         
         self.headView.addSubview(settingButton)
         self.settingButton.setImage(UIImage(named: "logo_menu"), for: .normal)
+        self.settingButton.addTarget(self, action: #selector(popSettingCellView), for: .touchUpInside)
         
 //        if self.imageUrls != nil {
             self.addSubview(imageContentView)
