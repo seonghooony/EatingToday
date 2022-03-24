@@ -36,6 +36,18 @@ class LoginViewController: UIViewController {
         return activityIndicator
         
     }()
+    let headerView = UIView()
+    let loginMainView = UIView()
+    let footerView = UIView()
+    private lazy var stackMainView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [self.headerView, self.loginMainView, self.footerView])
+        stackView.axis = .vertical
+        stackView.distribution = .fill
+        stackView.spacing = 0
+        stackView.alignment = .fill
+        return stackView
+    }()
+    
 
     let titleImage = UIImageView()
     
@@ -222,28 +234,34 @@ class LoginViewController: UIViewController {
     }
     
     func viewConfigure() {
-        //view.backgroundColor = UIColor(displayP3Red: 200/255, green: 92/255, blue: 92/255, alpha: 1)
+        
+        self.view.addSubview(self.stackMainView)
+        
+        self.headerView.backgroundColor = .clear
+        self.loginMainView.backgroundColor = .clear
+        self.footerView.backgroundColor = .clear
+        
         
         view.backgroundColor = .white
         self.view.addSubview(self.activityIndicator)
 
-        
-        self.view.addSubview(self.titleImage)
+
+        self.headerView.addSubview(self.titleImage)
         self.titleImage.image = UIImage(named: "logo_lamen")
         ///<a href="https://www.flaticon.com/kr/free-icons/" title="라면 아이콘">라면 아이콘  제작자: tulpahn - Flaticon</a>
-        
-        self.view.addSubview(self.titleLabel)
+
+        self.headerView.addSubview(self.titleLabel)
         self.titleLabel.text = "Eatingram"
         self.titleLabel.textAlignment = .center
         self.titleLabel.font = UIFont(name: "Marker Felt", size: 35)
         self.titleLabel.textColor = UIColor(displayP3Red: 1/255, green: 1/255, blue: 1/255, alpha: 1)
-        
-        self.view.addSubview(self.idLabel)
+
+        self.loginMainView.addSubview(self.idLabel)
         self.idLabel.text = "이메일"
         self.idLabel.textColor = .black
         self.idLabel.font = UIFont(name: "Helvetica Bold", size: 15)
-        
-        self.view.addSubview(self.idFeild)
+
+        self.loginMainView.addSubview(self.idFeild)
         self.idFeild.placeholder = "이메일을 입력해주세요."
         self.idFeild.title = ""
         //클리어버튼 생성
@@ -281,13 +299,13 @@ class LoginViewController: UIViewController {
         //키보드 return 클릭시 반응하도록 위임
         self.idFeild.delegate = self
 
-        
-        self.view.addSubview(self.pwLabel)
+
+        self.loginMainView.addSubview(self.pwLabel)
         self.pwLabel.text = "비밀번호"
         self.pwLabel.textColor = .black
         self.pwLabel.font = UIFont(name: "Helvetica Bold", size: 15)
-        
-        self.view.addSubview(self.pwFeild)
+
+        self.loginMainView.addSubview(self.pwFeild)
         self.pwFeild.placeholder = "비밀번호를 입력해주세요."
         self.pwFeild.title = ""
         //클리어버튼 생성
@@ -322,34 +340,34 @@ class LoginViewController: UIViewController {
         self.pwFeild.addTarget(self, action: #selector(passwordFieldDidChange(_:)), for: .editingChanged)
         //키보드 return 클릭 시 반응 하도록 위임
         self.pwFeild.delegate = self
-        
-        
-        self.view.addSubview(self.loginButton)
+
+
+        self.loginMainView.addSubview(self.loginButton)
         self.loginButton.backgroundColor = UIColor(displayP3Red: 249/255, green: 151/255, blue: 93/255, alpha: 1)
         self.loginButton.setTitle("로그인", for: .normal)
         self.loginButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
         self.loginButton.layer.cornerRadius = 10
         self.loginButton.addTarget(self, action: #selector(loginClicked), for: .touchUpInside)
-        
-        self.view.addSubview(self.findPasswordButton)
+
+        self.loginMainView.addSubview(self.findPasswordButton)
         self.findPasswordButton.setTitle("비밀번호를 잊으셨나요?", for: .normal)
         self.findPasswordButton.setTitleColor(UIColor(displayP3Red: 100/255, green: 100/255, blue: 100/255, alpha: 1), for: .normal)
         self.findPasswordButton.titleLabel?.font = UIFont(name: "Helvetica", size: 14)!
         self.findPasswordButton.addTarget(self, action: #selector(findPwdBtnTapped), for: .touchUpInside)
-        
-        self.view.addSubview(self.loginHeadlineView)
+
+        self.footerView.addSubview(self.loginHeadlineView)
         self.loginHeadlineView.addSubview(leftlineView)
         self.leftlineView.backgroundColor = .lightGray
-        
+
         self.loginHeadlineView.addSubview(lineTextLabel)
         self.lineTextLabel.textColor = .lightGray
         self.lineTextLabel.text = "간편 로그인"
         self.lineTextLabel.font = UIFont(name: "Helvetica", size: 15)
-        
+
         self.loginHeadlineView.addSubview(rightlineView)
         self.rightlineView.backgroundColor = .lightGray
-        
-        self.view.addSubview(self.googleLoginButton)
+
+        self.footerView.addSubview(self.googleLoginButton)
         self.googleLoginButton.setImage(UIImage(named: "logo_google"), for: .normal)
         self.googleLoginButton.setTitle("구글로 로그인", for: .normal)
         self.googleLoginButton.setTitleColor(.black, for: .normal)
@@ -357,8 +375,8 @@ class LoginViewController: UIViewController {
         self.googleLoginButton.backgroundColor = UIColor(displayP3Red: 230/255, green: 230/255, blue: 230/255, alpha: 1)
         self.googleLoginButton.layer.cornerRadius = 20
         self.googleLoginButton.addTarget(self, action: #selector(googleLoginClicked), for: .touchUpInside)
-        
-        self.view.addSubview(self.appleLoginButton)
+
+        self.footerView.addSubview(self.appleLoginButton)
         self.appleLoginButton.setImage(UIImage(named: "logo_apple"), for: .normal)
         self.appleLoginButton.setTitle("애플로 로그인", for: .normal)
         self.appleLoginButton.setTitleColor(.white, for: .normal)
@@ -366,8 +384,8 @@ class LoginViewController: UIViewController {
         self.appleLoginButton.backgroundColor = UIColor(displayP3Red: 1/255, green: 1/255, blue: 1/255, alpha: 1)
         self.appleLoginButton.layer.cornerRadius = 20
         self.appleLoginButton.addTarget(self, action: #selector(appleLoginClicked), for: .touchUpInside)
-        
-        self.view.addSubview(self.emailRegisterButton)
+
+        self.footerView.addSubview(self.emailRegisterButton)
         self.emailRegisterButton.setTitle("아직 계정이 없어요.", for: .normal)
         self.emailRegisterButton.setTitleColor(.black, for: .normal)
         self.emailRegisterButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
@@ -377,24 +395,48 @@ class LoginViewController: UIViewController {
     func constraintConfigure() {
         let leadingTrailingSize = 30
         
+        self.stackMainView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        self.headerView.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.height.equalToSuperview().multipliedBy(0.35)
+            
+        }
+        self.loginMainView.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.height.equalToSuperview().multipliedBy(0.35)
+        }
+        
+        self.footerView.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.height.equalToSuperview().multipliedBy(0.3)
+        }
+        
         self.activityIndicator.snp.makeConstraints{ make in
             make.centerX.equalToSuperview()
             make.centerY.equalToSuperview()
         }
-        
+
         self.titleImage.snp.makeConstraints{ make in
-            make.top.equalToSuperview().offset(90)
+//            make.top.equalToSuperview().offset(90)
+//            make.width.height.equalTo(150).priority(752)
+//            make.centerX.equalToSuperview()
+            
+            make.centerX.centerY.equalToSuperview()
             make.width.height.equalTo(150)
-            make.centerX.equalToSuperview()
+
         }
         self.titleLabel.snp.makeConstraints{ make in
             make.top.equalTo(self.titleImage.snp.bottom).offset(25)
             make.centerX.equalToSuperview()
         }
-        
+
         self.idLabel.snp.makeConstraints { make in
-            make.top.equalTo(self.titleLabel.snp.bottom).offset(50)
+//            make.top.equalTo(self.titleLabel.snp.bottom).offset(50)
             make.leading.equalToSuperview().offset(leadingTrailingSize)
+            
+            make.top.equalToSuperview().offset(20)
         }
 
         self.idFeild.snp.makeConstraints{ make in
@@ -403,7 +445,7 @@ class LoginViewController: UIViewController {
             make.leading.equalToSuperview().offset(leadingTrailingSize)
             make.trailing.equalToSuperview().offset(-leadingTrailingSize)
         }
-        
+
         self.pwLabel.snp.makeConstraints { make in
             make.top.equalTo(self.idFeild.snp.bottom).offset(30)
             make.leading.equalToSuperview().offset(leadingTrailingSize)
@@ -423,19 +465,21 @@ class LoginViewController: UIViewController {
             make.leading.equalToSuperview().offset(leadingTrailingSize)
             make.trailing.equalToSuperview().offset(-leadingTrailingSize)
         }
-        
+
         self.findPasswordButton.snp.makeConstraints { make in
             make.top.equalTo(self.loginButton.snp.bottom).offset(5)
             make.leading.equalToSuperview().offset(leadingTrailingSize + 10)
         }
-        
+
         self.loginHeadlineView.snp.makeConstraints { make in
-            make.top.equalTo(self.loginButton.snp.bottom).offset(32)
+//            make.top.equalTo(self.loginButton.snp.bottom).offset(32)
             make.height.equalTo(50)
             make.leading.equalToSuperview().offset(leadingTrailingSize)
             make.trailing.equalToSuperview().offset(-leadingTrailingSize)
+            
+            make.top.equalToSuperview().offset(5)
         }
-        
+
         self.leftlineView.snp.makeConstraints { make in
             make.leading.equalToSuperview()
             make.centerY.equalToSuperview()
@@ -452,7 +496,7 @@ class LoginViewController: UIViewController {
             make.leading.equalTo(self.lineTextLabel.snp.trailing).offset(15)
             make.height.equalTo(1)
         }
-        
+
         self.googleLoginButton.snp.makeConstraints{ make in
             make.top.equalTo(self.loginHeadlineView.snp.bottom).offset(10)
             make.height.equalTo(50)
@@ -467,9 +511,10 @@ class LoginViewController: UIViewController {
             make.trailing.equalToSuperview().offset(-leadingTrailingSize)
         }
         self.emailRegisterButton.snp.makeConstraints{ make in
-            make.top.equalTo(self.appleLoginButton.snp.bottom).offset(15)
+            make.top.equalTo(self.appleLoginButton.snp.bottom).offset(10)
             make.leading.equalToSuperview().offset(leadingTrailingSize)
             make.trailing.equalToSuperview().offset(-leadingTrailingSize)
+//            make.bottom.equalTo(self.view.snp.bottom)
         }
     }
 }
