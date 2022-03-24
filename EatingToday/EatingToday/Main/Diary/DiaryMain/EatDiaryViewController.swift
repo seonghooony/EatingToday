@@ -55,6 +55,7 @@ class EatDiaryViewController: UIViewController {
         
         return tableView
     }()
+    let refreshControl = UIRefreshControl()
     
     var isFirstSetting = true
     
@@ -349,6 +350,16 @@ class EatDiaryViewController: UIViewController {
         self.getUserDiaryList()
         
     }
+    @objc func refreshDiaryControl(refreshControl: UIRefreshControl) {
+        refreshControl.endRefreshing()
+        self.currentPage = 1
+        self.userDiaries.removeAll()
+        self.diaryInfos.removeAll()
+        self.diaryImageArrays.removeAll()
+        self.boardTableView.reloadData()
+        self.getUserDiaryList()
+        
+    }
     
     func viewConfigure() {
         
@@ -369,6 +380,8 @@ class EatDiaryViewController: UIViewController {
         self.view.addSubview(self.mainView)
         self.mainView.backgroundColor = .white
         self.mainView.addSubview(self.boardTableView)
+        self.boardTableView.refreshControl = refreshControl
+        self.refreshControl.addTarget(self, action: #selector(refreshDiaryControl(refreshControl:)), for: .valueChanged)
         
         self.mainView.addSubview(self.activityIndicator)
         self.activityIndicator.stopAnimating()

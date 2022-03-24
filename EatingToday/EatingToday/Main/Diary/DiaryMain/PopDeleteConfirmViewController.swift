@@ -195,8 +195,9 @@ class PopDeleteConfirmViewController: UIViewController {
         self.deleteButton.setTitleColor(.red, for: .normal)
         self.deleteButton.addTarget(self, action: #selector(deleteDiaryButtonTapped), for: .touchUpInside)
         
-//        self.footerView.addSubview(self.cancelButton)
-//        self.footerView.addSubview(self.deleteButton)
+        self.popupView.addSubview(self.activityIndicator)
+        
+
 
     }
     
@@ -238,6 +239,11 @@ class PopDeleteConfirmViewController: UIViewController {
             make.leading.top.equalToSuperview().offset(edgeSize)
             make.trailing.bottom.equalToSuperview().offset(-edgeSize)
 //            make.top.bottom.equalToSuperview()
+        }
+        
+        self.activityIndicator.snp.makeConstraints{ make in
+            make.centerX.equalTo(self.view.snp.centerX)
+            make.centerY.equalTo(self.view.snp.centerY)
         }
     }
 }

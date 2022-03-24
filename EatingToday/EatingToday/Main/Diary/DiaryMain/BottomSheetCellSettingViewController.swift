@@ -45,7 +45,7 @@ class BottomSheetCellSettingViewController: UIViewController {
         popDeleteVC.modalPresentationStyle = .overFullScreen
         popDeleteVC.diaryId = self.diaryId
         self.dismiss(animated: true) {
-            pvc.present(popDeleteVC, animated: true, completion: nil)
+            pvc.present(popDeleteVC, animated: false, completion: nil)
         }
         
         
