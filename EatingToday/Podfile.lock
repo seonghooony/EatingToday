@@ -321,10 +321,10 @@ PODS:
     - BoringSSL-GRPC (= 0.0.7)
     - gRPC-Core/Interface (= 1.28.2)
   - gRPC-Core/Interface (1.28.2)
-  - GTMAppAuth (1.2.2):
+  - GTMAppAuth (1.2.3):
     - AppAuth/Core (~> 1.4)
     - GTMSessionFetcher/Core (~> 1.5)
-  - GTMSessionFetcher/Core (1.7.0)
+  - GTMSessionFetcher/Core (1.7.1)
   - Kingfisher (7.2.0)
   - leveldb-library (1.22.1)
   - lottie-ios (3.3.0)
@@ -362,6 +362,7 @@ PODS:
     - nanopb/encode (= 1.30906.0)
   - nanopb/decode (1.30906.0)
   - nanopb/encode (1.30906.0)
+  - NMapsMap (3.14.1)
   - PromisesObjC (1.2.12)
   - SkyFloatingLabelTextField (3.8.0)
   - SnapKit (5.0.1)
@@ -380,6 +381,7 @@ DEPENDENCIES:
   - Kingfisher
   - lottie-ios
   - MaterialComponents/BottomSheet
+  - NMapsMap
   - SkyFloatingLabelTextField (~> 3.0)
   - SnapKit
 
@@ -412,6 +414,7 @@ SPEC REPOS:
     - lottie-ios
     - MaterialComponents
     - nanopb
+    - NMapsMap
     - PromisesObjC
     - SkyFloatingLabelTextField
     - SnapKit
@@ -437,17 +440,18 @@ SPEC CHECKSUMS:
   GoogleUtilities: 7f2f5a07f888cdb145101d6042bc4422f57e70b3
   "gRPC-C++": 13d8ccef97d5c3c441b7e3c529ef28ebee86fad2
   gRPC-Core: 4afa11bfbedf7cdecd04de535a9e046893404ed5
-  GTMAppAuth: ad5c2b70b9a8689e1a04033c9369c4915bfcbe89
-  GTMSessionFetcher: 43748f93435c2aa068b1cbe39655aaf600652e91
+  GTMAppAuth: 987526d41b07efb1bedda5e936fe0cb718a03113
+  GTMSessionFetcher: 4577a4cc914a5a07c40a8a0ad0acc22080418c2d
   Kingfisher: 3ac0b75b155cabc0e544877d1a4deea29feece92
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
   lottie-ios: 6ac74dcc09904798f59b18cb3075c089d76be9ae
   MaterialComponents: 1a9b2d9d45b1601ae544de85089adc4c464306d4
   nanopb: 59317e09cf1f1a0af72f12af412d54edf52603fc
+  NMapsMap: 79bae4e0d7cc5214dd6dabdb95687a1356616556
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   SkyFloatingLabelTextField: 5a338412114808e961fe2d14ea2c5452c8b6e4aa
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
 
-PODFILE CHECKSUM: 92e328fa7568f0970318aba1465d2142152f79d0
+PODFILE CHECKSUM: 4f9dd16e8ef7312a93ec1bc4b5993766775b5f8c
 
 COCOAPODS: 1.11.3
