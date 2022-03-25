@@ -362,7 +362,6 @@ PODS:
     - nanopb/encode (= 1.30906.0)
   - nanopb/decode (1.30906.0)
   - nanopb/encode (1.30906.0)
-  - PanModal (1.2.7)
   - PromisesObjC (1.2.12)
   - SkyFloatingLabelTextField (3.8.0)
   - SnapKit (5.0.1)
@@ -381,7 +380,6 @@ DEPENDENCIES:
   - Kingfisher
   - lottie-ios
   - MaterialComponents/BottomSheet
-  - PanModal
   - SkyFloatingLabelTextField (~> 3.0)
   - SnapKit
 
@@ -414,7 +412,6 @@ SPEC REPOS:
     - lottie-ios
     - MaterialComponents
     - nanopb
-    - PanModal
     - PromisesObjC
     - SkyFloatingLabelTextField
     - SnapKit
@@ -447,11 +444,10 @@ SPEC CHECKSUMS:
   lottie-ios: 6ac74dcc09904798f59b18cb3075c089d76be9ae
   MaterialComponents: 1a9b2d9d45b1601ae544de85089adc4c464306d4
   nanopb: 59317e09cf1f1a0af72f12af412d54edf52603fc
-  PanModal: 3e16ead1a907fb06f4df3f13492fd00149fa4974
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   SkyFloatingLabelTextField: 5a338412114808e961fe2d14ea2c5452c8b6e4aa
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
 
-PODFILE CHECKSUM: 7573e0e32ff46552d7a29f023ee940640a08745e
+PODFILE CHECKSUM: 92e328fa7568f0970318aba1465d2142152f79d0
 
 COCOAPODS: 1.11.3

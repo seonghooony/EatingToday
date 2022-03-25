@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import PanModal
+
 
 class BottomSheetCellSettingViewController: UIViewController {
     
@@ -140,19 +140,5 @@ class BottomSheetCellSettingViewController: UIViewController {
         }
         
     }
-}
-
-extension BottomSheetCellSettingViewController: PanModalPresentable {
-    var panScrollable: UIScrollView? {
-        return nil
-    }
-    
-    var shortFormHeight: PanModalHeight {
-        return .contentHeight(250)
-    }
-    
-    
-    
-    
 }
 
