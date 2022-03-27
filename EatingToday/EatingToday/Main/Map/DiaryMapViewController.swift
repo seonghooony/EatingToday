@@ -31,11 +31,22 @@ class DiaryMapViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: animated)
+        self.getUserDiaryList()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.setNavigationBarHidden(false, animated: animated)
+        self.deleteMapviewInfo()
+    }
+    
+    private func deleteMapviewInfo() {
+        
+        for i in 0..<locationMarker.count {
+            locationMarker[i].mapView = nil
+        }
+        locationMarker.removeAll()
+        
     }
     
     override func viewDidLoad() {
@@ -43,7 +54,7 @@ class DiaryMapViewController: UIViewController {
         self.view.backgroundColor = .black
         self.mapConfigure()
         self.updateCurrentLocation()
-        self.getUserDiaryList()
+//        self.getUserDiaryList()
     }
     
 
@@ -214,42 +225,62 @@ class DiaryMapViewController: UIViewController {
     }
     
     func setMapMarkers(diaryList: [DiaryInfo], completion: @escaping (Array<NMFMarker>?) -> Void) {
-    
-        for i in 0..<diaryList.count {
+        
+        DispatchQueue.global(qos: .default).async {
+            for i in 0..<diaryList.count {
+                
+                guard let diaryLat = diaryList[i].place_info?.y else { continue }
+                guard let diaryLng = diaryList[i].place_info?.x else { continue }
+                guard let diaryLocaName = diaryList[i].place_info?.place_name else { continue }
+                guard let diaryCateName = diaryList[i].category else { continue }
+                
+                let categoryColor = self.setColorFromCategory(category: diaryCateName) as UIColor
+                let categoryImage = self.setImageFromCategory(category: diaryCateName) as NMFOverlayImage
+                
+                print(categoryColor)
+                let mapMarker = NMFMarker()
+                mapMarker.position = NMGLatLng(lat: Double(diaryLat) ?? 0, lng: Double(diaryLng) ?? 0)
+    //            mapMarker.iconImage = NMF_MARKER_IMAGE_BLACK
+                mapMarker.iconImage = categoryImage
+                mapMarker.iconTintColor = categoryColor
+                mapMarker.width = 22
+                mapMarker.height = 22
+                
+                mapMarker.captionText = diaryLocaName
+                mapMarker.captionTextSize = 13
+                mapMarker.captionColor = UIColor.black
+                mapMarker.captionHaloColor = UIColor(red: 236/255, green: 236/255, blue: 236/255, alpha: 1.0)
+                
+                mapMarker.subCaptionText = diaryCateName
+                mapMarker.subCaptionTextSize = 11
+                mapMarker.subCaptionColor = categoryColor
+                mapMarker.subCaptionHaloColor = UIColor(red: 255/255, green: 251/255, blue: 233/255, alpha: 1.0)
+                mapMarker.userInfo = ["diaryIndex" : i]
+                mapMarker.touchHandler = { (overlay) -> Bool in
+                    print("해당 인덱스 : \(i)")
+                    print("마커 diaryIndex : \(overlay.userInfo["diaryIndex"])")
+                    print("식당명 : \(diaryLocaName)")
+                    
+                    return true
+                }
+                
+                self.locationMarker.append(mapMarker)
+                print("append 됨 \(i)")
+            }
             
-            guard let diaryLat = diaryList[i].place_info?.y else { continue }
-            guard let diaryLng = diaryList[i].place_info?.x else { continue }
-            guard let diaryLocaName = diaryList[i].place_info?.place_name else { continue }
-            guard let diaryCateName = diaryList[i].category else { continue }
             
-            let categoryColor = self.setColorFromCategory(category: diaryCateName) as UIColor
-            let categoryImage = self.setImageFromCategory(category: diaryCateName) as NMFOverlayImage
+            DispatchQueue.main.async { [weak self] in
+                
+                for i in 0..<(self?.locationMarker.count)! {
+                    self?.locationMarker[i].mapView = self?.naverMapView.mapView
+                    print("setting 됨 \(i)")
+                }
+            }
             
-            print(categoryColor)
-            let mapMarker = NMFMarker()
-            mapMarker.position = NMGLatLng(lat: Double(diaryLat) ?? 0, lng: Double(diaryLng) ?? 0)
-//            mapMarker.iconImage = NMF_MARKER_IMAGE_BLACK
-            mapMarker.iconImage = categoryImage
-            mapMarker.iconTintColor = categoryColor
-            
-            mapMarker.captionText = diaryLocaName
-            mapMarker.captionTextSize = 15
-            mapMarker.captionColor = UIColor.black
-            mapMarker.captionHaloColor = UIColor(red: 236/255, green: 236/255, blue: 236/255, alpha: 1.0)
-            
-            mapMarker.subCaptionText = diaryCateName
-            mapMarker.subCaptionTextSize = 12
-            mapMarker.subCaptionColor = categoryColor
-            mapMarker.subCaptionHaloColor = UIColor(red: 255/255, green: 251/255, blue: 233/255, alpha: 1.0)
-            
-            self.locationMarker.append(mapMarker)
-            print("append 됨 \(i)")
         }
         
-        for i in 0..<self.locationMarker.count {
-            self.locationMarker[i].mapView = self.naverMapView.mapView
-            print("setting 됨 \(i)")
-        }
+        
+        
     
     }
     
@@ -264,7 +295,7 @@ class DiaryMapViewController: UIViewController {
         case "양식":
             return NMFOverlayImage(image: UIImage(named: "burger")!)
         case "분식":
-            return NMFOverlayImage(image: UIImage(named: "tteokbokki")!)
+            return NMFOverlayImage(image: UIImage(named: "fish-cake")!)
         case "구이":
             return NMFOverlayImage(image: UIImage(named: "meat")!)
         case "아시안":
@@ -303,8 +334,8 @@ class DiaryMapViewController: UIViewController {
             //짖은 초록
             return UIColor(red: 70/255, green: 78/255, blue: 46/255, alpha: 1.0)
         case "디저트":
-            //분홍
-            return UIColor(red: 255/255, green: 128/255, blue: 128/255, alpha: 1.0)
+            //보라색
+            return UIColor(red: 156/255, green: 25/255, blue: 224/255, alpha: 1.0)
         case "그외":
             //보라
             return UIColor(red: 255/255, green: 195/255, blue: 0/255, alpha: 1.0)
