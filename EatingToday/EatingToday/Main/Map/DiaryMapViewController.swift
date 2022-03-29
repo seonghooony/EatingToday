@@ -265,7 +265,7 @@ class DiaryMapViewController: UIViewController {
                 }
                 
                 self.locationMarker.append(mapMarker)
-                print("append 됨 \(i)") 
+                print("append 됨 \(i)")  
             }
             
             
