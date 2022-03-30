@@ -10,10 +10,17 @@ import UIKit
 import CoreLocation
 import NMapsMap
 
+import MaterialComponents
+
 import Firebase
 import FirebaseFirestoreSwift
 import FirebaseFirestore
 import FirebaseCore
+
+struct locationXY: Hashable {
+    let lat: String
+    let lng: String
+}
 
 class DiaryMapViewController: UIViewController {
     
@@ -26,6 +33,8 @@ class DiaryMapViewController: UIViewController {
     var userDiaries = Array<String>()
     var diaryInfos = Array<DiaryInfo>()
     var locationMarker = Array<NMFMarker>()
+    var locationLatLng: Set<locationXY> = []
+    
     
     
     override func viewWillAppear(_ animated: Bool) {
@@ -46,6 +55,7 @@ class DiaryMapViewController: UIViewController {
             locationMarker[i].mapView = nil
         }
         locationMarker.removeAll()
+        locationLatLng.removeAll()
         
     }
     
@@ -229,8 +239,25 @@ class DiaryMapViewController: UIViewController {
         DispatchQueue.global(qos: .default).async {
             for i in 0..<diaryList.count {
                 
+                
                 guard let diaryLat = diaryList[i].place_info?.y else { continue }
                 guard let diaryLng = diaryList[i].place_info?.x else { continue }
+                
+//                guard let diaryLocaName = diaryList[i].place_info?.place_name else { continue }
+//                guard let diaryCateName = diaryList[i].category else { continue }
+                
+                let locationStruct = locationXY(lat: diaryLat, lng: diaryLng)
+                
+                if self.locationLatLng.contains(locationStruct) {
+//                    print(" \( diaryLocaName) 는 이미 존재함")
+                    continue
+                    
+                } else {
+//                    print(" \( diaryLocaName) 는 새로 넣음")
+                    self.locationLatLng.insert(locationStruct)
+                }
+                
+//                print("새로 넣음 후 이 글이 떠야함 이미존재함 뜬후 이글 뜨면 오류")
                 guard let diaryLocaName = diaryList[i].place_info?.place_name else { continue }
                 guard let diaryCateName = diaryList[i].category else { continue }
                 
@@ -256,16 +283,20 @@ class DiaryMapViewController: UIViewController {
                 mapMarker.subCaptionColor = categoryColor
                 mapMarker.subCaptionHaloColor = UIColor(red: 255/255, green: 251/255, blue: 233/255, alpha: 1.0)
                 mapMarker.userInfo = ["diaryIndex" : i]
+                mapMarker.userInfo = ["selectedDiaryInfos" : self.findSelectedDiaryList(lat: diaryLat, lng: diaryLng)]
                 mapMarker.touchHandler = { (overlay) -> Bool in
                     print("해당 인덱스 : \(i)")
                     print("마커 diaryIndex : \(overlay.userInfo["diaryIndex"])")
+                    print("마커 selectedDiaryInfos: \(overlay.userInfo["selectedDiaryInfos"])")
                     print("식당명 : \(diaryLocaName)")
+                    
+                    self.popDetailPlaceInfo(selectedDiaryInfos: overlay.userInfo["selectedDiaryInfos"] as! [DiaryInfo])
                     
                     return true
                 }
                 
                 self.locationMarker.append(mapMarker)
-                print("append 됨 \(i)")  
+                print("append 됨 \(i)")
             }
             
             
@@ -273,15 +304,44 @@ class DiaryMapViewController: UIViewController {
                 
                 for i in 0..<(self?.locationMarker.count)! {
                     self?.locationMarker[i].mapView = self?.naverMapView.mapView
+                    
                     print("setting 됨 \(i)")
                 }
             }
             
         }
-        
-        
-        
+
+    }
     
+    func popDetailPlaceInfo(selectedDiaryInfos: [DiaryInfo]) {
+        let bottomSheetVC = BottomSheetSelectedPlaceDetailViewController()
+        bottomSheetVC.selectedDiaryInfos = selectedDiaryInfos
+        
+        bottomSheetVC.selectedPlaceName = selectedDiaryInfos[0].place_info?.place_name
+        bottomSheetVC.selectedPlaceAddress = selectedDiaryInfos[0].place_info?.address_name
+        bottomSheetVC.selectedPlaceCategory = selectedDiaryInfos[0].category
+        
+        
+        let bottomSheet: MDCBottomSheetController = MDCBottomSheetController(contentViewController: bottomSheetVC)
+        bottomSheet.mdc_bottomSheetPresentationController?.preferredSheetHeight = 300
+        
+        self.present(bottomSheet, animated: true)
+        
+
+    }
+    
+    func findSelectedDiaryList(lat: String, lng: String) -> [DiaryInfo] {
+        
+        var selectedDiaryInfos = Array<DiaryInfo>()
+        
+        for diary in diaryInfos {
+            if diary.place_info?.x == lng && diary.place_info?.y == lat {
+                selectedDiaryInfos.append(diary)
+            }
+        }
+        
+        return selectedDiaryInfos
+        
     }
     
     func setImageFromCategory(category: String) -> NMFOverlayImage {
