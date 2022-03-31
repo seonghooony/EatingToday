@@ -98,6 +98,7 @@ class EatTableViewCell: UITableViewCell {
         fatalError("init(coder:)has not been implemented")
     }
     
+    
 
 
     
@@ -179,7 +180,8 @@ class EatTableViewCell: UITableViewCell {
         
         self.infoContentView.addSubview(self.storyLabel)
         self.storyLabel.text = "이야기"
-        self.storyLabel.textAlignment = .center
+        self.storyLabel.lineBreakMode = .byCharWrapping
+        self.storyLabel.textAlignment = .left
         self.storyLabel.textColor = .black
         self.storyLabel.numberOfLines = 0
         self.storyLabel.font = UIFont(name: "Helvetica", size: 15)
@@ -276,7 +278,7 @@ class EatTableViewCell: UITableViewCell {
         self.storyLabel.snp.makeConstraints { make in
             make.top.equalTo(self.scoreLabel.snp.bottom).offset(20)
             make.leading.equalToSuperview().offset(leadingtrailingSize)
-//            make.bottom.equalToSuperview().offset(-leadingtrailingSize)
+            make.trailing.equalToSuperview().offset(-leadingtrailingSize)
         }
         
         self.writeDateLabel.snp.makeConstraints { make in

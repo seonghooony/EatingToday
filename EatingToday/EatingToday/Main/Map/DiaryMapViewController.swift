@@ -323,7 +323,7 @@ class DiaryMapViewController: UIViewController {
         
         
         let bottomSheet: MDCBottomSheetController = MDCBottomSheetController(contentViewController: bottomSheetVC)
-        bottomSheet.mdc_bottomSheetPresentationController?.preferredSheetHeight = 300
+        bottomSheet.mdc_bottomSheetPresentationController?.preferredSheetHeight = self.view.bounds.height * 0.4
         
         self.present(bottomSheet, animated: true)
         
@@ -407,61 +407,7 @@ class DiaryMapViewController: UIViewController {
         }
         
     }
-//
-//    func downloadImages(startIndex: Int, endIndex: Int, completion: @escaping (String) -> Void) {
-//        for i in startIndex..<endIndex {
-//            self.diaryImageArrays.append(Array<UIImage>())
-//            if let urls = self.diaryInfos[i].images {
-//                var imageDataList = Array<UIImage>()
-//
-//                for _ in 0..<urls.count {
-//                    imageDataList.append(UIImage())
-//                }
-//                self.diaryImageArrays[i] = imageDataList
-//            }
-//        }
-//
-//        for i in startIndex..<endIndex {
-//            if let urls = self.diaryInfos[i].images {
-//                //print("\(i)번째 url들 :\(urls)")
-//
-//                var completeDownCount = 0
-//                for j in 0..<urls.count {
-//                    self.downloadImage(urlString: urls[j]) { image in
-//                        if let image = image {
-////                            imageDataList[j] = image
-//                            self.diaryImageArrays[i][j] = image
-//                            completeDownCount += 1
-//
-//                            if completeDownCount == urls.count {
-//                                completion("success")
-//                            }
-//                        }
-//                    }
-//
-//                }
-//
-//            }
-//
-//        }
-//    }
-//
-//    private func downloadImage(urlString: String, completion: @escaping (UIImage?) -> Void) {
-//        let storageReference = Storage.storage().reference(forURL: urlString)
-//        let megaByte = Int64(4 * 1024 * 1024)
-//
-//        storageReference.getData(maxSize: megaByte) { data, error in
-//            if let error = error {
-//                print("Image Download Error : \(error.localizedDescription)")
-//            }
-//
-//            guard let imageData = data else {
-//                completion(nil)
-//                return
-//            }
-//            completion(UIImage(data: imageData))
-//        }
-//    }
+
     
     
 }
