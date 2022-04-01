@@ -229,7 +229,7 @@ class BottomSheetSelectedPlaceDetailViewController: UIViewController {
             make.top.leading.trailing.equalToSuperview()
             make.height.equalTo(110)
             
-        }
+        } 
         
         self.titleLabel.snp.makeConstraints { make in
             make.leading.top.equalToSuperview().offset(leadingtrailingSize)
