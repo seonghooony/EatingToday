@@ -12,6 +12,8 @@ import FirebaseFirestore
 import FirebaseCore
 import Cosmos
 
+import Kingfisher
+
 class BottomSheetSelectedPlaceDetailViewController: UIViewController {
     
     var selectedDiaryInfos: Array<DiaryInfo>?
@@ -23,6 +25,8 @@ class BottomSheetSelectedPlaceDetailViewController: UIViewController {
     
     var currentPage: Int = 1
     let pagingSize = 3
+    
+    let FBstorage = Storage.storage()
     
     let headerView = UIView()
     let titleLabel = UILabel()
@@ -75,16 +79,11 @@ class BottomSheetSelectedPlaceDetailViewController: UIViewController {
         self.viewConfigure()
         self.constraintConfigure()
 //        print("viewdidload \(selectedDiaryInfos)")
-        self.downloadImages(currentPage: self.currentPage) { result in
-            if result == "success" {
-                DispatchQueue.main.async {
-                    self.mapDetailPlaceTableView.reloadData()
-                    print("이미지 다운로드 완료")
-                }
-            }
-        }
+        
         
     }
+    
+    
     
     func setStarScore() {
         
@@ -122,58 +121,7 @@ class BottomSheetSelectedPlaceDetailViewController: UIViewController {
     }
     
 
-    func downloadImages(currentPage: Int, completion: @escaping (String) -> Void) {
-        if let selectedDiaryInfos = self.selectedDiaryInfos {
-            
-            let startIndex = (self.currentPage - 1) * self.pagingSize
-            let endIndex = self.currentPage * self.pagingSize > selectedDiaryInfos.count ? selectedDiaryInfos.count : self.currentPage * self.pagingSize
-            
-            for i in startIndex..<endIndex {
-                if let _ = selectedDiaryInfos[i].images {
-                    self.selectedDiaryFirstImageArrays.append(UIImage())
-                }
-            }
-            
-            var downloadCount = 0
-            for i in startIndex..<endIndex {
-                if let urls = selectedDiaryInfos[i].images {
-
-                    self.downloadImage(urlString: urls[0]) { image in
-                        if let image = image {
-                            self.selectedDiaryFirstImageArrays[i] = image
-                            downloadCount += 1
-                            
-                            print("endIndex - startIndex + 1 == downloadCount \(endIndex) - \(startIndex) + 1 == \(downloadCount)")
-                            
-                            if endIndex - startIndex == downloadCount {
-                                completion("success")
-                            }
-                        }
-                    }
-
-                }
-
-            }
-        }
-        
-    }
-
-    private func downloadImage(urlString: String, completion: @escaping (UIImage?) -> Void) {
-        let storageReference = Storage.storage().reference(forURL: urlString)
-        let megaByte = Int64(4 * 1024 * 1024)
-
-        storageReference.getData(maxSize: megaByte) { data, error in
-            if let error = error {
-                print("Image Download Error : \(error.localizedDescription)")
-            }
-
-            guard let imageData = data else {
-                completion(nil)
-                return
-            }
-            completion(UIImage(data: imageData))
-        }
-    }
+    
     
     func viewConfigure() {
         
@@ -314,8 +262,15 @@ extension BottomSheetSelectedPlaceDetailViewController: UITableViewDataSource {
         cell?.diaryScoreLabel.rating = Double(self.selectedDiaryInfos?[indexPath.row].score ?? 0.0)
         cell?.diaryScoreLabel.text = "\(self.selectedDiaryInfos?[indexPath.row].score ?? 0.0)점"
         
+        if let imageUrl: String = self.selectedDiaryInfos?[indexPath.row].images![0] {
+            print("url 주소 : \(imageUrl)")
+            let url = URL(string: imageUrl)
+            
+            cell?.firstImageView.kf.indicatorType = .activity
+            cell?.firstImageView.kf.setImage(with: url, placeholder: nil, options: [.transition(.fade(0.5))], progressBlock: nil)
+        }
         
-        cell?.firstImageView.image = self.selectedDiaryFirstImageArrays[indexPath.row]
+        
         
         
         
@@ -333,19 +288,7 @@ extension BottomSheetSelectedPlaceDetailViewController: UITableViewDataSource {
         if (indexPath.row + 1)/pagingSize == currentPage {
             self.currentPage += 1
             print("self.currentPage : \(self.currentPage)")
-            
-            self.downloadImages(currentPage: self.currentPage) { result in
-                if result == "success" {
-                    
-                    DispatchQueue.main.async {
-                        self.mapDetailPlaceTableView.reloadData()
-                        print("이미지 다운로드 완료")
-                    }
-                    
-                }
-            }
-            
-            
+
 
         }
     }

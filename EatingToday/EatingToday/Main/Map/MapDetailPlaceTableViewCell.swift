@@ -7,6 +7,7 @@
 
 import UIKit
 import Cosmos
+import Kingfisher
 
 class MapDetailPlaceTableViewCell: UITableViewCell {
     

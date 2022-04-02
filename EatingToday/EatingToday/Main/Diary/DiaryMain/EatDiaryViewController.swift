@@ -17,6 +17,8 @@ import Alamofire
 import MaterialComponents
 
 
+
+
 class EatDiaryViewController: UIViewController {
     
     let db = Firestore.firestore()
@@ -114,7 +116,7 @@ class EatDiaryViewController: UIViewController {
         if let uid = Auth.auth().currentUser?.uid {
             let userDiariesList = db.collection("users").document(uid)
             
-            userDiariesList.getDocument { document, error in
+            userDiariesList.getDocument { [weak self] document, error in
                 if let error = error {
                     print("Error get Diary List : \(error.localizedDescription)")
                     return
@@ -128,36 +130,44 @@ class EatDiaryViewController: UIViewController {
                         let userDiaryInfo = try JSONDecoder().decode(UserDiaryInfo.self, from: jsonData)
                         if let diaryList = userDiaryInfo.diary {
                             if diaryList.count > 0 {
-                                self.userDiaries = diaryList.sorted(by: >)
+                                self?.userDiaries = diaryList.sorted(by: >)
                                 //print(self.userDiaries)
                                
-                                self.getDiaryInfo(list: self.userDiaries, currentPage: self.currentPage) { startIndex, endIndex, diaryInfos in
-                                    self.downloadImages(startIndex: startIndex, endIndex: endIndex) {result in
-                                        if result == "success" {
-                                            //print("이미지데이터 로드 완료")
-                                            self.activityIndicator.stopAnimating()
-                                            //터치 이벤트 막기
-                                            self.mainView.isUserInteractionEnabled = true
-                                            
-                                            DispatchQueue.main.async {
-                                                self.boardTableView.reloadData()
-                                                print("첫 화면 리로드 완료")
-                                            }
-                                        }
+                                self?.getDiaryInfo(list: self!.userDiaries, currentPage: self!.currentPage) { [weak self] startIndex, endIndex, diaryInfos in
+                                    self?.activityIndicator.stopAnimating()
+                                    //터치 이벤트 막기
+                                    self?.mainView.isUserInteractionEnabled = true
+                                    DispatchQueue.main.async {
+                                        self?.boardTableView.reloadData()
+                                        print("첫 화면 리로드 완료")
                                     }
+                                    
+//                                    self?.downloadImages(startIndex: startIndex, endIndex: endIndex) { [weak self] result in
+//                                        if result == "success" {
+//                                            //print("이미지데이터 로드 완료")
+//                                            self?.activityIndicator.stopAnimating()
+//                                            //터치 이벤트 막기
+//                                            self?.mainView.isUserInteractionEnabled = true
+//
+//                                            DispatchQueue.main.async {
+//                                                self?.boardTableView.reloadData()
+//                                                print("첫 화면 리로드 완료")
+//                                            }
+//                                        }
+//                                    }
                                 }
                             } else {
                                 print("유저 내 다이어리 개수 0개임")
-                                self.boardTableView.reloadData()
-                                self.activityIndicator.stopAnimating()
-                                self.mainView.isUserInteractionEnabled = true
+                                self?.boardTableView.reloadData()
+                                self?.activityIndicator.stopAnimating()
+                                self?.mainView.isUserInteractionEnabled = true
                             }
                             
                         } else {
                             print("유저 내 다이어리 없음")
-                            self.boardTableView.reloadData()
-                            self.activityIndicator.stopAnimating()
-                            self.mainView.isUserInteractionEnabled = true
+                            self?.boardTableView.reloadData()
+                            self?.activityIndicator.stopAnimating()
+                            self?.mainView.isUserInteractionEnabled = true
                             
                         }
                         
@@ -168,9 +178,9 @@ class EatDiaryViewController: UIViewController {
                     }
                 } else {
                     print("유저 정보 없음")
-                    self.boardTableView.reloadData()
-                    self.activityIndicator.stopAnimating()
-                    self.mainView.isUserInteractionEnabled = true
+                    self?.boardTableView.reloadData()
+                    self?.activityIndicator.stopAnimating()
+                    self?.mainView.isUserInteractionEnabled = true
                 }
 
             }
@@ -197,7 +207,7 @@ class EatDiaryViewController: UIViewController {
             for i in startIndex..<endIndex {
                 let diaryInfoDoc = self.db.collection("diaries").document(self.userDiaries[i])
                 
-                diaryInfoDoc.getDocument { document, error in
+                diaryInfoDoc.getDocument { [weak self] document, error in
                     if let error = error {
                         print("Error get Diary Info : \(error.localizedDescription)")
                         return
@@ -211,7 +221,7 @@ class EatDiaryViewController: UIViewController {
                             let jsonData = try JSONSerialization.data(withJSONObject: documentData, options: [])
                             if let diaryInfo = try? JSONDecoder().decode(DiaryInfo.self, from: jsonData) {
                                 
-                                self.diaryInfos[i] = diaryInfo
+                                self?.diaryInfos[i] = diaryInfo
                                 completeCount += 1
 //                                print("0: \(self.diaryInfos)")
 //                                print("\(i)넣음")
@@ -226,7 +236,7 @@ class EatDiaryViewController: UIViewController {
 //                        print("(endIndex - startIndex) == completeCount : \(endIndex - startIndex) == \(completeCount) ")
                         
                         if (endIndex - startIndex) == completeCount {
-                            completion(startIndex, endIndex, self.diaryInfos)
+                            completion(startIndex, endIndex, self?.diaryInfos)
 //                            DispatchQueue.main.async {
 //                                self.boardTableView.reloadData()
 //                            }
@@ -265,10 +275,10 @@ class EatDiaryViewController: UIViewController {
 
                 var completeDownCount = 0
                 for j in 0..<urls.count {
-                    self.downloadImage(urlString: urls[j]) { image in
+                    self.downloadImage(urlString: urls[j]) { [weak self] image in
                         if let image = image {
 //                            imageDataList[j] = image
-                            self.diaryImageArrays[i][j] = image
+                            self?.diaryImageArrays[i][j] = image
                             completeDownCount += 1
                             
                             if completeDownCount == urls.count {
@@ -452,6 +462,7 @@ extension EatDiaryViewController: UITableViewDataSource {
         
         let cellDiaryInfo = self.diaryInfos[indexPath.row]
         
+        cell?.cellDiaryInfo = cellDiaryInfo
         cell?.titleLabel.text = cellDiaryInfo.place_info?.place_name
         cell?.scoreLabel.rating = Double(cellDiaryInfo.score ?? 0.0)
         cell?.scoreLabel.text = "\(cellDiaryInfo.score ?? 0.0)점"
@@ -467,14 +478,12 @@ extension EatDiaryViewController: UITableViewDataSource {
             print(intervalStr)
             cell?.writeDateLabel.text = intervalStr
         }
-        
-        
+
         cell?.storyLabel.text = cellDiaryInfo.story
         
-        print("self.diaryImageArrays.count > indexPath.row : \(self.diaryImageArrays.count) > \(indexPath.row)")
-        if self.diaryImageArrays.count > indexPath.row {
-            cell?.images = self.diaryImageArrays[indexPath.row]
-            cell?.pageControl.numberOfPages = self.diaryImageArrays[indexPath.row].count
+        if let imagecount = cellDiaryInfo.images?.count {
+            cell?.imagecount = imagecount
+            cell?.pageControl.numberOfPages = imagecount
             
         }
         
@@ -507,7 +516,7 @@ extension EatDiaryViewController: UITableViewDataSource {
         if (indexPath.row + 1)/pagingSize == currentPage {
             self.currentPage += 1
             print("self.currentPage : \(self.currentPage)")
-            self.getDiaryInfo(list: self.userDiaries, currentPage: self.currentPage) { startIndex, endIndex, diaryInfos in
+            self.getDiaryInfo(list: self.userDiaries, currentPage: self.currentPage) { [weak self] startIndex, endIndex, diaryInfos in
                     
 //                var insertIndexPaths = [IndexPath]()
 //                print("만들어질 인덱스 : \(startIndex)~\(endIndex)")
@@ -520,32 +529,36 @@ extension EatDiaryViewController: UITableViewDataSource {
 
                 DispatchQueue.global().sync {
 
-                    self.boardTableView.reloadData()
+                    self?.boardTableView.reloadData()
                 }
                 
-
+                self?.activityIndicator.stopAnimating()
+                //터치 이벤트 막기
+                self?.mainView.isUserInteractionEnabled = true
                 
-                self.downloadImages(startIndex: startIndex, endIndex: endIndex) {result in
-                    if result == "success" {
-                        print("이미지데이터 로드 완료")
-                        self.activityIndicator.stopAnimating()
-                        //터치 이벤트 막기
-                        self.mainView.isUserInteractionEnabled = true
-                        
-//                        var reloadIndexPaths = [IndexPath]()
-//                        for index in startIndex..<endIndex {
-//                            let indexPath = IndexPath(row: index, section: Int(0))
-//                            reloadIndexPaths.append(indexPath)
+                self?.boardTableView.reloadData()
+                
+//                self?.downloadImages(startIndex: startIndex, endIndex: endIndex) { [weak self] result in
+//                    if result == "success" {
+//                        print("이미지데이터 로드 완료")
+//                        self?.activityIndicator.stopAnimating()
+//                        //터치 이벤트 막기
+//                        self?.mainView.isUserInteractionEnabled = true
+//
+////                        var reloadIndexPaths = [IndexPath]()
+////                        for index in startIndex..<endIndex {
+////                            let indexPath = IndexPath(row: index, section: Int(0))
+////                            reloadIndexPaths.append(indexPath)
+////                        }
+//                        DispatchQueue.global().sync {
+//
+//                            self?.boardTableView.reloadData()
 //                        }
-                        DispatchQueue.global().sync {
-
-                            self.boardTableView.reloadData()
-                        }
-//                        DispatchQueue.main.async {
-//                            self.boardTableView.reloadData()
-//                        }
-                    }
-                }
+////                        DispatchQueue.main.async {
+////                            self.boardTableView.reloadData()
+////                        }
+//                    }
+//                }
             }
 
         }

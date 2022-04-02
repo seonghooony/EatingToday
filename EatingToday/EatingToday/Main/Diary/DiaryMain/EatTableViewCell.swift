@@ -11,6 +11,7 @@ import Cosmos
 import Firebase
 import FirebaseStorage
 import CryptoKit
+import Kingfisher
 
 protocol popSetBottomSheetDelegate: AnyObject {
     
@@ -23,6 +24,8 @@ class EatTableViewCell: UITableViewCell {
     
     var diaryId: String?
     var writeDate: String?
+    var cellDiaryInfo: DiaryInfo?
+    var imagecount: Int?
     
     weak var popSetBottomSheetDelegate: popSetBottomSheetDelegate?
     
@@ -35,7 +38,7 @@ class EatTableViewCell: UITableViewCell {
         return df
     }()
     
-    var images = [UIImage]()
+    
     var indexOfCellBeforeDragging = 0
     
     let headView = UIView()
@@ -141,6 +144,8 @@ class EatTableViewCell: UITableViewCell {
         self.pageControl.hidesForSinglePage = true
 //        self.pageControl.numberOfPages = images.count
         self.pageControl.pageIndicatorTintColor = .darkGray
+        self.pageControl.backgroundColor = UIColor.black.withAlphaComponent(0.1)
+        self.pageControl.layer.cornerRadius = 13
         self.imageContentView.addSubview(pageControl)
         pageControl.addTarget(self, action: #selector(pageValueDidChanged), for: .valueChanged)
 //        }
@@ -185,6 +190,7 @@ class EatTableViewCell: UITableViewCell {
         self.storyLabel.textColor = .black
         self.storyLabel.numberOfLines = 0
         self.storyLabel.font = UIFont(name: "Helvetica", size: 15)
+        self.storyLabel.sizeToFit()
         
         self.infoContentView.addSubview(self.writeDateLabel)
         self.writeDateLabel.text = "작성날짜"
@@ -266,6 +272,7 @@ class EatTableViewCell: UITableViewCell {
         self.scoreLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(10)
 //            make.top.equalTo(self.infoTitleLabel.snp.bottom).offset(10)
+            make.height.equalTo(22)
             make.leading.equalToSuperview().offset(leadingtrailingSize)
         }
         
@@ -279,12 +286,14 @@ class EatTableViewCell: UITableViewCell {
             make.top.equalTo(self.scoreLabel.snp.bottom).offset(20)
             make.leading.equalToSuperview().offset(leadingtrailingSize)
             make.trailing.equalToSuperview().offset(-leadingtrailingSize)
+            make.height.greaterThanOrEqualTo(10)
         }
         
         self.writeDateLabel.snp.makeConstraints { make in
             make.top.equalTo(self.storyLabel.snp.bottom).offset(20)
             make.leading.equalToSuperview().offset(leadingtrailingSize)
             make.bottom.equalToSuperview().offset(-leadingtrailingSize)
+//            make.height.greaterThanOrEqualTo(12)
         }
         
         
@@ -298,12 +307,19 @@ class EatTableViewCell: UITableViewCell {
 
 extension EatTableViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return images.count ?? 0
+        return self.imagecount ?? 0
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageCollectionViewCell", for: indexPath) as? ImageCollectionViewCell else { return UICollectionViewCell() }
         cell.backgroundColor = UIColor.white
-        cell.imageView.image = images[indexPath.row]
+        
+        if let imageUrl = self.cellDiaryInfo?.images![indexPath.row] {
+            let url = URL(string: imageUrl)
+            cell.imageView.kf.indicatorType = .activity
+            cell.imageView.kf.setImage(with: url, placeholder: nil, options: [.transition(.fade(0.5))], progressBlock: nil)
+            cell.imageView.kf.setImage(with: url)
+        }
+        
         return cell
     }
     
@@ -327,7 +343,7 @@ extension EatTableViewCell: UICollectionViewDelegate {
 
         // Calculate conditions
         let pageWidth = UIScreen.main.bounds.size.width// The width your page should have (plus a possible margin)
-        let collectionViewItemCount = images.count// The number of items in this section
+        let collectionViewItemCount = self.imagecount ?? 0// The number of items in this section
         let proportionalOffset = imageCollectionView.contentOffset.x / pageWidth
         let indexOfMajorCell = Int(round(proportionalOffset))
         let swipeVelocityThreshold: CGFloat = 0.5
