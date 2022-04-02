@@ -18,7 +18,11 @@ class BottomSheetSelectedPlaceDetailViewController: UIViewController {
     var selectedPlaceName: String?
     var selectedPlaceAddress: String?
     var selectedPlaceCategory: String?
+    var selectedDiaryFirstImageArrays = Array<UIImage>()
     var selectedDiaryImageArrays = Array<Array<UIImage>>()
+    
+    var currentPage: Int = 1
+    let pagingSize = 3
     
     let headerView = UIView()
     let titleLabel = UILabel()
@@ -71,10 +75,12 @@ class BottomSheetSelectedPlaceDetailViewController: UIViewController {
         self.viewConfigure()
         self.constraintConfigure()
 //        print("viewdidload \(selectedDiaryInfos)")
-        self.downloadImages() { result in
+        self.downloadImages(currentPage: self.currentPage) { result in
             if result == "success" {
-                self.mapDetailPlaceTableView.reloadData()
-                print("이미지 다운로드 완료")
+                DispatchQueue.main.async {
+                    self.mapDetailPlaceTableView.reloadData()
+                    print("이미지 다운로드 완료")
+                }
             }
         }
         
@@ -116,38 +122,33 @@ class BottomSheetSelectedPlaceDetailViewController: UIViewController {
     }
     
 
-    func downloadImages(completion: @escaping (String) -> Void) {
-        if let selectedDiaryInfos = selectedDiaryInfos {
-            for i in 0..<selectedDiaryInfos.count {
-                self.selectedDiaryImageArrays.append(Array<UIImage>())
-                if let urls = selectedDiaryInfos[i].images {
-                    var imageDataList = Array<UIImage>()
-
-                    for _ in 0..<urls.count {
-                        imageDataList.append(UIImage())
-                    }
-                    self.selectedDiaryImageArrays[i] = imageDataList
+    func downloadImages(currentPage: Int, completion: @escaping (String) -> Void) {
+        if let selectedDiaryInfos = self.selectedDiaryInfos {
+            
+            let startIndex = (self.currentPage - 1) * self.pagingSize
+            let endIndex = self.currentPage * self.pagingSize > selectedDiaryInfos.count ? selectedDiaryInfos.count : self.currentPage * self.pagingSize
+            
+            for i in startIndex..<endIndex {
+                if let _ = selectedDiaryInfos[i].images {
+                    self.selectedDiaryFirstImageArrays.append(UIImage())
                 }
             }
-
-            for i in 0..<selectedDiaryInfos.count {
+            
+            var downloadCount = 0
+            for i in startIndex..<endIndex {
                 if let urls = selectedDiaryInfos[i].images {
-                    //print("\(i)번째 url들 :\(urls)")
 
-                    var completeDownCount = 0
-                    for j in 0..<urls.count {
-                        self.downloadImage(urlString: urls[j]) { image in
-                            if let image = image {
-    //                            imageDataList[j] = image
-                                self.selectedDiaryImageArrays[i][j] = image
-                                completeDownCount += 1
-
-                                if completeDownCount == urls.count {
-                                    completion("success")
-                                }
+                    self.downloadImage(urlString: urls[0]) { image in
+                        if let image = image {
+                            self.selectedDiaryFirstImageArrays[i] = image
+                            downloadCount += 1
+                            
+                            print("endIndex - startIndex + 1 == downloadCount \(endIndex) - \(startIndex) + 1 == \(downloadCount)")
+                            
+                            if endIndex - startIndex == downloadCount {
+                                completion("success")
                             }
                         }
-
                     }
 
                 }
@@ -229,7 +230,7 @@ class BottomSheetSelectedPlaceDetailViewController: UIViewController {
             make.top.leading.trailing.equalToSuperview()
             make.height.equalTo(110)
             
-        } 
+        }
         
         self.titleLabel.snp.makeConstraints { make in
             make.leading.top.equalToSuperview().offset(leadingtrailingSize)
@@ -275,15 +276,30 @@ class BottomSheetSelectedPlaceDetailViewController: UIViewController {
 
 extension BottomSheetSelectedPlaceDetailViewController: UITableViewDelegate {
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        return 140
+//    }
+//    
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return 140
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
+//        return 500
     }
     
 }
 
 extension BottomSheetSelectedPlaceDetailViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.selectedDiaryInfos?.count ?? 0
+        var endIndex = 0
+        if let selectedDiaryInfos = self.selectedDiaryInfos {
+            endIndex = self.currentPage * self.pagingSize > selectedDiaryInfos.count ? selectedDiaryInfos.count : self.currentPage * self.pagingSize
+        }
+        
+        
+        return endIndex
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -299,7 +315,9 @@ extension BottomSheetSelectedPlaceDetailViewController: UITableViewDataSource {
         cell?.diaryScoreLabel.text = "\(self.selectedDiaryInfos?[indexPath.row].score ?? 0.0)점"
         
         
-        cell?.firstImageView.image = self.selectedDiaryImageArrays[indexPath.row][0]
+        cell?.firstImageView.image = self.selectedDiaryFirstImageArrays[indexPath.row]
+        
+        
         
         
         
@@ -308,5 +326,28 @@ extension BottomSheetSelectedPlaceDetailViewController: UITableViewDataSource {
         return cell ?? UITableViewCell()
     }
     
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        print("보여질 셀: \(indexPath.row)")
+        
+        if (indexPath.row + 1)/pagingSize == currentPage {
+            self.currentPage += 1
+            print("self.currentPage : \(self.currentPage)")
+            
+            self.downloadImages(currentPage: self.currentPage) { result in
+                if result == "success" {
+                    
+                    DispatchQueue.main.async {
+                        self.mapDetailPlaceTableView.reloadData()
+                        print("이미지 다운로드 완료")
+                    }
+                    
+                }
+            }
+            
+            
+
+        }
+    }
     
 }

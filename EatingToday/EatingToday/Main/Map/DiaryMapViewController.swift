@@ -285,18 +285,18 @@ class DiaryMapViewController: UIViewController {
                 mapMarker.userInfo = ["diaryIndex" : i]
                 mapMarker.userInfo = ["selectedDiaryInfos" : self.findSelectedDiaryList(lat: diaryLat, lng: diaryLng)]
                 mapMarker.touchHandler = { (overlay) -> Bool in
-                    print("해당 인덱스 : \(i)")
-                    print("마커 diaryIndex : \(overlay.userInfo["diaryIndex"])")
-                    print("마커 selectedDiaryInfos: \(overlay.userInfo["selectedDiaryInfos"])")
-                    print("식당명 : \(diaryLocaName)")
-                    
+//                    print("해당 인덱스 : \(i)")
+//                    print("마커 diaryIndex : \(overlay.userInfo["diaryIndex"])")
+//                    print("마커 selectedDiaryInfos: \(overlay.userInfo["selectedDiaryInfos"])")
+//                    print("식당명 : \(diaryLocaName)")
+//
                     self.popDetailPlaceInfo(selectedDiaryInfos: overlay.userInfo["selectedDiaryInfos"] as! [DiaryInfo])
                     
                     return true
                 }
                 
                 self.locationMarker.append(mapMarker)
-                print("append 됨 \(i)")
+//                print("append 됨 \(i)")
             }
             
             
@@ -305,7 +305,7 @@ class DiaryMapViewController: UIViewController {
                 for i in 0..<(self?.locationMarker.count)! {
                     self?.locationMarker[i].mapView = self?.naverMapView.mapView
                     
-                    print("setting 됨 \(i)")
+//                    print("setting 됨 \(i)")
                 }
             }
             
@@ -370,7 +370,7 @@ class DiaryMapViewController: UIViewController {
     }
     
     func setColorFromCategory(category: String) -> UIColor {
-        print(category)
+//        print(category)
         switch category {
         case "한식":
             //파랑

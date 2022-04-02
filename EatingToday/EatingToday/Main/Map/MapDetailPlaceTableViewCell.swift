@@ -44,6 +44,7 @@ class MapDetailPlaceTableViewCell: UITableViewCell {
         self.leadingSideView.addSubview(self.firstImageView)
         self.firstImageView.layer.cornerRadius = 40
         self.firstImageView.clipsToBounds = true
+        self.firstImageView.contentMode = .scaleAspectFill
         self.firstImageView.image = UIImage(systemName: "doc.text.image")
         
         self.headerView.addSubview(self.trailingSideView)
@@ -123,7 +124,8 @@ class MapDetailPlaceTableViewCell: UITableViewCell {
         }
         
         self.diaryScoreLabel.snp.makeConstraints { make in
-            make.trailing.bottom.equalToSuperview().offset(-leadingTrailingSize)
+            make.trailing.equalToSuperview().offset(-leadingTrailingSize)
+            make.bottom.equalToSuperview().offset(0)
 //            make.centerY.equalToSuperview()
         }
         

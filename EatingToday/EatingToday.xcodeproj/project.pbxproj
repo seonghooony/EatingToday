@@ -44,6 +44,7 @@
 		DB6F1B5E27DF25C500247B89 /* CategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1B5D27DF25C500247B89 /* CategoryCollectionViewCell.swift */; };
 		DBCD74F927F432D20061FFE8 /* BottomSheetSelectedPlaceDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCD74F827F432D20061FFE8 /* BottomSheetSelectedPlaceDetailViewController.swift */; };
 		DBCD74FB27F56A4B0061FFE8 /* MapDetailPlaceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCD74FA27F56A4B0061FFE8 /* MapDetailPlaceTableViewCell.swift */; };
+		DBCD74FE27F806FF0061FFE8 /* CommonIndicatorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCD74FD27F806FF0061FFE8 /* CommonIndicatorTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -88,6 +89,7 @@
 		DB6F1B5D27DF25C500247B89 /* CategoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCollectionViewCell.swift; sourceTree = "<group>"; };
 		DBCD74F827F432D20061FFE8 /* BottomSheetSelectedPlaceDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetSelectedPlaceDetailViewController.swift; sourceTree = "<group>"; };
 		DBCD74FA27F56A4B0061FFE8 /* MapDetailPlaceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDetailPlaceTableViewCell.swift; sourceTree = "<group>"; };
+		DBCD74FD27F806FF0061FFE8 /* CommonIndicatorTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonIndicatorTableViewCell.swift; sourceTree = "<group>"; };
 		FA450889CB86B174B9C86197 /* Pods-EatingToday.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EatingToday.debug.xcconfig"; path = "Target Support Files/Pods-EatingToday/Pods-EatingToday.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -136,7 +138,7 @@
 				DB6F1AE327BBF93100247B89 /* AppDelegate.swift */,
 				DB6F1AE527BBF93100247B89 /* SceneDelegate.swift */,
 				DB6F1AEE27BBF93200247B89 /* LaunchScreen.storyboard */,
-				DB6F1B5527D9B6C300247B89 /* CustomPopAlertViewController.swift */,
+				DBCD74FC27F806110061FFE8 /* Common */,
 				DB6F1B2D27C4816200247B89 /* Main */,
 				DB6F1B2C27C4814100247B89 /* Login */,
 				DB6F1B0527C2135400247B89 /* EatingToday.entitlements */,
@@ -237,6 +239,15 @@
 				DB6F1B4827D466A900247B89 /* SelectedSearchResultDocument.swift */,
 			);
 			path = Search;
+			sourceTree = "<group>";
+		};
+		DBCD74FC27F806110061FFE8 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				DB6F1B5527D9B6C300247B89 /* CustomPopAlertViewController.swift */,
+				DBCD74FD27F806FF0061FFE8 /* CommonIndicatorTableViewCell.swift */,
+			);
+			path = Common;
 			sourceTree = "<group>";
 		};
 		E8F031605423560C206A9F33 /* Frameworks */ = {
@@ -395,6 +406,7 @@
 				DBCD74FB27F56A4B0061FFE8 /* MapDetailPlaceTableViewCell.swift in Sources */,
 				DB6F1B3F27CE042C00247B89 /* SearchKakaoViewController.swift in Sources */,
 				DB6F1AE627BBF93100247B89 /* SceneDelegate.swift in Sources */,
+				DBCD74FE27F806FF0061FFE8 /* CommonIndicatorTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
