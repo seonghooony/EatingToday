@@ -500,7 +500,7 @@ class AddEatDiaryViewController: UIViewController {
                     
                     thumbnail = result
                     let data = thumbnail.jpegData(compressionQuality: 1)
-                    let newImage = UIImage(data: data!)?.resize(newWidth: 1170)
+                    let newImage = UIImage(data: data!)?.resize(newWidth: 1080)
                     
                     self.selectedOriginalImages[i] = newImage! as UIImage
                     

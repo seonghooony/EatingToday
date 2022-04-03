@@ -323,7 +323,7 @@ class DiaryMapViewController: UIViewController {
         
         
         let bottomSheet: MDCBottomSheetController = MDCBottomSheetController(contentViewController: bottomSheetVC)
-        bottomSheet.mdc_bottomSheetPresentationController?.preferredSheetHeight = self.view.bounds.height * 0.4
+        bottomSheet.mdc_bottomSheetPresentationController?.preferredSheetHeight = self.view.bounds.height * 0.45
         
         self.present(bottomSheet, animated: true)
         

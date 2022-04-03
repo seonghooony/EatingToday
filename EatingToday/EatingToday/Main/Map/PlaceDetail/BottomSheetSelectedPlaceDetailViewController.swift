@@ -28,7 +28,26 @@ class BottomSheetSelectedPlaceDetailViewController: UIViewController {
     
     let FBstorage = Storage.storage()
     
-    let headerView = UIView()
+    let headerView: UIView = {
+        let headView = UIView()
+        let shadowSize: CGFloat = 2.0
+        headView.layer.shadowPath = UIBezierPath(rect: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 100 + shadowSize)).cgPath
+        headView.backgroundColor = .white
+        headView.layer.cornerRadius = 1
+        headView.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5).cgColor
+        headView.layer.shadowOffset = CGSize(width: 1, height: 4)
+        headView.layer.shadowRadius = 15
+        headView.layer.shadowOpacity = 1
+        
+        headView.layer.masksToBounds = false
+//        headView.layer.shouldRasterize = true
+//        headView.layer.rasterizationScale = UIScreen.main.scale
+
+        
+
+        return headView
+    }()
+    
     let titleLabel = UILabel()
     let addressLabel = UILabel()
     let categoryLabel = UILabel()
@@ -39,7 +58,7 @@ class BottomSheetSelectedPlaceDetailViewController: UIViewController {
     let mainView = UIView()
     private lazy var mapDetailPlaceTableView: UITableView = {
         let tableView = UITableView(frame: .zero)
-        tableView.backgroundColor = .white
+        tableView.backgroundColor = .clear
 //        tableView.separatorStyle = .none
 //        tableView.separatorColor = .white
         tableView.dataSource = self
@@ -126,8 +145,8 @@ class BottomSheetSelectedPlaceDetailViewController: UIViewController {
     func viewConfigure() {
         
         self.view.backgroundColor = .white
-//        self.view.layer.cornerRadius = 5
-//        self.view.clipsToBounds = true
+        self.view.layer.cornerRadius = 10
+        self.view.clipsToBounds = true
         
         self.view.addSubview(self.headerView)
         self.headerView.backgroundColor = .white
@@ -164,7 +183,7 @@ class BottomSheetSelectedPlaceDetailViewController: UIViewController {
         self.lineView.backgroundColor = .lightGray
         
         self.view.addSubview(self.mainView)
-        self.mainView.backgroundColor = .gray
+        self.mainView.backgroundColor = .clear
         
         self.mainView.addSubview(self.mapDetailPlaceTableView)
     
@@ -270,13 +289,7 @@ extension BottomSheetSelectedPlaceDetailViewController: UITableViewDataSource {
             cell?.firstImageView.kf.setImage(with: url, placeholder: nil, options: [.transition(.fade(0.5))], progressBlock: nil)
         }
         
-        
-        
-        
-        
-        
-        
-        
+//        cell?.selectionStyle = .none
         
         return cell ?? UITableViewCell()
     }
@@ -288,9 +301,26 @@ extension BottomSheetSelectedPlaceDetailViewController: UITableViewDataSource {
         if (indexPath.row + 1)/pagingSize == currentPage {
             self.currentPage += 1
             print("self.currentPage : \(self.currentPage)")
-
+            DispatchQueue.main.async {
+                self.mapDetailPlaceTableView.reloadData()
+            }
+            
 
         }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        print("클릭")
+        
+        let popupDetailPlaceStoryViewController = PopupDetailPlaceStoryViewController()
+        
+        let cellDiaryInfo = self.selectedDiaryInfos?[indexPath.row]
+        
+        popupDetailPlaceStoryViewController.selectedDiaryInfo = self.selectedDiaryInfos?[indexPath.row]
+        
+        popupDetailPlaceStoryViewController.modalPresentationStyle = .overFullScreen
+        self.present(popupDetailPlaceStoryViewController, animated: false, completion: nil)
     }
     
 }

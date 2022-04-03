@@ -44,7 +44,7 @@
 		DB6F1B5E27DF25C500247B89 /* CategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1B5D27DF25C500247B89 /* CategoryCollectionViewCell.swift */; };
 		DBCD74F927F432D20061FFE8 /* BottomSheetSelectedPlaceDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCD74F827F432D20061FFE8 /* BottomSheetSelectedPlaceDetailViewController.swift */; };
 		DBCD74FB27F56A4B0061FFE8 /* MapDetailPlaceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCD74FA27F56A4B0061FFE8 /* MapDetailPlaceTableViewCell.swift */; };
-		DBCD74FE27F806FF0061FFE8 /* CommonIndicatorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCD74FD27F806FF0061FFE8 /* CommonIndicatorTableViewCell.swift */; };
+		DBCD750127F97A840061FFE8 /* PopupDetailPlaceStoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCD750027F97A840061FFE8 /* PopupDetailPlaceStoryViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -89,7 +89,7 @@
 		DB6F1B5D27DF25C500247B89 /* CategoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCollectionViewCell.swift; sourceTree = "<group>"; };
 		DBCD74F827F432D20061FFE8 /* BottomSheetSelectedPlaceDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetSelectedPlaceDetailViewController.swift; sourceTree = "<group>"; };
 		DBCD74FA27F56A4B0061FFE8 /* MapDetailPlaceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDetailPlaceTableViewCell.swift; sourceTree = "<group>"; };
-		DBCD74FD27F806FF0061FFE8 /* CommonIndicatorTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonIndicatorTableViewCell.swift; sourceTree = "<group>"; };
+		DBCD750027F97A840061FFE8 /* PopupDetailPlaceStoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupDetailPlaceStoryViewController.swift; sourceTree = "<group>"; };
 		FA450889CB86B174B9C86197 /* Pods-EatingToday.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EatingToday.debug.xcconfig"; path = "Target Support Files/Pods-EatingToday/Pods-EatingToday.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -184,8 +184,7 @@
 			isa = PBXGroup;
 			children = (
 				DB6F1B0827C34E1F00247B89 /* DiaryMapViewController.swift */,
-				DBCD74F827F432D20061FFE8 /* BottomSheetSelectedPlaceDetailViewController.swift */,
-				DBCD74FA27F56A4B0061FFE8 /* MapDetailPlaceTableViewCell.swift */,
+				DBCD74FF27F975ED0061FFE8 /* PlaceDetail */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -245,9 +244,18 @@
 			isa = PBXGroup;
 			children = (
 				DB6F1B5527D9B6C300247B89 /* CustomPopAlertViewController.swift */,
-				DBCD74FD27F806FF0061FFE8 /* CommonIndicatorTableViewCell.swift */,
 			);
 			path = Common;
+			sourceTree = "<group>";
+		};
+		DBCD74FF27F975ED0061FFE8 /* PlaceDetail */ = {
+			isa = PBXGroup;
+			children = (
+				DBCD74F827F432D20061FFE8 /* BottomSheetSelectedPlaceDetailViewController.swift */,
+				DBCD74FA27F56A4B0061FFE8 /* MapDetailPlaceTableViewCell.swift */,
+				DBCD750027F97A840061FFE8 /* PopupDetailPlaceStoryViewController.swift */,
+			);
+			path = PlaceDetail;
 			sourceTree = "<group>";
 		};
 		E8F031605423560C206A9F33 /* Frameworks */ = {
@@ -390,6 +398,7 @@
 				DB6F1B5427D8953600247B89 /* PwdResetPopupViewConroller.swift in Sources */,
 				DB6F1B4127CE20C900247B89 /* SearchResultOverview.swift in Sources */,
 				DB4BCAA527E317C700320903 /* DiaryInfo.swift in Sources */,
+				DBCD750127F97A840061FFE8 /* PopupDetailPlaceStoryViewController.swift in Sources */,
 				DB6F1B0927C34E1F00247B89 /* DiaryMapViewController.swift in Sources */,
 				DB6F1B2F27C48F0200247B89 /* EatTableViewCell.swift in Sources */,
 				DB6F1B5C27DF215000247B89 /* PopCategoryViewController.swift in Sources */,
@@ -406,7 +415,6 @@
 				DBCD74FB27F56A4B0061FFE8 /* MapDetailPlaceTableViewCell.swift in Sources */,
 				DB6F1B3F27CE042C00247B89 /* SearchKakaoViewController.swift in Sources */,
 				DB6F1AE627BBF93100247B89 /* SceneDelegate.swift in Sources */,
-				DBCD74FE27F806FF0061FFE8 /* CommonIndicatorTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

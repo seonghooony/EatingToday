@@ -74,18 +74,10 @@ class EatTableViewCell: UITableViewCell {
         imageCollectionView.scrollToItem(at: indexPath as IndexPath, at: .left, animated: animated)
     }
     
-    @objc func popSettingCellView() {
-        print(self.diaryId)
-        if let id = self.diaryId {
-            popSetBottomSheetDelegate?.popSetBottomSheet(diaryid: id)
-        }
-    }
-    
     let infoContentView = UIView()
-    let infoTitleLabel = UILabel()
     let scoreLabel = CosmosView()
     
-    let categoryLabel = UILabel()
+//    let categoryLabel = UILabel()
     let dateLabel = UILabel()
     let storyLabel = UILabel()
     let writeDateLabel = UILabel()
@@ -102,7 +94,12 @@ class EatTableViewCell: UITableViewCell {
     }
     
     
-
+    @objc func popSettingCellView() {
+        print(self.diaryId)
+        if let id = self.diaryId {
+            popSetBottomSheetDelegate?.popSetBottomSheet(diaryid: id)
+        }
+    }
 
     
     
@@ -152,12 +149,6 @@ class EatTableViewCell: UITableViewCell {
         
         
         self.addSubview(self.infoContentView)
-        
-        self.infoContentView.addSubview(self.infoTitleLabel)
-        self.infoTitleLabel.text = "정보"
-        self.infoTitleLabel.textAlignment = .center
-        self.infoTitleLabel.textColor = .black
-        self.infoTitleLabel.font = UIFont(name: "Helvetica Bold", size: 16)
         
         self.infoContentView.addSubview(self.scoreLabel)
         self.scoreLabel.settings.fillMode = .half

@@ -467,7 +467,7 @@ extension EatDiaryViewController: UITableViewDataSource {
         cell?.scoreLabel.rating = Double(cellDiaryInfo.score ?? 0.0)
         cell?.scoreLabel.text = "\(cellDiaryInfo.score ?? 0.0)점"
         cell?.locationLabel.text = cellDiaryInfo.place_info?.address_name
-        cell?.categoryLabel.text = cellDiaryInfo.category
+//        cell?.categoryLabel.text = cellDiaryInfo.category
         if let cellDate = cellDiaryInfo.date {
             cell?.dateLabel.text = "\(cellDate) 방문"
         }

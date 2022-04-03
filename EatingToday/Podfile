@@ -22,4 +22,5 @@ target 'EatingToday' do
   pod 'FSCalendar'
   pod 'MaterialComponents/BottomSheet'
   pod 'NMapsMap'
+  pod 'FSPagerView'
 end

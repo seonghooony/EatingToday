@@ -276,6 +276,7 @@ PODS:
     - FirebaseCore (~> 6.10)
     - GTMSessionFetcher/Core (~> 1.1)
   - FSCalendar (2.8.2)
+  - FSPagerView (0.8.3)
   - GoogleDataTransport (7.5.1):
     - nanopb (~> 1.30906.0)
   - GoogleSignIn (6.1.0):
@@ -377,6 +378,7 @@ DEPENDENCIES:
   - Firebase/Storage
   - FirebaseFirestoreSwift
   - FSCalendar
+  - FSPagerView
   - GoogleSignIn
   - Kingfisher
   - lottie-ios
@@ -402,6 +404,7 @@ SPEC REPOS:
     - FirebaseFirestoreSwift
     - FirebaseStorage
     - FSCalendar
+    - FSPagerView
     - GoogleDataTransport
     - GoogleSignIn
     - GoogleUtilities
@@ -435,6 +438,7 @@ SPEC CHECKSUMS:
   FirebaseFirestoreSwift: 2c46dbc1156db97dc4f6dd798d4f5b57b9c7fab6
   FirebaseStorage: 15e0f15ef3c7fec3d1899d68623e47d4447066b4
   FSCalendar: e6a2eb9c571bf0719ed797ef807e08426753c241
+  FSPagerView: 670405b2f18e2a87fa37f20b00de783e562c25a8
   GoogleDataTransport: f56af7caa4ed338dc8e138a5d7c5973e66440833
   GoogleSignIn: c90b5bec45e780f54c6a8e1e3c182a86e3dda69d
   GoogleUtilities: 7f2f5a07f888cdb145101d6042bc4422f57e70b3
@@ -452,6 +456,6 @@ SPEC CHECKSUMS:
   SkyFloatingLabelTextField: 5a338412114808e961fe2d14ea2c5452c8b6e4aa
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
 
-PODFILE CHECKSUM: 4f9dd16e8ef7312a93ec1bc4b5993766775b5f8c
+PODFILE CHECKSUM: 8cfba094765a85b17bc9e24e23cedbf4b81a1473
 
 COCOAPODS: 1.11.3

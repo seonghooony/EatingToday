@@ -11,6 +11,8 @@ import Kingfisher
 
 class MapDetailPlaceTableViewCell: UITableViewCell {
     
+    
+    
     let headerView = UIView()
     
     let leadingSideView = UIView()
@@ -39,7 +41,7 @@ class MapDetailPlaceTableViewCell: UITableViewCell {
     func viewConfigure() {
         
         self.addSubview(self.headerView)
-        self.headerView.backgroundColor = .white
+        self.headerView.backgroundColor = .clear
         
         self.headerView.addSubview(self.leadingSideView)
         self.leadingSideView.addSubview(self.firstImageView)
@@ -66,7 +68,7 @@ class MapDetailPlaceTableViewCell: UITableViewCell {
 
         
         self.addSubview(self.footerView)
-        self.footerView.backgroundColor = .white
+        self.footerView.backgroundColor = .clear
         self.footerView.addSubview(self.diaryScoreLabel)
         self.diaryScoreLabel.settings.fillMode = .half
         self.diaryScoreLabel.settings.starSize = 15
@@ -126,7 +128,7 @@ class MapDetailPlaceTableViewCell: UITableViewCell {
         
         self.diaryScoreLabel.snp.makeConstraints { make in
             make.trailing.equalToSuperview().offset(-leadingTrailingSize)
-            make.bottom.equalToSuperview().offset(0)
+            make.bottom.equalToSuperview().offset(-5)
 //            make.centerY.equalToSuperview()
         }
         
