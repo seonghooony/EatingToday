@@ -58,7 +58,7 @@ extension MainViewController {
         thirdNavigationController.addChild(thirdTabConroller)
         thirdNavigationController.tabBarItem.image = UIImage(systemName: "person")
         thirdNavigationController.tabBarItem.selectedImage = UIImage(systemName: "person.fill")
-        thirdNavigationController.tabBarItem.title = "프로필"
+        thirdNavigationController.tabBarItem.title = "MY"
         
         let viewControllers = [firstNavigationController, secondNavigationController, thirdNavigationController]
         self.setViewControllers(viewControllers, animated: true)

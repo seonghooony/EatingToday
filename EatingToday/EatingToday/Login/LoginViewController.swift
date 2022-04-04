@@ -184,7 +184,7 @@ class LoginViewController: UIViewController {
                     return
                 }
                 
-                pushUserInfo(email: user.email, uid: user.uid, nickname: "닉네임을 등록해주세요.")
+                pushUserInfo(email: user.email, uid: user.uid, nickname: Auth.auth().currentUser?.displayName ?? "닉네임을 등록해주세요")
                 
                 let mainVC = MainViewController()
                 mainVC.modalPresentationStyle = .fullScreen
@@ -550,7 +550,7 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
                     return
                 }
                 
-                self.pushUserInfo(email: user.email, uid: user.uid, nickname: "닉네임을 등록해주세요.")
+                self.pushUserInfo(email: user.email, uid: user.uid, nickname: "닉네임을 등록해주세요")
                 
                 let mainVC = MainViewController()
                 mainVC.modalPresentationStyle = .fullScreen

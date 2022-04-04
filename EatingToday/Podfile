@@ -23,4 +23,5 @@ target 'EatingToday' do
   pod 'MaterialComponents/BottomSheet'
   pod 'NMapsMap'
   pod 'FSPagerView'
+  pod 'AcknowList'
 end

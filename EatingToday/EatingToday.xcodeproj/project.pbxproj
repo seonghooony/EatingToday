@@ -42,9 +42,11 @@
 		DB6F1B5A27DE518C00247B89 /* PopDateCalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1B5927DE518C00247B89 /* PopDateCalendarViewController.swift */; };
 		DB6F1B5C27DF215000247B89 /* PopCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1B5B27DF215000247B89 /* PopCategoryViewController.swift */; };
 		DB6F1B5E27DF25C500247B89 /* CategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F1B5D27DF25C500247B89 /* CategoryCollectionViewCell.swift */; };
+		DBC4B9BD27FAB31C00D96CDB /* Pods-EatingToday-acknowledgements.plist in Resources */ = {isa = PBXBuildFile; fileRef = DBC4B9BC27FAB31C00D96CDB /* Pods-EatingToday-acknowledgements.plist */; };
 		DBCD74F927F432D20061FFE8 /* BottomSheetSelectedPlaceDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCD74F827F432D20061FFE8 /* BottomSheetSelectedPlaceDetailViewController.swift */; };
 		DBCD74FB27F56A4B0061FFE8 /* MapDetailPlaceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCD74FA27F56A4B0061FFE8 /* MapDetailPlaceTableViewCell.swift */; };
 		DBCD750127F97A840061FFE8 /* PopupDetailPlaceStoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCD750027F97A840061FFE8 /* PopupDetailPlaceStoryViewController.swift */; };
+		DBCD750327FAADA50061FFE8 /* settingOptionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCD750227FAADA50061FFE8 /* settingOptionTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -87,9 +89,11 @@
 		DB6F1B5927DE518C00247B89 /* PopDateCalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopDateCalendarViewController.swift; sourceTree = "<group>"; };
 		DB6F1B5B27DF215000247B89 /* PopCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopCategoryViewController.swift; sourceTree = "<group>"; };
 		DB6F1B5D27DF25C500247B89 /* CategoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCollectionViewCell.swift; sourceTree = "<group>"; };
+		DBC4B9BC27FAB31C00D96CDB /* Pods-EatingToday-acknowledgements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "Pods-EatingToday-acknowledgements.plist"; path = "Pods/Target Support Files/Pods-EatingToday/Pods-EatingToday-acknowledgements.plist"; sourceTree = "<group>"; };
 		DBCD74F827F432D20061FFE8 /* BottomSheetSelectedPlaceDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetSelectedPlaceDetailViewController.swift; sourceTree = "<group>"; };
 		DBCD74FA27F56A4B0061FFE8 /* MapDetailPlaceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDetailPlaceTableViewCell.swift; sourceTree = "<group>"; };
 		DBCD750027F97A840061FFE8 /* PopupDetailPlaceStoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupDetailPlaceStoryViewController.swift; sourceTree = "<group>"; };
+		DBCD750227FAADA50061FFE8 /* settingOptionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = settingOptionTableViewCell.swift; sourceTree = "<group>"; };
 		FA450889CB86B174B9C86197 /* Pods-EatingToday.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EatingToday.debug.xcconfig"; path = "Target Support Files/Pods-EatingToday/Pods-EatingToday.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -117,6 +121,7 @@
 		DB6F1AD727BBF93100247B89 = {
 			isa = PBXGroup;
 			children = (
+				DBC4B9BC27FAB31C00D96CDB /* Pods-EatingToday-acknowledgements.plist */,
 				DB6F1AE227BBF93100247B89 /* EatingToday */,
 				DB6F1AE127BBF93100247B89 /* Products */,
 				0C59A11F018F2A301A55101A /* Pods */,
@@ -193,6 +198,7 @@
 			isa = PBXGroup;
 			children = (
 				DB6F1B2A27C3781800247B89 /* ProfileViewController.swift */,
+				DBCD750227FAADA50061FFE8 /* settingOptionTableViewCell.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -326,6 +332,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DBC4B9BD27FAB31C00D96CDB /* Pods-EatingToday-acknowledgements.plist in Resources */,
 				DB6F1B5227D6601300247B89 /* loadingImage.json in Resources */,
 				DB6F1AF027BBF93200247B89 /* LaunchScreen.storyboard in Resources */,
 				DB4BCA9F27E074DB00320903 /* loadingfood.json in Resources */,
@@ -394,6 +401,7 @@
 				DB4BCAC927EAED7500320903 /* PopDeleteConfirmViewController.swift in Sources */,
 				DB6F1B0227BE4A6000247B89 /* RegisterUserViewController.swift in Sources */,
 				DB4BCAA327E3124400320903 /* UserDiaryInfo.swift in Sources */,
+				DBCD750327FAADA50061FFE8 /* settingOptionTableViewCell.swift in Sources */,
 				DB6F1B0727C34D7100247B89 /* EatDiaryViewController.swift in Sources */,
 				DB6F1B5427D8953600247B89 /* PwdResetPopupViewConroller.swift in Sources */,
 				DB6F1B4127CE20C900247B89 /* SearchResultOverview.swift in Sources */,

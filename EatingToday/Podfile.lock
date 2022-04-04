@@ -212,6 +212,7 @@ PODS:
     - abseil/base/base_internal
     - abseil/base/config
     - abseil/meta/type_traits
+  - AcknowList (2.1.0)
   - Alamofire (5.5.0)
   - AppAuth (1.5.0):
     - AppAuth/Core (= 1.5.0)
@@ -369,6 +370,7 @@ PODS:
   - SnapKit (5.0.1)
 
 DEPENDENCIES:
+  - AcknowList
   - Alamofire
   - BSImagePicker (~> 3.1)
   - Cosmos (~> 23.0)
@@ -390,6 +392,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - abseil
+    - AcknowList
     - Alamofire
     - AppAuth
     - BoringSSL-GRPC
@@ -424,6 +427,7 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   abseil: 6c8eb7892aefa08d929b39f9bb108e5367e3228f
+  AcknowList: bb4f8090d41d1d59302c8159fa31b17b442a4749
   Alamofire: 1c4fb5369c3fe93d2857c780d8bbe09f06f97e7c
   AppAuth: 80317d99ac7ff2801a2f18ff86b48cd315ed465d
   BoringSSL-GRPC: 8edf627ee524575e2f8d19d56f068b448eea3879
@@ -456,6 +460,6 @@ SPEC CHECKSUMS:
   SkyFloatingLabelTextField: 5a338412114808e961fe2d14ea2c5452c8b6e4aa
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
 
-PODFILE CHECKSUM: 8cfba094765a85b17bc9e24e23cedbf4b81a1473
+PODFILE CHECKSUM: d915deb1ef75e6c364e8b8d1c7ca14e5297d94db
 
 COCOAPODS: 1.11.3
