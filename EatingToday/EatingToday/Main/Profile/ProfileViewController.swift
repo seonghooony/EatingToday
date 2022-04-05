@@ -210,7 +210,10 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
         } else if indexPath.row == 1 {
             cell.optionNameLabel.text = "사용한 라이브러리 license 보기"
         } else if indexPath.row == 2 {
-            cell.optionNameLabel.text = "로그 아웃"
+            cell.optionNameLabel.text = "로그아웃"
+            cell.optionNameLabel.textColor = .red
+            cell.arrowImageView.isHidden = true
+            
         }
         
         
@@ -234,6 +237,24 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
             
         } else if indexPath.row == 2 {
             print("로그아웃 해야함")
+            do {
+                try Auth.auth().signOut()
+            } catch let signOutError as NSError {
+                print("ERROR signing out: \(signOutError)")
+            }
+            
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            
+            
+            
+            let loginVC = LoginViewController()
+            let navigationController = UINavigationController(rootViewController: loginVC)
+//            navigationController.modalPresentationStyle = .fullScreen
+//            navigationController.modalTransitionStyle = .crossDissolve
+//            self.present(navigationController, animated: true, completion: nil)
+        
+            self.view.window?.rootViewController = navigationController
+        
         }
         
     }

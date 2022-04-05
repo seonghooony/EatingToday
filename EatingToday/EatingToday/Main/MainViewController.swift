@@ -31,6 +31,7 @@ class MainViewController: UITabBarController {
         self.view.backgroundColor = .white
         self.selectedIndex = defaultIndex
         
+        
     }
     
 }
@@ -45,6 +46,7 @@ extension MainViewController {
         firstNavigationController.tabBarItem.image = UIImage(systemName: "house")
         firstNavigationController.tabBarItem.selectedImage = UIImage(systemName: "house.fill")
         firstNavigationController.tabBarItem.title = "홈"
+        
         
         let secondNavigationController = UINavigationController()
         let secondTabConroller = DiaryMapViewController()
@@ -82,3 +84,5 @@ extension MainViewController {
         
     }
 }
+
+

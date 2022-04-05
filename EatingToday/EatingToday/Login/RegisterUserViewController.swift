@@ -218,7 +218,7 @@ class RegisterUserViewController: UIViewController {
         //네비게이션 뒤로가기 가능하도록 설정
         self.navigationController?.interactivePopGestureRecognizer?.delegate = nil
         view.backgroundColor = .white
-        self.navigationController?.navigationBar.backgroundColor = .white
+        self.navigationController?.navigationBar.backgroundColor = .clear
         
         self.scrollContainerView.addSubview(self.activityIndicator)
         
@@ -727,7 +727,7 @@ extension RegisterUserViewController: UITextFieldDelegate {
     
     @objc func nicknameFieldDidChange(_ textField: UITextField) {
         
-        let nicknamePattern = "^[가-힣A-Za-z0-9]{4,20}$"
+        let nicknamePattern = "^[가-힣A-Za-z0-9]{2,10}$"
         
         let regex = try? NSRegularExpression(pattern: nicknamePattern)
         
@@ -742,7 +742,7 @@ extension RegisterUserViewController: UITextFieldDelegate {
                     self.nicknameValidation = true
                 } else {
                     floatingLabelTextField.errorMessage = " "
-                    self.nicknameDetailLabel.text = "닉네임은 4~20자리 한글,영문자,숫자만 가능합니다."
+                    self.nicknameDetailLabel.text = "닉네임은 2~10자리 한글,영문자,숫자만 가능합니다."
                     self.nicknameDetailLabel.textColor = self.failColor
                     self.nicknameValidation = false
                 }

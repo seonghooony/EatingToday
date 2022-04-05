@@ -70,6 +70,8 @@ class EatDiaryViewController: UIViewController {
     var dataSource: [AnyObject] = []
     lazy var cache: NSCache<AnyObject, AnyObject> = NSCache()
     
+    var previousTabBarIndex = 0
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: animated)
@@ -371,7 +373,16 @@ class EatDiaryViewController: UIViewController {
         
     }
     
+    @objc func moveUpperScroll() {
+        DispatchQueue.main.async {
+            self.boardTableView.setContentOffset(.zero, animated: true)
+        }
+        
+    }
+    
     func viewConfigure() {
+        
+        self.tabBarController?.delegate = self
         
         self.view.addSubview(self.headView)
         self.headView.backgroundColor = .white
@@ -381,6 +392,7 @@ class EatDiaryViewController: UIViewController {
         self.titleButton.setTitleColor(.black, for: .normal)
         self.titleButton.titleLabel?.textAlignment = .center
         self.titleButton.titleLabel?.font = UIFont(name: "Marker Felt", size: 25)
+        self.titleButton.addTarget(self, action: #selector(moveUpperScroll), for: .touchUpInside)
         
         self.headView.addSubview(diaryAddButton)
         self.diaryAddButton.setImage(UIImage(systemName: "plus.app"), for: .normal)
@@ -614,3 +626,26 @@ extension EatDiaryViewController: popSetBottomSheetDelegate {
 }
 
 
+extension EatDiaryViewController: UITabBarControllerDelegate {
+    
+    
+    
+    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        let selectedIndex = tabBarController.viewControllers?.firstIndex(of: viewController)!
+        
+        if selectedIndex == 0 {
+            if selectedIndex == self.previousTabBarIndex {
+                //스크롤링
+                print("스크롤 위로 실행")
+                self.moveUpperScroll()
+            } else {
+                self.previousTabBarIndex = selectedIndex!
+                print("그냥 아무것도안함")
+            }
+            
+        } else {
+            self.previousTabBarIndex = selectedIndex!
+            print("그냥 아무것도안함")
+        }
+    }
+}
