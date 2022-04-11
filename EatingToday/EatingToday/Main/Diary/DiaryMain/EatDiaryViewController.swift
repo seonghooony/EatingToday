@@ -378,7 +378,7 @@ class EatDiaryViewController: UIViewController {
             self.boardTableView.setContentOffset(.zero, animated: true)
         }
         
-    } 
+    }  
     
     func viewConfigure() {
         
