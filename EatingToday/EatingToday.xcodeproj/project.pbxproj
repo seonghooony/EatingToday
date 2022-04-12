@@ -47,6 +47,7 @@
 		DBCD74FB27F56A4B0061FFE8 /* MapDetailPlaceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCD74FA27F56A4B0061FFE8 /* MapDetailPlaceTableViewCell.swift */; };
 		DBCD750127F97A840061FFE8 /* PopupDetailPlaceStoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCD750027F97A840061FFE8 /* PopupDetailPlaceStoryViewController.swift */; };
 		DBCD750327FAADA50061FFE8 /* settingOptionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCD750227FAADA50061FFE8 /* settingOptionTableViewCell.swift */; };
+		DBDBF6442805569A0052881D /* MapCategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBDBF6432805569A0052881D /* MapCategoryCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -94,6 +95,7 @@
 		DBCD74FA27F56A4B0061FFE8 /* MapDetailPlaceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDetailPlaceTableViewCell.swift; sourceTree = "<group>"; };
 		DBCD750027F97A840061FFE8 /* PopupDetailPlaceStoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupDetailPlaceStoryViewController.swift; sourceTree = "<group>"; };
 		DBCD750227FAADA50061FFE8 /* settingOptionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = settingOptionTableViewCell.swift; sourceTree = "<group>"; };
+		DBDBF6432805569A0052881D /* MapCategoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCategoryCollectionViewCell.swift; sourceTree = "<group>"; };
 		FA450889CB86B174B9C86197 /* Pods-EatingToday.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EatingToday.debug.xcconfig"; path = "Target Support Files/Pods-EatingToday/Pods-EatingToday.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -189,6 +191,7 @@
 			isa = PBXGroup;
 			children = (
 				DB6F1B0827C34E1F00247B89 /* DiaryMapViewController.swift */,
+				DBDBF6432805569A0052881D /* MapCategoryCollectionViewCell.swift */,
 				DBCD74FF27F975ED0061FFE8 /* PlaceDetail */,
 			);
 			path = Map;
@@ -413,6 +416,7 @@
 				DB6F1B3B27CB542A00247B89 /* AddImageCollectionViewCell.swift in Sources */,
 				DB6F1B4B27D48B5900247B89 /* PopDetailImageViewController.swift in Sources */,
 				DB6F1B4927D466A900247B89 /* SelectedSearchResultDocument.swift in Sources */,
+				DBDBF6442805569A0052881D /* MapCategoryCollectionViewCell.swift in Sources */,
 				DB6F1B5E27DF25C500247B89 /* CategoryCollectionViewCell.swift in Sources */,
 				DB6F1B5627D9B6C300247B89 /* CustomPopAlertViewController.swift in Sources */,
 				DB6F1B2B27C3781800247B89 /* ProfileViewController.swift in Sources */,

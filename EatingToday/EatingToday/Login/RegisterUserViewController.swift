@@ -367,7 +367,7 @@ class RegisterUserViewController: UIViewController {
         
         self.scrollContainerView.addSubview(self.pwdConfirmField)
 //        self.pwdConfirmField.placeholder = "8~20자리 영문자,숫자,특수문자 조합"
-        self.passwordField.placeholder = "6자리 이상의 비밀번호"
+        self.pwdConfirmField.placeholder = "6자리 이상의 비밀번호"
         self.pwdConfirmField.title = ""
         //클리어버튼 생성
         self.pwdConfirmField.clearButtonMode = .whileEditing

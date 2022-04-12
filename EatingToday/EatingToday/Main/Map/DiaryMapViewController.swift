@@ -17,9 +17,23 @@ import FirebaseFirestoreSwift
 import FirebaseFirestore
 import FirebaseCore
 
+import SnapKit
+
 struct locationXY: Hashable {
     let lat: String
     let lng: String
+}
+
+struct categoryLocaIndex {
+    var koreanCateIndex: Array<Int>     //한식
+    var chineseCateIndex: Array<Int>    //중식
+    var japaneseCateIndex: Array<Int>   //일식
+    var usaCateIndex: Array<Int>        //양식
+    var snackCateIndex: Array<Int>      //분식
+    var steakCateIndex: Array<Int>      //구이
+    var asianCateIndex: Array<Int>      //아시안
+    var dessertCateIndex: Array<Int>    //디저트
+    var etcCateIndex: Array<Int>        //그외
 }
 
 class DiaryMapViewController: UIViewController {
@@ -29,11 +43,52 @@ class DiaryMapViewController: UIViewController {
     var locationManager = CLLocationManager()
     let naverMapView = NMFNaverMapView(frame: UIScreen.main.bounds)
     
+    var categoryCollectionView: UICollectionView = {
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.scrollDirection = .horizontal
+
+        let collectionView = UICollectionView(frame: .init(x: 0, y: 0, width: 100, height: 50), collectionViewLayout: flowLayout)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.backgroundColor = UIColor.clear
+        
+        return collectionView
+    }()
+    
+    var collectionViewloaded = false
+    
+    
+    var foodImages: [UIImage] = [
+        UIImage(named: "logo_lamen")!,
+        UIImage(named: "logo_koreanfood")!,
+        UIImage(named: "logo_chinesefood")!,
+        UIImage(named: "logo_japanesefood")!,
+        UIImage(named: "logo_westernfood")!,
+        UIImage(named: "logo_snackbarfood")!,
+        UIImage(named: "logo_meatfood")!,
+        UIImage(named: "logo_lamen")!,
+        UIImage(named: "logo_lamen")!,
+        UIImage(named: "logo_lamen")!]
+    
+    var foodLabelNames: [String] = ["전체",
+                                    "한식",
+                                    "중식",
+                                    "일식",
+                                    "양식",
+                                    "분식",   
+                                    "구이",
+                                    "아시안",
+                                    "디저트",
+                                    "그외"]
+    
+    var cateIndex = categoryLocaIndex(koreanCateIndex: [], chineseCateIndex: [], japaneseCateIndex: [], usaCateIndex: [], snackCateIndex: [], steakCateIndex: [], asianCateIndex: [], dessertCateIndex: [], etcCateIndex: [])
+    
     
     var userDiaries = Array<String>()
     var diaryInfos = Array<DiaryInfo>()
     var locationMarker = Array<NMFMarker>()
     var locationLatLng: Set<locationXY> = []
+    
+
     
     
     
@@ -41,6 +96,7 @@ class DiaryMapViewController: UIViewController {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: animated)
         self.getUserDiaryList()
+        self.categoryCollectionView.reloadData()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -57,6 +113,10 @@ class DiaryMapViewController: UIViewController {
         locationMarker.removeAll()
         locationLatLng.removeAll()
         
+        self.cateIndex = categoryLocaIndex(koreanCateIndex: [], chineseCateIndex: [], japaneseCateIndex: [], usaCateIndex: [], snackCateIndex: [], steakCateIndex: [], asianCateIndex: [], dessertCateIndex: [], etcCateIndex: [])
+        
+        self.collectionViewloaded = false
+        
     }
     
     override func viewDidLoad() {
@@ -65,9 +125,14 @@ class DiaryMapViewController: UIViewController {
         self.mapConfigure()
         self.updateCurrentLocation()
 //        self.getUserDiaryList()
+        
+        self.viewConfigure()
+        self.constraintConfigure()
+        
+        
     }
     
-
+    
     
     
     private func mapConfigure() {
@@ -76,6 +141,8 @@ class DiaryMapViewController: UIViewController {
         self.naverMapView.mapView.isIndoorMapEnabled = true
         self.naverMapView.mapView.zoomLevel = 15
         self.view.addSubview(self.naverMapView)
+        
+        
         
     }
     
@@ -99,7 +166,22 @@ class DiaryMapViewController: UIViewController {
 
     
     
+    func viewConfigure() {
+        self.categoryCollectionView.delegate = self
+        self.categoryCollectionView.dataSource = self
+        self.categoryCollectionView.register(MapCategoryCollectionViewCell.self, forCellWithReuseIdentifier: "MapCategoryCollectionViewCell")
+        self.view.addSubview(self.categoryCollectionView)
+        self.categoryCollectionView.showsHorizontalScrollIndicator = false
+    }
     
+    func constraintConfigure() {
+        self.categoryCollectionView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(50)
+            make.leading.equalToSuperview().offset(0)
+            make.trailing.equalToSuperview().offset(0)
+            make.height.equalTo(40)
+        }
+    }
     
     
     func getUserDiaryList() {
@@ -234,6 +316,31 @@ class DiaryMapViewController: UIViewController {
         
     }
     
+    func setCateArrays(index: Int, category: String) {
+        switch category {
+        case "한식":
+            self.cateIndex.koreanCateIndex.append(index)
+        case "중식":
+            self.cateIndex.chineseCateIndex.append(index)
+        case "일식":
+            self.cateIndex.japaneseCateIndex.append(index)
+        case "양식":
+            self.cateIndex.usaCateIndex.append(index)
+        case "분식":
+            self.cateIndex.snackCateIndex.append(index)
+        case "구이":
+            self.cateIndex.steakCateIndex.append(index)
+        case "아시안":
+            self.cateIndex.asianCateIndex.append(index)
+        case "디저트":
+            self.cateIndex.dessertCateIndex.append(index)
+        case "그외":
+            self.cateIndex.etcCateIndex.append(index)
+        default:
+            print("오류")
+        }
+    }
+    
     func setMapMarkers(diaryList: [DiaryInfo], completion: @escaping (Array<NMFMarker>?) -> Void) {
         
         DispatchQueue.global(qos: .default).async {
@@ -260,6 +367,8 @@ class DiaryMapViewController: UIViewController {
 //                print("새로 넣음 후 이 글이 떠야함 이미존재함 뜬후 이글 뜨면 오류")
                 guard let diaryLocaName = diaryList[i].place_info?.place_name else { continue }
                 guard let diaryCateName = diaryList[i].category else { continue }
+                
+                self.setCateArrays(index: i, category: diaryCateName)
                 
                 let categoryColor = self.setColorFromCategory(category: diaryCateName) as UIColor
                 let categoryImage = self.setImageFromCategory(category: diaryCateName) as NMFOverlayImage
@@ -309,6 +418,7 @@ class DiaryMapViewController: UIViewController {
                 }
             }
             
+//            print(self.cateIndex)
         }
 
     }
@@ -440,3 +550,135 @@ extension DiaryMapViewController: CLLocationManagerDelegate {
 
 
 }
+
+
+
+extension DiaryMapViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    //셀 개수
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 10
+    }
+    
+    //셀 생성
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MapCategoryCollectionViewCell", for: indexPath) as? MapCategoryCollectionViewCell else { return UICollectionViewCell() }
+        
+        if indexPath.row == 0 && !self.collectionViewloaded {
+            cell.isSelected = true
+            collectionView.selectItem(at: indexPath, animated: false, scrollPosition: .init())
+            self.collectionViewloaded = true
+        }
+        
+        cell.categoryLabel.text = self.foodLabelNames[indexPath.row]
+        cell.categoryImageView.image = self.foodImages[indexPath.row]
+        
+        
+        
+        return cell
+    }
+    
+    
+    
+    //셀 클릭
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        // 0:전체, 1:한식, 2:중식, 3:일식, 4:양식, 5:분식, 6:구이, 7:아시안, 8:디저트, 9:그 외
+        
+        switch indexPath.row {
+        case 0:
+            for i in 0..<self.locationMarker.count {
+                self.locationMarker[i].hidden = false
+            }
+        case 1:
+            for i in 0..<self.locationMarker.count {
+                self.locationMarker[i].hidden = true
+            }
+            for i in 0..<self.cateIndex.koreanCateIndex.count {
+                let tempIdx = self.cateIndex.koreanCateIndex[i]
+                self.locationMarker[tempIdx].hidden = false
+            }
+        case 2:
+            for i in 0..<self.locationMarker.count {
+                self.locationMarker[i].hidden = true
+            }
+            for i in 0..<self.cateIndex.chineseCateIndex.count {
+                let tempIdx = self.cateIndex.chineseCateIndex[i]
+                self.locationMarker[tempIdx].hidden = false
+            }
+        case 3:
+            for i in 0..<self.locationMarker.count {
+                self.locationMarker[i].hidden = true
+            }
+            for i in 0..<self.cateIndex.japaneseCateIndex.count {
+                let tempIdx = self.cateIndex.japaneseCateIndex[i]
+                self.locationMarker[tempIdx].hidden = false
+            }
+        case 4:
+            for i in 0..<self.locationMarker.count {
+                self.locationMarker[i].hidden = true
+            }
+            for i in 0..<self.cateIndex.usaCateIndex.count {
+                let tempIdx = self.cateIndex.usaCateIndex[i]
+                self.locationMarker[tempIdx].hidden = false
+            }
+        case 5:
+            for i in 0..<self.locationMarker.count {
+                self.locationMarker[i].hidden = true
+            }
+            for i in 0..<self.cateIndex.snackCateIndex.count {
+                let tempIdx = self.cateIndex.snackCateIndex[i]
+                self.locationMarker[tempIdx].hidden = false
+            }
+        case 6:
+            for i in 0..<self.locationMarker.count {
+                self.locationMarker[i].hidden = true
+            }
+            for i in 0..<self.cateIndex.steakCateIndex.count {
+                let tempIdx = self.cateIndex.steakCateIndex[i]
+                self.locationMarker[tempIdx].hidden = false
+            }
+        case 7:
+            for i in 0..<self.locationMarker.count {
+                self.locationMarker[i].hidden = true
+            }
+            for i in 0..<self.cateIndex.asianCateIndex.count {
+                let tempIdx = self.cateIndex.asianCateIndex[i]
+                self.locationMarker[tempIdx].hidden = false
+            }
+        case 8:
+            for i in 0..<self.locationMarker.count {
+                self.locationMarker[i].hidden = true
+            }
+            for i in 0..<self.cateIndex.dessertCateIndex.count {
+                let tempIdx = self.cateIndex.dessertCateIndex[i]
+                self.locationMarker[tempIdx].hidden = false
+            }
+        case 9:
+            for i in 0..<self.locationMarker.count {
+                self.locationMarker[i].hidden = true
+            }
+            for i in 0..<self.cateIndex.etcCateIndex.count {
+                let tempIdx = self.cateIndex.etcCateIndex[i]
+                self.locationMarker[tempIdx].hidden = false
+            }
+        default:
+            print("오류")
+        }
+        
+    }
+    
+    //셀 크기
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        let tmpLabel: UILabel = UILabel()
+        tmpLabel.text = self.foodLabelNames[indexPath.row]
+        
+        
+        return CGSize(width: tmpLabel.intrinsicContentSize.width + 50, height: 35)
+    }
+    
+    //셀간 최소간격
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 15
+    }
+}
+
