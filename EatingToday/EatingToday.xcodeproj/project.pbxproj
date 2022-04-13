@@ -48,6 +48,7 @@
 		DBCD750127F97A840061FFE8 /* PopupDetailPlaceStoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCD750027F97A840061FFE8 /* PopupDetailPlaceStoryViewController.swift */; };
 		DBCD750327FAADA50061FFE8 /* settingOptionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCD750227FAADA50061FFE8 /* settingOptionTableViewCell.swift */; };
 		DBDBF6442805569A0052881D /* MapCategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBDBF6432805569A0052881D /* MapCategoryCollectionViewCell.swift */; };
+		DBDBF6462806A25C0052881D /* ProfileDetailModifyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBDBF6452806A25C0052881D /* ProfileDetailModifyViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -96,6 +97,7 @@
 		DBCD750027F97A840061FFE8 /* PopupDetailPlaceStoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupDetailPlaceStoryViewController.swift; sourceTree = "<group>"; };
 		DBCD750227FAADA50061FFE8 /* settingOptionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = settingOptionTableViewCell.swift; sourceTree = "<group>"; };
 		DBDBF6432805569A0052881D /* MapCategoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCategoryCollectionViewCell.swift; sourceTree = "<group>"; };
+		DBDBF6452806A25C0052881D /* ProfileDetailModifyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDetailModifyViewController.swift; sourceTree = "<group>"; };
 		FA450889CB86B174B9C86197 /* Pods-EatingToday.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EatingToday.debug.xcconfig"; path = "Target Support Files/Pods-EatingToday/Pods-EatingToday.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -202,6 +204,7 @@
 			children = (
 				DB6F1B2A27C3781800247B89 /* ProfileViewController.swift */,
 				DBCD750227FAADA50061FFE8 /* settingOptionTableViewCell.swift */,
+				DBDBF6452806A25C0052881D /* ProfileDetailModifyViewController.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -395,6 +398,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DB6F1AFA27BBFA0800247B89 /* LoginViewController.swift in Sources */,
+				DBDBF6462806A25C0052881D /* ProfileDetailModifyViewController.swift in Sources */,
 				DB6F1B3727C55B0E00247B89 /* ImageCollectionViewCell.swift in Sources */,
 				DB6F1B5A27DE518C00247B89 /* PopDateCalendarViewController.swift in Sources */,
 				DBCD74F927F432D20061FFE8 /* BottomSheetSelectedPlaceDetailViewController.swift in Sources */,

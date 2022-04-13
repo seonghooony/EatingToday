@@ -230,6 +230,10 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
         
         if indexPath.row == 0 {
             print("내정보 수정하러가야함")
+            let profileDetailModifyVC = ProfileDetailModifyViewController()
+            profileDetailModifyVC.currentNickname = self.nickname
+            
+            navigationController?.pushViewController(profileDetailModifyVC, animated: true)
             
         } else if indexPath.row == 1 {
             let acknowList = AcknowListViewController(fileNamed: "Pods-EatingToday-acknowledgements")
