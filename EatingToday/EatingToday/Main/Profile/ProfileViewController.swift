@@ -28,7 +28,6 @@ class ProfileViewController: UIViewController {
     let optionTableView = UITableView()
     
     let footerView = UIView()
-    let licenseLabelButton = UIButton()
     let gitUrlButton = UIButton()
     
     override func viewWillAppear(_ animated: Bool) {
@@ -123,6 +122,13 @@ class ProfileViewController: UIViewController {
         }
     }
     
+    @objc func goGithubUrlTapped() {
+        let link = "https://github.com/seonghooony/EatingToday"
+        if let url = URL(string: link) {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
+    }
+    
     private func viewConfigure() {
         self.view.backgroundColor = customGray1
         self.view.addSubview(self.headerView)
@@ -149,8 +155,12 @@ class ProfileViewController: UIViewController {
         
         self.footerView.backgroundColor = .clear
         self.view.addSubview(self.footerView)
-        self.footerView.addSubview(self.licenseLabelButton)
         self.footerView.addSubview(self.gitUrlButton)
+        self.gitUrlButton.setTitle("https://github.com/seonghooony/EatingToday", for: .normal)
+        self.gitUrlButton.backgroundColor = .clear
+        self.gitUrlButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 13)
+        self.gitUrlButton.setTitleColor(.lightGray, for: .normal)
+        self.gitUrlButton.addTarget(self, action: #selector(goGithubUrlTapped), for: .touchUpInside)
     
     }
     
@@ -188,6 +198,11 @@ class ProfileViewController: UIViewController {
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(UIScreen.main.bounds.height * 0.3)
         
+        }
+        self.gitUrlButton.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(30)
         }
     
     }
