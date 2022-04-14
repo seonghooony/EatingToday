@@ -162,7 +162,7 @@ class ProfileViewController: UIViewController {
         self.gitUrlButton.setTitleColor(.lightGray, for: .normal)
         self.gitUrlButton.addTarget(self, action: #selector(goGithubUrlTapped), for: .touchUpInside)
     
-    }
+    } 
     
     private func constraintConfigure() {
         
