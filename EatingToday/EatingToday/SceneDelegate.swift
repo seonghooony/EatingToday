@@ -18,7 +18,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         window = UIWindow(frame: scene.coordinateSpace.bounds)
         window?.windowScene = scene
-        
+        sleep(1)
         let firstViewController = LoginViewController()
         let navigationController = UINavigationController(rootViewController: firstViewController)
         

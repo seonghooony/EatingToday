@@ -247,7 +247,7 @@ class LoginViewController: UIViewController {
 
 
         self.headerView.addSubview(self.titleImage)
-        self.titleImage.image = UIImage(named: "logo_lamen")
+        self.titleImage.image = UIImage(named: "main_character")
         ///<a href="https://www.flaticon.com/kr/free-icons/" title="라면 아이콘">라면 아이콘  제작자: tulpahn - Flaticon</a>
 
         self.headerView.addSubview(self.titleLabel)
@@ -419,16 +419,16 @@ class LoginViewController: UIViewController {
         }
 
         self.titleImage.snp.makeConstraints{ make in
-//            make.top.equalToSuperview().offset(90)
+            make.top.equalToSuperview().offset(60)
 //            make.width.height.equalTo(150).priority(752)
 //            make.centerX.equalToSuperview()
             
-            make.centerX.centerY.equalToSuperview()
-            make.width.height.equalTo(150)
+            make.centerX.equalToSuperview()
+            make.width.height.equalTo(200)
 
         }
         self.titleLabel.snp.makeConstraints{ make in
-            make.top.equalTo(self.titleImage.snp.bottom).offset(25)
+            make.top.equalTo(self.titleImage.snp.bottom).offset(0)
             make.centerX.equalToSuperview()
         }
 

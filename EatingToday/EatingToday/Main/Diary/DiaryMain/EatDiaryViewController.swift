@@ -44,6 +44,8 @@ class EatDiaryViewController: UIViewController {
     let titleButton = UIButton()
     let diaryAddButton = UIButton()
     let mainView = UIView()
+    let nothingLabel = UILabel()
+    let nothingImageView = UIImageView()
     private lazy var boardTableView: UITableView = {
         let tableView = UITableView(frame: .zero)
         tableView.backgroundColor = .white
@@ -139,6 +141,8 @@ class EatDiaryViewController: UIViewController {
                                     self?.activityIndicator.stopAnimating()
                                     //터치 이벤트 막기
                                     self?.mainView.isUserInteractionEnabled = true
+                                    self?.nothingImageView.isHidden = true
+                                    self?.nothingLabel.isHidden = true
                                     DispatchQueue.main.async {
                                         self?.boardTableView.reloadData()
                                         print("첫 화면 리로드 완료")
@@ -163,6 +167,8 @@ class EatDiaryViewController: UIViewController {
                                 self?.boardTableView.reloadData()
                                 self?.activityIndicator.stopAnimating()
                                 self?.mainView.isUserInteractionEnabled = true
+                                self?.nothingImageView.isHidden = false
+                                self?.nothingLabel.isHidden = false
                             }
                             
                         } else {
@@ -170,7 +176,8 @@ class EatDiaryViewController: UIViewController {
                             self?.boardTableView.reloadData()
                             self?.activityIndicator.stopAnimating()
                             self?.mainView.isUserInteractionEnabled = true
-                            
+                            self?.nothingImageView.isHidden = false
+                            self?.nothingLabel.isHidden = false
                         }
                         
                         
@@ -183,6 +190,8 @@ class EatDiaryViewController: UIViewController {
                     self?.boardTableView.reloadData()
                     self?.activityIndicator.stopAnimating()
                     self?.mainView.isUserInteractionEnabled = true
+                    self?.nothingImageView.isHidden = false
+                    self?.nothingLabel.isHidden = false
                 }
 
             }
@@ -405,9 +414,23 @@ class EatDiaryViewController: UIViewController {
         self.boardTableView.refreshControl = refreshControl
         self.refreshControl.addTarget(self, action: #selector(refreshDiaryControl(refreshControl:)), for: .valueChanged)
         
+        self.mainView.addSubview(self.nothingLabel)
+        self.nothingLabel.numberOfLines = 2
+        self.nothingLabel.textAlignment = .center
+        self.nothingLabel.text = "우측 상단의 '+' 버튼을 클릭하여\n새로운 일기장을 작성해보세요."
+        self.nothingLabel.textColor = .lightGray
+        self.nothingLabel.font = UIFont(name: "Helvetica Bold", size: 20)
+        self.nothingLabel.isHidden = true
+        
+        self.mainView.addSubview(self.nothingImageView)
+        self.nothingImageView.image = UIImage(named: "logo_nothing")?.withRenderingMode(.alwaysTemplate)
+        self.nothingImageView.tintColor = .lightGray
+        self.nothingImageView.isHidden = true
+        
+        
         self.mainView.addSubview(self.activityIndicator)
         self.activityIndicator.stopAnimating()
-    
+        
 
         
     }
@@ -444,6 +467,17 @@ class EatDiaryViewController: UIViewController {
             make.leading.equalToSuperview().offset(0)
             make.trailing.equalToSuperview().offset(0)
         }
+        
+        self.nothingLabel.snp.makeConstraints { make in
+            make.bottom.equalTo(self.nothingImageView.snp.top).offset(-10)
+            make.centerX.equalToSuperview()
+        }
+        
+        self.nothingImageView.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.width.height.equalTo(100)
+        }
+        
         self.boardTableView.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(0)
             make.bottom.equalToSuperview().offset(0)

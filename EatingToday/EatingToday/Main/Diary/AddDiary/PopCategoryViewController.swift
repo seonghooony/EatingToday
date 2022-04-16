@@ -42,9 +42,9 @@ class PopCategoryViewController: UIViewController {
         UIImage(named: "logo_westernfood")!,  //3
         UIImage(named: "logo_snackbarfood")!,  //4
         UIImage(named: "logo_meatfood")!,  //5
-        UIImage(named: "logo_lamen")!,  //6
-        UIImage(named: "logo_lamen")!,  //7
-        UIImage(named: "logo_lamen")!]  //8
+        UIImage(named: "logo_asianfood")!,  //6
+        UIImage(named: "logo_dessert")!,  //7
+        UIImage(named: "logo_etc")!]  //8
     
     var foodLabelNames: [String] = ["한식",   //0
                                     "중식",   //1

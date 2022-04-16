@@ -65,9 +65,9 @@ class DiaryMapViewController: UIViewController {
         UIImage(named: "logo_westernfood")!,
         UIImage(named: "logo_snackbarfood")!,
         UIImage(named: "logo_meatfood")!,
-        UIImage(named: "logo_lamen")!,
-        UIImage(named: "logo_lamen")!,
-        UIImage(named: "logo_lamen")!]
+        UIImage(named: "logo_asianfood")!,  //6
+        UIImage(named: "logo_dessert")!,  //7
+        UIImage(named: "logo_etc")!]  //8
     
     var foodLabelNames: [String] = ["전체",
                                     "한식",
