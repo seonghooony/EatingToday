@@ -368,7 +368,7 @@ class DiaryMapViewController: UIViewController {
                 guard let diaryLocaName = diaryList[i].place_info?.place_name else { continue }
                 guard let diaryCateName = diaryList[i].category else { continue }
                 
-                self.setCateArrays(index: i, category: diaryCateName)
+                
                 
                 let categoryColor = self.setColorFromCategory(category: diaryCateName) as UIColor
                 let categoryImage = self.setImageFromCategory(category: diaryCateName) as NMFOverlayImage
@@ -405,6 +405,7 @@ class DiaryMapViewController: UIViewController {
                 }
                 
                 self.locationMarker.append(mapMarker)
+                self.setCateArrays(index: self.locationMarker.count - 1, category: diaryCateName)
 //                print("append 됨 \(i)")
             }
             
