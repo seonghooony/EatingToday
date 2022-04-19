@@ -68,7 +68,7 @@ class EatDiaryViewController: UIViewController {
     var userDiaries = Array<String>()
     var diaryInfos = Array<DiaryInfo>()
     var diaryImageArrays = Array<Array<UIImage>>()
-    
+     
     var dataSource: [AnyObject] = []
     lazy var cache: NSCache<AnyObject, AnyObject> = NSCache()
     
