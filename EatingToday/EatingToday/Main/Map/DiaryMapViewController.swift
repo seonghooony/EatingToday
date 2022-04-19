@@ -154,12 +154,15 @@ class DiaryMapViewController: UIViewController {
         if CLLocationManager.locationServicesEnabled() {
             print("현재 위치 서비스 On")
             locationManager.startUpdatingLocation()
-            print(locationManager.location?.coordinate)
-            let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: locationManager.location?.coordinate.latitude ?? 0, lng: locationManager.location?.coordinate.longitude ?? 0))
+            print(locationManager.location?.coordinate.latitude)
+            let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: locationManager.location?.coordinate.latitude ?? 37.5666, lng: locationManager.location?.coordinate.longitude ?? 126.9784))
             cameraUpdate.animation = .easeIn
             self.naverMapView.mapView.moveCamera(cameraUpdate)
             
         } else {
+            let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: 37, lng: 126))
+            cameraUpdate.animation = .easeIn
+            self.naverMapView.mapView.moveCamera(cameraUpdate)
             print("현재 위치 서비스 Off")
         }
     }
