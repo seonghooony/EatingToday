@@ -1,6 +1,9 @@
 # Eatingram
 방문한 맛집을 지도에 콕콕 박아보세요.<br>
-방문한 날의 이야기를 추억으로 남겨보세요.
+방문한 날의 이야기를 추억으로 남겨보세요.<br>
+<br>
+<br>
+Firebase, Kingfisher, lottie-ios, Snapkit, Alamofire, FSCalendar, NMapsMap(NaverMap), MaterailComponents, FSPagerView, AcknowList, DaumMap(kakaoMap) 등
 
 ![슬라이드1](https://user-images.githubusercontent.com/91402556/164047459-42491b25-05c9-4cb4-a7f4-367713c64752.PNG)
 ![슬라이드2](https://user-images.githubusercontent.com/91402556/164047975-85375d2e-0ebe-47c8-8ded-38a27b9f4868.PNG)
