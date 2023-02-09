@@ -11,11 +11,11 @@
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>사용자의 위치를 받습니다.</string>
 	<key>NMFClientId</key>
-	<string>g9kui5e0ad</string>
+	<string>1234567890</string>
 	<key>UIUserInterfaceStyle</key>
 	<string>Light</string>
 	<key>KAKAO_APP_KEY</key>
-	<string>0b40f8408abada230e551a9ddf9d6276</string>
+	<string>1234567890</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Why you want to access photo library</string>
 	<key>CFBundleURLTypes</key>
@@ -25,7 +25,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.976737269415-qard7ju56ijf5oslsbq7nk5m17id5vti</string>
+				<string>com.googleusercontent.apps.1234567890</string>
 			</array>
 		</dict>
 	</array>
